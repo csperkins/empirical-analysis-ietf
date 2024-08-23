@@ -27,6 +27,7 @@
 # Project specific build rules:
 
 PAPER_PDF = paper.pdf
+PAPER_TEX = $(PAPER_PDF:.pdf=.tex)
 
 IETF_DATA = data/ietf/rfc-index.xml
 
@@ -106,6 +107,7 @@ clean:
 	$(call remove,$(RESULTS))
 	if [ -d figures ]; then rmdir figures; fi
 	if [ -d results ]; then rmdir results; fi
+	$(call remove-latex,$(PAPER_TEX))
 
 # =================================================================================================
 # Configuration for make:
