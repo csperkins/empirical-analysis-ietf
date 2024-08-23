@@ -31,7 +31,7 @@ PAPER_TEX = $(PAPER_PDF:.pdf=.tex)
 
 IETF_DATA = data/ietf/rfc-index.xml
 
-RESULTS = 
+RESULTS = results/rfcs-by-year.csv
 
 FIGURES = 
 
@@ -57,6 +57,9 @@ data/ietf/rfc-index.xml: scripts/fetch.sh | data/ietf
 
 results:
 	mkdir $@
+
+results/rfcs-by-year.csv: scripts/rfcs-by-year.py data/ietf/rfc-index.xml | results
+	python3 $^ $@
 
 
 # -------------------------------------------------------------------------------------------------
