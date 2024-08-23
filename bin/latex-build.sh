@@ -82,6 +82,7 @@ if [ $MODE = "clean" ]; then
            $DIR_NAME/$TEX_BASE.blg \
            $DIR_NAME/$TEX_BASE.dep \
            $DIR_NAME/$TEX_BASE.fls \
+           $DIR_NAME/$TEX_BASE.out \
            $DIR_NAME/$TEX_BASE.fonts
   do
     if [ -f $f ]; then
