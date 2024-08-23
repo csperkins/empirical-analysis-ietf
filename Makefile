@@ -48,8 +48,8 @@ data:
 data/ietf: | data
 	mkdir $@
 
-data/ietf/rfc-index.xml: bin/download.sh | data/ietf
-	@sh bin/download.sh https://www.rfc-editor.org/rfc-index.xml $@
+data/ietf/rfc-index.xml: scripts/download.sh | data/ietf
+	@sh scripts/download.sh https://www.rfc-editor.org/rfc-index.xml $@
 
 
 # -------------------------------------------------------------------------------------------------
@@ -69,13 +69,13 @@ figures:
 # -------------------------------------------------------------------------------------------------
 # Rules to build the final PDF:
 
-%.pdf: %.tex bin/latex-build.sh
-	@sh bin/latex-build.sh $<
-	@perl bin/check-for-duplicate-words.perl $<
-	@sh bin/check-for-todo.sh $<
-	@sh bin/check-for-ack.sh  $<
+%.pdf: %.tex scripts/latex-build.sh
+	@sh scripts/latex-build.sh $<
+	@perl scripts/check-for-duplicate-words.perl $<
+	@sh scripts/check-for-todo.sh $<
+	@sh scripts/check-for-ack.sh  $<
 
-# Include dependency information for PDF files. The bin/latex-build.sh
+# Include dependency information for PDFs. The scripts/latex-build.sh
 # script will generate this as needed. This ensures that the Makefile
 # knows to try to build any PDF or TeX files included by the main TeX
 # files.
@@ -94,7 +94,7 @@ $(call xargs,rm -f,$(1))
 endef
 
 define remove-latex
-$(call xargs,bin/latex-build.sh --clean,$(1))
+$(call xargs,scripts/latex-build.sh --clean,$(1))
 endef
 
 clean-data: clean
