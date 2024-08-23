@@ -6,10 +6,10 @@ if [ $# != 2 ]; then
 fi
 
 if [ -f $2 ]; then
-  echo "download $1 -> $2 (if changed)";
+  echo "fetch $1 -> $2 (if changed)";
   curl -L --progress-bar -o $2 -z $2 $1;
 else
-  echo "download $1 -> $2";
+  echo "fetch $1 -> $2";
   curl -L --progress-bar -o $2       $1;
 fi
 

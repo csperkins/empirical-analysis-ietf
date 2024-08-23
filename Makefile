@@ -26,14 +26,30 @@
 # =================================================================================================
 # Project specific build rules:
 
-IETF_DB     = 
-TEX_FILES   = paper.tex
+PAPER_PDF = paper.pdf
+
+IETF_DATA = data/ietf/rfc-index.xml
 
 RESULTS = 
 
 FIGURES = 
 
-all: $(RESULTS) $(FIGURES) $(TEX_FILES)
+all: $(PAPER_PDF)
+
+$(PAPER_PDF): $(FIGURES)
+
+# -------------------------------------------------------------------------------------------------
+# Rules to fetch data:
+
+data:
+	mkdir $@
+
+data/ietf: | data
+	mkdir $@
+
+data/ietf/rfc-index.xml: bin/download.sh | data/ietf
+	@sh bin/download.sh https://www.rfc-editor.org/rfc-index.xml $@
+
 
 # -------------------------------------------------------------------------------------------------
 # Rules to generate results:
@@ -49,15 +65,14 @@ figures:
 	mkdir $@
 
 
-
 # -------------------------------------------------------------------------------------------------
 # Rules to build the final PDF:
 
 %.pdf: %.tex bin/latex-build.sh
 	@sh bin/latex-build.sh $<
-	@sh bin/check-for-duplicate-words.perl $<
-	@sh bin/check-for-todo.sh              $<
-	@sh bin/check-for-ack.sh               $<
+	@perl bin/check-for-duplicate-words.perl $<
+	@sh bin/check-for-todo.sh $<
+	@sh bin/check-for-ack.sh  $<
 
 # Include dependency information for PDF files. The bin/latex-build.sh
 # script will generate this as needed. This ensures that the Makefile
@@ -81,11 +96,16 @@ define remove-latex
 $(call xargs,bin/latex-build.sh --clean,$(1))
 endef
 
+clean-data: clean
+	rm -rf $(IETF_DATA)
+	if [ -d data/ietf ]; then rmdir data/ietf; fi
+	if [ -d data      ]; then rmdir data;      fi
+
 clean:
 	$(call remove,$(FIGURES))
 	$(call remove,$(RESULTS))
-	rmdir figures
-	rmdir results
+	if [ -d figures ]; then rmdir figures; fi
+	if [ -d results ]; then rmdir results; fi
 
 # =================================================================================================
 # Configuration for make:
