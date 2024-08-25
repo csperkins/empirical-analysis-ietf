@@ -46,7 +46,10 @@ for rfc in ri.rfcs():
     rfcnum.append(rfc.doc_id)
     year.append(rfc.year)
     stream.append(rfc.stream)
-    area.append(rfc.area)
+    if rfc.area is None:
+        area.append("Other")
+    else:
+        area.append(rfc.area)
 
 df = pd.DataFrame({
         "rfc_num": rfcnum,
@@ -59,8 +62,8 @@ streams = df.pivot_table(values="rfc_num", aggfunc="count", index="year", column
 areas   = df.pivot_table(values="rfc_num", aggfunc="count", index="year", columns="area",   fill_value=0)
 totals  = df.groupby("year").agg("count")["rfc_num"]
 
-tmp = pd.merge(totals, streams, on="year").rename(columns={"rfc_num":"Total"})
-res = pd.merge(tmp, areas, on="year")
+tmp = pd.merge(streams, areas, on="year")
+res = pd.merge(tmp, totals, on="year").rename(columns={"rfc_num":"Total"})
 
 res.to_csv(sys.argv[2], index_label="Year")
 
