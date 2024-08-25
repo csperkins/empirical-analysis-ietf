@@ -23,6 +23,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import pandas as pd
 import sys
 
 from pathlib              import Path
@@ -36,61 +37,28 @@ if len(sys.argv) != 3:
 
 ri = RFCIndex(rfc_index = sys.argv[1])
 
-# Find the publication streams:
-streams = []
-for rfc in ri.rfcs():
-    if rfc.stream not in streams:
-        streams.append(rfc.stream)
-
-# Find the IETF areas:
-areas = []
-for rfc in ri.rfcs():
-    if rfc.area not in areas:
-        areas.append(rfc.area)
-
-# Find the RFCs per year and stream:
-count_year   = {}
-count_area   = {}
-count_stream = {}
+rfcnum = []
+year   = []
+stream = []
+area   = []
 
 for rfc in ri.rfcs():
-    doc_id = rfc.doc_id
-    year   = rfc.year
-    month  = strptime(rfc.month, "%B").tm_mon
-    stream = rfc.stream
-    area   = rfc.area
+    rfcnum.append(rfc.doc_id)
+    year.append(rfc.year)
+    stream.append(rfc.stream)
+    area.append(rfc.area)
 
-    if year in count_year:
-        count_year[year] += 1
-        count_area[year][area] += 1
-        count_stream[year][stream] += 1
-    else:
-        count_year[year]   = 0
-        count_area[year]   = {}
-        count_stream[year] = {}
-        for area in areas:
-            count_area[year][area] = 0
-        for stream in streams:
-            count_stream[year][stream] = 0
+df = pd.DataFrame({
+        "rfc_num": rfcnum,
+        "stream" : stream,
+        "year": year,
+        "area": area
+    })
 
-# Print the results:
-with open(sys.argv[2], "w") as outf:
-    print("Year", end=",", file=outf)
-    for stream in streams:
-        print(stream.upper(), end=",", file=outf)
-    for area in areas:
-        if area is None:
-            print("NoArea", end=",", file=outf)
-        else:
-            print(area.upper(), end=",", file=outf)
-    print("Total", file=outf)
+streams = df.pivot_table(values="rfc_num", aggfunc="count", index="year", columns="stream", fill_value=0)
+areas   = df.pivot_table(values="rfc_num", aggfunc="count", index="year", columns="area",   fill_value=0)
 
+res = pd.merge(streams, areas, on="year")
 
-    for year in sorted(count_year.keys()):
-        print(year, end=",", file=outf)
-        for stream in streams:
-            print(count_stream[year][stream], end=",", file=outf)
-        for area in areas:
-            print(count_area[year][area], end=",", file=outf)
-        print(count_year[year], file=outf)
+res.to_csv(sys.argv[2])
 
