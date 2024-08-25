@@ -33,7 +33,7 @@ IETF_DATA = data/ietf/rfc-index.xml
 
 RESULTS = results/rfcs-by-year.csv
 
-FIGURES = 
+FIGURES = figures/rfcs-by-year.pdf
 
 all: $(PAPER_PDF)
 

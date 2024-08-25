@@ -1,0 +1,205 @@
+\documentclass[twocolumn,10pt]{article}
+\usepackage[l2tabu,orthodox]{nag}
+\usepackage[utf8x]{inputenc}
+\usepackage[british]{babel}
+\usepackage{ifpdf}
+\ifpdf
+  \usepackage{microtype}
+\fi
+\usepackage{amsmath}
+\usepackage[all]{onlyamsmath}
+\usepackage[caption=false]{subfig}
+\usepackage{booktabs}
+\usepackage{upquote}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{color}
+\usepackage[cm]{fullpage}
+
+\frenchspacing
+\uchyph=0
+
+% Define a simple \todo{...} macro:
+\newcommand{\todo}[1]{\textbf{\textcolor{red}{To do: #1}}}
+
+%==================================================================================================
+\begin{document}
+
+\title{An Empirical Analysis of the Internet Engineering Task Force 
+       with Computational Methods}
+\author{Colin Perkins\\University of Glasgow}
+\maketitle
+%==================================================================================================
+\begin{abstract}
+  % Four sentences:
+  %  - State the problem
+  %  - Say why it's an interesting problem
+  %  - Say what your solution achieves
+  %  - Say what follows from your solution
+
+  The abstract goes here.
+
+\end{abstract}
+%==================================================================================================
+\section{Introduction}
+
+% A good paper introduction is fairly formulaic. If you follow a simple set
+% of rules, you can write a very good introduction. The following outline can
+% be varied. For example, you can use two paragraphs instead of one, or you
+% can place more emphasis on one aspect of the intro than another. But in all
+% cases, all of the points below need to be covered in an introduction, and
+% in most papers, you don't need to cover anything more in an introduction.
+%
+% Paragraph 1: Motivation. At a high level, what is the problem area you
+% are working in and why is it important? It is important to set the larger
+% context here. Why is the problem of interest and importance to the larger
+% community?
+
+
+
+% Paragraph 2: What is the specific problem considered in this paper? This
+% paragraph narrows down the topic area of the paper. In the first
+% paragraph you have established general context and importance. Here you
+% establish specific context and background.
+
+
+
+% Paragraph 3: "In this paper, we show that...". This is the key paragraph
+% in the introduction - you summarize, in one paragraph, what are the main
+% contributions of your paper, given the context established in paragraphs
+% 1 and 2. What's the general approach taken? Why are the specific results
+% significant? The story is not what you did, but rather:
+%  - what you show, new ideas, new insights
+%  - why interesting, important?
+% State your contributions: these drive the entire paper.  Contributions
+% should be refutable claims, not vague generic statements.
+
+In this paper, we ...
+
+% Paragraph 4: What are the differences between your work, and what others
+% have done? Keep this at a high level, as you can refer to future sections
+% where specific details and differences will be given, but it is important
+% for the reader to know what is new about this work compared to other work
+% in the area.
+
+
+
+% Paragraph 5: "We structure the remainder of this paper as follows." Give
+% the reader a road-map for the rest of the paper. Try to avoid redundant
+% phrasing, "In Section 2, In section 3, ..., In Section 4, ... ", etc.
+
+We structure the remainder of this paper as follows.
+
+%==================================================================================================
+% Concentrate single-mindedly on a narrative that:
+%  - Describes the problem, and why it's interesting
+%  - Describes your idea
+%  - Defends your idea, showing how it solves the problem, and filling out
+%    the details
+% On the way, cite relevant work in passing, but defer discussion to the
+% end.
+%
+% Introduce the problem, and your idea, using examples, and only then
+% present the general case. Explain the idea as if your were speaking to
+% someone using a whiteboard. Conveying the intuition is primary; details
+% follow. Write in a top down manner: state broad themes and ideas first,
+% then go into details.
+%
+% The introduction makes claims. The body of the paper provides evidence
+% to support each claim. Check each claim in the introduction, identify
+% the evidence, and forward-reference it from the claim.
+%==================================================================================================
+\section{}
+
+
+\begin{figure}
+  \centering
+  \includegraphics{figures/rfcs-by-year.pdf}
+  \caption{Number of RFCs published per year}
+  \label{fig:rfcs-by-year}
+\end{figure}
+
+
+%==================================================================================================
+\section{}
+
+
+
+
+%==================================================================================================
+\section{}
+
+
+
+
+%==================================================================================================
+\section{Related Work}
+
+% This should come near the end, and focussing on discussing how your work
+% relates to that of others. Any relevant related work should have been
+% cited already, so this is not a list of related work, it's a discussion
+% of how that work relates.
+%
+% Why not put related work after the introduction? 1) because describing
+% alternative approaches gets between the reader and your idea; and 2)
+% because the reader knows nothing about the problem yet, so your
+% (carefully trimmed) description of various technical trade-offs is
+% absolutely incomprehensible.
+%
+% When writing the related work:
+%  - Give credit to others where it's due; this doesn't diminish the
+%    credit you get from your paper.
+%  - Acknowledge weaknesses in your approach.
+%  - Ensure related work is accurate and up-to-date
+
+
+
+%==================================================================================================
+\section{Conclusions}
+
+
+
+%==================================================================================================
+\section*{Acknowledgements}
+
+% Acknowledge funding sources.
+
+%==================================================================================================
+% Set the bibliography style. Choose one of the following, depending on the
+% document class being used:
+%
+%   \bibliographystyle{abbrv}                 When using article class
+%   \bibliographystyle{IEEEtran}              When using IEEE style
+%   \bibliographystyle{ACM-Reference-Format}  When using ACM style
+
+\bibliographystyle{ACM-Reference-Format}
+
+% Load the bibliography file(s) for this paper:
+\bibliography{example}
+
+%==================================================================================================
+% The following information gets written into the PDF file information:
+\ifpdf
+  \pdfinfo{
+    /Title        (...)
+    /Author       (...)
+    /Subject      (...)
+    /Keywords     (..., ..., ...)
+    /CreationDate (D:20150827110616Z)
+    /ModDate      (D:20150827110616Z)
+    /Creator      (LaTeX)
+    /Producer     (pdfTeX)
+  }
+  % Suppress unnecessary metadata, to ensure the PDF generated by pdflatex is
+  % identical each time it is built. This needs pdfTeX 3.14159265-2.6-1.40.17
+  % or later.
+  \ifdefined\pdftrailerid
+    \pdftrailerid{}
+    \pdfsuppressptexinfo=15
+  \fi
+\fi
+%==================================================================================================
+\end{document}
+% vim: set ts=2 sw=2 tw=75 et ai:
