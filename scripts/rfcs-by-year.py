@@ -57,8 +57,10 @@ df = pd.DataFrame({
 
 streams = df.pivot_table(values="rfc_num", aggfunc="count", index="year", columns="stream", fill_value=0)
 areas   = df.pivot_table(values="rfc_num", aggfunc="count", index="year", columns="area",   fill_value=0)
+totals  = df.groupby("year").agg("count")["rfc_num"]
 
-res = pd.merge(streams, areas, on="year")
+tmp = pd.merge(totals, streams, on="year").rename(columns={"rfc_num":"Total"})
+res = pd.merge(tmp, areas, on="year")
 
-res.to_csv(sys.argv[2])
+res.to_csv(sys.argv[2], index_label="Year")
 
