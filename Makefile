@@ -68,6 +68,8 @@ results/rfcs-by-year.csv: scripts/rfcs-by-year.py data/ietf/rfc-index.xml | resu
 figures:
 	mkdir $@
 
+figures/rfcs-by-year.pdf: scripts/plot-rfcs-by-year.py results/rfcs-by-year.csv | figures
+	python3 $^ $@
 
 # -------------------------------------------------------------------------------------------------
 # Rules to build the final PDF:
