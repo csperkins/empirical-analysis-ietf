@@ -24,8 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-import seaborn
-import pandas
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
  
@@ -36,14 +35,23 @@ if len(sys.argv) != 3:
 csv_path = sys.argv[1]
 pdf_path = sys.argv[2]
 
-plt.figure(figsize=(3.5, 2))
-seaborn.set(font_scale=0.6)
+csv = pd.read_csv(csv_path)
 
-csv = pandas.read_csv(csv_path)
-dat = csv.query("Year != 1969")
-res = seaborn.barplot(x="Year", y="Total", data=dat)
-res.xaxis.set_major_locator(ticker.MultipleLocator(5))
-fig = res.get_figure()
-fig.savefig(pdf_path)
+plt.figure(figsize=(3.5,2))
+plt.rc('font',**{'family':'serif','serif':['Times'], 'size': 9})
+plt.rc('text', usetex=True)
+plt.rc('axes', axisbelow=True)
+plt.rcParams['pdf.fonttype'] = 42
 
+plt.xlabel("Year")
+plt.ylabel("RFCs Published")
+
+plt.bar(csv["Year"], csv["Total"])
+
+# Annotate with date IETF created
+plt.plot([1986, 1986], [0, 400], ':', color='black')
+plt.text(1978, 410, 'IETF Created', color='black')
+
+plt.plot()
+plt.savefig(pdf_path, format="pdf", bbox_inches="tight")
 
