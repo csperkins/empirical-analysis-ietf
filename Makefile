@@ -31,9 +31,9 @@ PAPER_TEX = $(PAPER_PDF:.pdf=.tex)
 
 IETF_DATA = data/ietf/rfc-index.xml
 
-RESULTS = results/rfcs-by-year.csv
+RESULTS = results/rfcs-by-year-stream.csv
 
-FIGURES = figures/rfcs-by-year.pdf
+FIGURES = figures/rfcs-by-year-stream.pdf
 
 all: $(PAPER_PDF)
 
@@ -58,7 +58,7 @@ data/ietf/rfc-index.xml: scripts/fetch.sh | data/ietf
 results:
 	mkdir $@
 
-results/rfcs-by-year.csv: scripts/rfcs-by-year.py data/ietf/rfc-index.xml | results
+results/rfcs-by-year-stream.csv: scripts/rfcs-by-year-stream.py data/ietf/rfc-index.xml | results
 	python3 $^ $@
 
 
@@ -68,7 +68,7 @@ results/rfcs-by-year.csv: scripts/rfcs-by-year.py data/ietf/rfc-index.xml | resu
 figures:
 	mkdir $@
 
-figures/rfcs-by-year.pdf: scripts/plot-rfcs-by-year.py results/rfcs-by-year.csv | figures
+figures/rfcs-by-year-stream.pdf: scripts/plot-rfcs-by-year-stream.py results/rfcs-by-year-stream.csv | figures
 	python3 $^ $@
 
 # -------------------------------------------------------------------------------------------------
