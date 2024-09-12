@@ -84,7 +84,7 @@ figures/rfcs-by-year-stream.pdf: scripts/plot-rfcs-by-year-stream.py results/rfc
 # script will generate this as needed. This ensures that the Makefile
 # knows to try to build any PDF or TeX files included by the main TeX
 # files.
--include $(TEX_FILES:%.tex=%.dep)
+-include $(PAPER_TEX:%.tex=%.dep)
 
 # =================================================================================================
 # Project specific clean rules:
