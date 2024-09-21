@@ -691,13 +691,14 @@ University and University Carlos III of Madrid.
 \end{figure}
 
 %..................................................................................................
+% IMC 2021 paper Section 3.2 (last part)
 \pb{Arrival of new authors:}
 Finally, Figure~\ref{fig:author_new} shows the percentage of authors in each
 year that have not previously authored an RFC. Given that the dataset used here
 begins in 2001, 100\% of authors are new in that year. The more stable trend in
 recent years likely highlights the churn in RFC authorship, with around 30\%
 of authors each year having never previously authored an RFC.
-
+\todo{Not clear this fits here}
 
 \begin{figure}
 \includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/authors/repeat_authors.pdf}
@@ -716,6 +717,260 @@ contributors from Africa), and that the authorship pool is becoming
 increasingly centralised, with a third of authors coming from the top 10
 affiliations. This suggests, if the organisation is concerned with being
 more representative, further efforts are needed.
+
+%==================================================================================================
+\section{Organisational Dynamics of the IETF}
+
+%--------------------------------------------------------------------------------------------------
+\subsection{Characterising Participant Interactions}
+
+% IMC 2021 paper Section 3.3
+
+The operations of the IETF is largely underpinned by mailing list
+interactions, which are used to discuss and finalise the drafts that
+eventually become RFCs. Our data, which starts from 1995, confirms their
+vital role, with 1,153 mailing lists, containing 2,439,240 emails from
+74,646 unique email addresses.
+
+\pb{Volume of Discussion:}
+Figure~\ref{fig:pid_count_emailing_yearly} presents the number of emails
+sent across the last 25 years, showing that email volumes have grown
+significantly with time, plateauing at around 130,000 annual messages since
+around 2010. The figure also shows how the number of unique Person ID
+counts (as described in \S\ref{sec:data}) observed every year in the mail
+lists, showing a decreasing trend in the number of contributors.
+
+Figure~\ref{fig:emailvol_by_year_catg} shows the relative email volume by
+type. We see that an increasing fraction of messages originate from
+automated addresses. This is largely as a result of the growing use of
+GitHub, and other version control systems, for managing drafts. There were
+122 active IETF working groups at the time of writing: of these, 17 listed
+a GitHub repository in their metadata. The QUIC working group, as one
+example, has replaced the typical email list discussions with GitHub
+issues: indeed, this is a significant part of the surge observed in 2016.
+Given that most working groups use mailing lists to manage their activity,
+we do not further analyse interactions that take place on GitHub in this
+paper. As a result, Figure~\ref{fig:emailvol_by_year_catg} understates the
+volume of interactions: the plateau observed in recent years is at least
+somewhat attributable to the shift to GitHub and similar services. As this
+shift continues, it will become important for future work to consider these
+interactions.
+\todo{We have more discussion of GitHub?}
+
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/emails/pid_count_emailing_yearly.pdf}
+\caption{Number of Person IDs exchanging emails each year}
+\label{fig:pid_count_emailing_yearly}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/emails/frequency_emails_yearly_categories2.pdf}
+\caption{Number of messages exchanged per year across different categories:
+  messages mapped to the Datatracker (Datatracker Person-ID); messages by
+  automated email addresses (Automated); messages by role-based addresses
+  (Role-based); and messages not mapped to the Datatracker (New Person-ID)}
+\label{fig:emailvol_by_year_catg}
+\end{figure}
+
+%..................................................................................................
+\pb{Discussion of drafts:}
+The mailing lists are, other than plenary or interim meetings, the primary
+means for the discussion of drafts.  To measure how often drafts are
+discussed, we next identify mentions of drafts in mailing list messages.
+We therefore extract any mention of a draft (beginning \texttt{draft-}) or
+RFC (i.e., ``RFC'' followed by a number).  Figure~\ref{fig:draft_mentions}
+presents the number of drafts mentions in the emails per year. Separate
+mentions of the same draft are counted as different mentions, as we want to
+observe the entire volume of mentions.  We observe a strong increase in the
+number of mentions over time.  This is largely driven by the growing number
+of drafts being published. In fact, we find a Pearson correlation of 0.89
+between the number of drafts published and the number of mentions. This
+speaks to the influence of emails that mention drafts in driving draft
+production.
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/emails/yearly-draft-mention-volume.pdf}
+\caption{Number of draft mentions in each year found in the mail lists}
+\label{fig:draft_mentions}
+\end{figure}
+
+%..................................................................................................
+\pb{Contribution duration.}
+We now look into the longevity of contributors, in terms of the number of
+years that they actively participate in any IETF mailing lists. We define
+the \textit{contribution duration} of a participant as the length of time
+that they have contributed to the mailing lists.  To do this, we look at
+the contributors who first contribute to mailing lists between the years
+2000 to 2013. We limit our analysis to 2013, since the longevity of
+contributors that first participate more recently cannot be determined.
+For each year, in the period 2000 to 2013, we look at those who first
+contribute in each year and the number of years that they then go on to
+remain active in the mailing lists. For example, a participant who first
+sent an e-mail to an IETF list in 2010, and last sent an e-mail to an IETF
+list in 2018, will have a contribution duration of 9 years.
+
+We generate Gaussian Mixture Models for observing different clusters of the
+maximum duration that contributors remain active for.  These models
+identified three broad clusters that contributors can be categorised
+within:
+
+\begin{itemize}
+    \item \emph{Young contributors} who leave within 1 year of joining.
+    \item \emph{Mid-age contributors} who go onto remain associated for
+      more than 1 year, but less than 5 years.
+    \item \emph{Senior contributors} who go onto remain associated for 5 or
+      more years.
+\end{itemize}
+
+We use these contribution categories defined above to characterise the
+interactions between contributors belonging to different categories, as
+well as the authors of each RFC. We look at outgoing and incoming
+interactions with RFC authors in the period between the first draft and
+publication of the RFC. If this period is less than two years, we look at
+the activities of authors for two years before the RFC was published.
+Interactions are defined from the viewpoint of the RFC authors:
+
+\begin{itemize}
+    \item \textit{Outgoing interaction}, where an RFC author responds to an
+      email from other contributors (i.e., email sent).
+    \item \textit{Incoming interaction}, where contributors respond to an
+      email by the author (i.e., email received).
+\end{itemize}
+
+For each interaction type, we count the number of messages and number of
+unique contributors involved in those interactions. For each RFC, we
+analyse the interaction activities based on three measures of author
+contribution duration:
+
+\begin{itemize}
+    \item \emph{Junior-most author}, i.e., the author with the lowest
+      contribution duration at the time of publication.
+    \item \emph{Senior-most author}, i.e., the author with the highest
+      contribution duration at time of publication.
+    \item \emph{Mean contribution duration} of all of the authors of the
+      RFC at the time of publication.
+\end{itemize}
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/emails/age_authors_RFCs.pdf}
+\caption{Contribution duration distribution of authors of RFCs: junior-most
+  author of each RFC, senior-most author of each RFC, and mean
+  contribution-duration of all authors of each RFC}
+\label{fig:age_dist_rfc_authors}
+\end{figure}
+
+Figure~\ref{fig:age_dist_rfc_authors} shows the distribution of
+contribution duration of each of these three measures. This shows that the
+majority of junior-most authors have participated for less than 5 years in
+the IETF, whereas the majority of senior-most authors have participated in
+the IETF for more than 10 years. In fact, 35\% of authors exceed 15 years
+of IETF participation, showing that RFCs tend to be authored by a mix of
+seniority levels.
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/emails/rfc_authors_degree.pdf}
+\caption{CDF showing drift in annual degree (interaction with their
+  network) of RFC authors over the period 2000-2020.}
+\label{fig:degree_dist_rfc_authors}
+\end{figure}
+
+%..................................................................................................
+\pb{Evolution of interactions:}
+Figure~\ref{fig:degree_dist_rfc_authors} shows the gradual drift in annual
+degree (i.e., the number of people interacted with) of RFC authors. The
+degree of authors has substantially increased over time. For instance, in
+the year 2000 only 5.5\% of the authors had a degree of over 25, whereas by
+the year 2015 almost a quarter of the authors had a degree over 25.  This
+confirms that, on average, more recent RFCs generate greater discussion.
+This may explain increasing publication times: authors spend more time
+interacting with other participants, and these discussions are likely to
+lead to more drafts.
+\todo{Replace with material from one of the later papers?}
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/emails/junior_senior_authors_seniormem_indegree.pdf}
+\caption{CDF showing number of senior contributors sending messages
+  (in-degree) to junior and senior authors.}
+\label{fig:junior_senior_indegree_seniormem}
+\end{figure}
+
+We can also contrast the interaction patterns of the junior vs.\ senior
+authors. Figure~\ref{fig:junior_senior_indegree_seniormem} presents the
+CDFs of the in-degree across both junior and senior authors.  It shows that
+the incoming interactions from senior contributors to junior authors are
+significantly less than the incoming interactions from senior contributors
+to senior authors. Nearly 55\% of junior authors receive messages from
+fewer than 10 senior contributors, whereas nearly 65\% of senior authors
+receive messages from more than 10 senior contributors.  This speaks to the
+differing roles played by these sub-populations: senior authors act as hubs
+through which substantial volumes of interaction flow.
+\todo{Replace with material from one of the later papers?}
+
+%..................................................................................................
+\pb{Summary:}
+Emails play a vital role in underpinning RFC publication with approximately
+130,000 emails sent per year. We have shown that the seniority of both
+participants and RFC authors fundamentally changes the volume of
+interactions that they have. These trends are likely to have implications
+for the IETF community, especially as it tries to encourage new
+participants.
+
+
+
+%--------------------------------------------------------------------------------------------------
+\subsection{Influence}
+
+% ICWSM 2022 paper
+% - Measuring influence
+% - Behaviour of influential participants
+% - Impact of influential participants
+
+
+%--------------------------------------------------------------------------------------------------
+\subsection{Hierarchy}
+%..................................................................................................
+% ICWSM 2024 paper
+% - RQ1: Are higher levels of the hierarchy growing or becoming more
+%   centralised? Are they associated with an increased domination of the
+%   conversation? 
+% - RQ2: What is the association between the organisation hierarchy and
+%   general communication patterns?
+% - RQ3: How do people with differing roles communicate with each other?
+%   Does information flow “up” or “down” the hierarchy? 
+% - RQ4: What is the impact that individuals have on their direct contacts’
+%   activity over time? How does this vary across hierarchy level?
+
+%..................................................................................................
+% LEDA
+% - a taxonomy of dialogue acts (DAs) and a labeled dataset of emails
+
+%==================================================================================================
+\section{Understanding Participant Behaviour}
+
+% Tracing Linguistic Markers
+% - RQ1: How do linguistic traits differ between more and less influential
+%   participants? 
+% - RQ2: How do linguistic traits vary for participants at different levels
+%   of the organisation hierarchy? 
+% - RQ3: How does linguistic behaviour of participants change as they gain
+%   influence?
+
+% Frontiers in Psychology paper
+% - Use of Language, discussing how it shifts as people become more senior
+
+%==================================================================================================
+\section{Success Factors}
+
+\subsection{For authors}
+% ICWSM 2022 paper Section 4
+
+
+
+\subsection{For documents}
+
+% IMC 2021 paper Section 4
 
 %==================================================================================================
 \section{Related Work}
