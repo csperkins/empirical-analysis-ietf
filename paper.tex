@@ -578,10 +578,144 @@ more likely.
 \end{figure}
 
 %==================================================================================================
-\section{Exploring Authorship}
+\section{Trends in Participant Demographics}
+
+% The following is from our IMC 2021 paper, Section 3.2:
 
 
+The IETF Datatracker maintains metadata about document authors, including
+their names, email addresses, affiliations, and location information. This
+dataset does not cover the entire RFC corpus, with metadata available for
+authors of RFCs published from 2001, and where it has been provided.
+Country data is available for around 70\% of authors, while affiliation
+information is given for around 80\%. In this section, we look at the
+authorship of all of the RFCs published each year, using the available
+metadata. An author is counted once in a year for each affiliation or
+location they hold.
 
+%..................................................................................................
+\pb{Geographic Distribution of Authors:}
+Figures~\ref{fig:author_countries_normalised} and
+\ref{fig:author_continents_normalised} show the proportion of authors from
+countries and continents, respectively. The IETF has signalled that it
+wishes to encourage greater geographical diversity~\cite{rfc7704,
+ietfblog:diversity}. Without an explicit goal, we frame our findings within
+the context of global population distribution.  We find that North America,
+while still disproportionately over represented, is becoming less dominant.
+75\% of authors were from North America in 2001, and this has declined to
+44\% in 2020. At the same time, representation of both Europe and Asia has
+grown, from 17\% to 40\% and 6\% to 14\%, respectively.  However, Africa
+and South America remain heavily underrepresented, with only $\approx$0.5\%
+of authors coming from either continent in 2020.  This suggests that, if
+the IETF is to become more geographically representative, further efforts
+are needed.
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/authors/top5_countries_normalised.pdf}
+\caption{Authorship countries (normalised)}
+\label{fig:author_countries_normalised}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/authors/continents_normalised.pdf}
+\caption{Authorship continents (normalised)}
+\label{fig:author_continents_normalised}
+\end{figure}
+
+%..................................................................................................
+\pb{Author Affiliations:}
+Figure~\ref{fig:author_affiliations_normalised} shows the top 10
+affiliations by proportion of authors each year. Affiliation data is
+gathered from the Datatracker, and processed to normalise affiliation
+names, removing common variations in spelling, and amalgamating known
+subsidiaries and merged companies. For example, Huawei and Futurewei are
+combined as Huawei, and Sun Microsystems is merged with Oracle.
+
+From Figure~\ref{fig:author_affiliations_normalised}, we observe several
+interesting trends.  First, Cisco remains a consistent employer of IETF
+contributors, with around 12\% of authors affiliated with the company in
+2020, and having been the single largest affiliation across all years in
+the dataset. We can also see the rise of Huawei beginning in 2005, with
+7.1\% of authors being affiliated with the company in 2020, having peaked
+at 9.7\% in 2018. Google has a similar trajectory, first appearing in the
+dataset in 2006, with 3.8\% of authors being affiliated with it in 2020.
+
+We also observe the decline of a number of affiliations.  Microsoft and
+Nokia, having peaked with 3.3\% and 3.6\% of authors, had 0.7\% and 1.7\%
+of authors in 2020, respectively, with the absolute number of authors from
+both companies also declining.
+
+That we are able to observe changing trends in author affiliations, and in
+particular, that participants from new companies contribute, indicates that
+the IETF has broader relevance beyond a narrow set of companies. While we
+do not demonstrate any causal link, it is encouraging that commercially
+successful companies opt to enable their employees to actively participate
+in the IETF. Care is needed to ensure that this relevance is maintained,
+however: we observe that the author pool has grown less diverse in terms of
+companies that are represented. 35.4\% of authors came from the top 10
+affiliations in the dataset in 2020, compared with 25.6\% in 2001. 
+
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/authors/top5_affiliations_normalised.pdf}
+\caption{Authorship affiliations (normalised)}
+\label{fig:author_affiliations_normalised}
+\end{figure}
+
+%..................................................................................................
+\pb{Academia and consultants:}
+Academic affiliations are those where the affiliation name contains
+``University'', ``Institute'', or ``College'', while consultancy
+affiliations are those that contain ``Consultant``. Affiliation data has
+been normalised to remove common abbreviations (e.g., ``U.'' for
+``University'') and to translate non-English affiliations.  As shown in
+Figure~\ref{fig:author_affiliations_normalised}, we find that an increasing
+number of authors come from academic affiliations, growing from 8.1\% of
+authors in 2001, to 13.6\% in 2020, having peaked at 16.5\% in 2009. The
+number of consultants, by our measure, has remained stable, accounting for
+2\% of authors in 2020.  The remaining authors are largely from industrial
+affiliations.
+
+Figure~\ref{fig:author_affiliations_normalised_acad} shows the top 10
+academic affiliations in the dataset, and the percentage of academic
+authors that have those affiliations over time. In general, academic
+affiliations are each typically held by a small number of authors. We can
+see a number of trends in academic authorship, with fewer authors from
+Columbia University, MIT, and ISI in recent years, and the rise of Tsinghua
+University and University Carlos III of Madrid.
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/authors/top5_affiliations_normalised_acad.pdf}
+\caption{Academic affiliations (normalised)}
+\label{fig:author_affiliations_normalised_acad}
+\end{figure}
+
+%..................................................................................................
+\pb{Arrival of new authors:}
+Finally, Figure~\ref{fig:author_new} shows the percentage of authors in each
+year that have not previously authored an RFC. Given that the dataset used here
+begins in 2001, 100\% of authors are new in that year. The more stable trend in
+recent years likely highlights the churn in RFC authorship, with around 30\%
+of authors each year having never previously authored an RFC.
+
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/imc-2021/authors/repeat_authors.pdf}
+\caption{Percentage of new authors per year.}
+\label{fig:author_new}
+\end{figure}
+
+%..................................................................................................
+\pb{Summary:}
+The trends highlighted in this section  indicate a pool of authors that is
+diversifying and changing over time, with a growing proportion of authors
+from outside of North America, contributions from new companies and
+affiliations, and relatively high authorship churn. Despite this, we find
+that certain regions and groups are not well represented in the IETF (e.g.,
+contributors from Africa), and that the authorship pool is becoming
+increasingly centralised, with a third of authors coming from the top 10
+affiliations. This suggests, if the organisation is concerned with being
+more representative, further efforts are needed.
 
 %==================================================================================================
 \section{Related Work}
