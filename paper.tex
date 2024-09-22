@@ -28,7 +28,17 @@
 
 \title{An Empirical Analysis of the Internet Engineering Task Force 
        with Computational Methods}
-\author{Colin Perkins\\University of Glasgow}
+\author{Colin Perkins \and
+        Prashant Khare \and
+        Mladen Karan \and
+        Stephen McQuistin \and
+        Waleed Iqbal \and
+        Junaid Qadir \and
+        Matthew Purver \and
+        Patrick Healey \and
+        Ignacio Castro \and
+        Gareth Tyson}
+
 \maketitle
 %==================================================================================================
 \begin{abstract}
@@ -725,7 +735,7 @@ more representative, further efforts are needed.
 \label{sec:org-dynamics}
 
 %--------------------------------------------------------------------------------------------------
-\subsection{Characterising Participant Interactions}
+\subsection{Interactions}
 \label{sec:org-dynamics:participants}
 
 % IMC 2021 paper Section 3.3
@@ -928,16 +938,536 @@ participants.
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Influence}
+\label{sec:org-dynamics:influence}
 
 % ICWSM 2022 paper
 % - Measuring influence
 % - Behaviour of influential participants
 % - Impact of influential participants
 
+% This is modified from the Introduction to the ICWSM 2022 paper:
+
+As we showed in Section \ref{sec:org-dynamics:participants}, protocol
+standardisation is an inherently social process with most day-to-day work
+happening on public mailing lists, aided by meetings, video conference
+calls, and open document and code repositories.  We are specifically
+interested in better understanding how influence is distributed across
+stakeholders and how it might affect the standardisation process.  This is
+of critical societal importance: the IETF has a major impact on global
+Internet technologies, and understanding the social processes involved
+would give us insight into not only the driving forces behind
+standardisation, but also its resilience to the loss of major participants.
+In the following we consider the following \emph{research questions}: 
+\begin{enumerate}
+    \item How centralised is the active IETF community, and to what extent
+      is it reliant on a small core of participants? 
+    \item How do the most influential participants behave? 
+    \item How does influence (determined by mailing list participation)
+      relate to wider impacts throughout the IETF?
+    \item Does the organisational affiliation of participants also
+      influence the innovation (adoption of new work) within IETF?
+\end{enumerate}
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% ICWSM 2022 paper Section 3
+\subsubsection{The IETF as a Social Graph}
+
+\label{subsec:measuring_influence}
+
+Much of the interaction between IETF participants occurs on public mailing
+lists.  For each year, we build a social graph based on the \emph{active
+community} of participants (nodes) who have interactions (edges) with any
+other participant in the previous 5 years. 
+
+In Section \ref{sec:org-dynamics:participants}, we demonstrated that there
+are three categories of participants in IETF - (a) \textit{young
+contributors} -- who leave within one year of their first year mailing list
+contribution; (b) \textit{mid-age contributors} -- participants who stay
+active for up-to 5 years; and (c) \textit{senior contributors} -- who
+remain active for more than 5 years. Following this, a 5 year period window
+is chosen to observe interactions. There are no direct
+participant-to-participant email exchanges in our dataset: the emails and
+responses we capture are sent to the public mailing lists, and we observe
+an interaction between two participants when one replies to an email sent
+by another on any mailing list. This yields a social graph based on
+1,049,793 emails (out of 2.1M) from 22,138 unique participants across 840
+mailing lists.
+
+%..................................................................................................
+% ICWSM 2022 paper Section 3.1
+\pb{Participation}
+To examine the variation in participation between IETF participants, in
+Figure~\ref{fig:degree_cdf} we plot the cumulative degree distribution of
+the social graph -- i.e., the cumulative number of people a participant
+interacts with.  We observe a core group that always interacts with
+substantially more people than the rest of the community, with around 80\%
+of the participants having degree  $<$15, but 5\%-10\% having degree $>$40.
+However,  this difference decreases over time: in 2005-2009 around 6\% of
+participants had degree $>$40, but by the period 2015-2019 this increases
+to $\sim10\%$.  This shows that while there is always a core of more active
+participants, the degree of participation has spread  out over time.
+\todo{Repetitive with Section \ref{sec:org-dynamics:participants}?}
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/degree_CDF.pdf}
+\caption{Cumulative degree distribution of the email graph for different year-periods.}
+\label{fig:degree_cdf}
+\end{figure}
+
+To understand the structure of the community, and its reliance on specific
+groups, we analyse the connected components of this graph. Each connected
+component reflects a maximal set of nodes such that each pair of nodes is
+connected by a path. We compute the size of the Largest Connected Component
+(LCC) and the Number of Connected Components (NCC) for each year in
+Figure~\ref{fig:lcc_size_yearly}.  The NCC peaks in 2003 before declining,
+and broadly aligns with the variation in the number of meeting
+attendees,\footnote{\url{https://datatracker.ietf.org/stats/meeting/overview/}}
+suggesting a lag between participating for the first time and integrating
+into the wider community.  In contrast, the size of the LCC increases until
+2006 before stabilising.  Overall, we observe that the IETF community has
+become less fragmented.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/lcc_yearly_no_components.pdf}
+\caption{Size of Largest Connected Component (LCC) and Number of Connected Components (NCC)}
+\label{fig:lcc_size_yearly}
+\end{figure}
+
+%..................................................................................................
+% ICWSM 2022 paper Section 3.1
+\pb{Influence}
+Relying on a small group to interconnect the community could undermine the
+resilience of the IETF.  To study the influence of participants and their
+role in interconnecting the wider community, we compute the betweenness
+centrality of each participant in a given time
+period~\cite{kourtellis2013identifying, weitzel2012measuring,
+sole2014centrality}. We also considered other graph based influence metrics
+such as eigenvector centrality: eigenvector centrality reflects the
+importance of a node as per its neighbours, while betweenness centrality is
+based on shortest paths which is independent of the influence of
+neighbours.
+
+However, we found a very strong correlation between the two measures, 
+in line with similar experiments \cite{valente2008correlated,he2016correlation}:
+the Spearman's rank correlation of participants ranked by betweenness
+centrality and eigenvector centrality ranged between 0.51-0.72, with a
+strong statistical significance ($p < 0.01$) for the period 2000-2019. We
+therefore use just betweenness centrality in our analysis; this is often
+studied and acknowledged as a measure of influence in social and complex
+networks, particularly built on online communication
+\cite{hagen2018crisis,chen2012identifying, ghalmane2019centrality}.
+
+Figure~\ref{fig:purge_nodes_largest_connected_component_number_components}
+then shows the effect of removing the most influential participants (in 1\%
+increments from most to least, moving left-to-right on the x-axis) on the
+size of the LCC.  Worryingly, we find that removal of just 20-25\% of the
+most influential participants causes the LCC to shrink by 90\%.  However,
+we also find that this impact has decreased over time: for instance, in
+2000-2004, removing the top $\sim$5\% influential participants, reduces the
+size of LCC by more than half, whereas in 2015-2019, it takes the removal
+of the top $\sim$15\% of participants to have the same effect.  This shows
+that the community has become \emph{more} cohesive and resilient over time,
+and the IETF can now sustain a larger amount of churn while maintaining a
+well-connected social graph.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/lcc_proportion_granular_yearly.pdf}
+\caption{Impact of removing participants by their influence on the size of the LCC.}
+\label{fig:purge_nodes_largest_connected_component_number_components}
+\end{figure}
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% ICWSM 2022 paper Section 3.2
+\subsubsection{Behaviour of Influential Participants}
+\label{subsec:influencer_behaviour}
+
+\todo{This is somewhat repetitive with Section \ref{sec:org-dynamics:participants}}
+
+We now characterise the behaviour of the most influential participants, in
+terms of the volume of emails sent, length of time active within the
+community, and topics discussed. 
+
+%..................................................................................................
+\pb{Email volume}
+Figure~\ref{fig:emailcount_top_percentile} shows that each participant in
+the top 10\% most influential participants sends on average around
+0.05\%-0.08\% of total emails in a given period.  Collectively, the top
+10\% most influential participants account for 43.75\%, on average, of the
+total emails, a substantially larger proportion than the others.
+
+This dynamic seems stable over time, making differences even more acute.
+At the same time, the overall number of emails sent increases up to 2010
+and remains roughly stable from then onward.  Along with the results from
+\S\ref{subsec:measuring_influence}, this shows a worrying, if slowly
+improving, dependence of the IETF on a small number of influential
+participants.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/lineplot_proportion_emailscount_top_percentile.pdf}
+\caption{Proportion of emails sent (\%) by participants in each period 
+(with 95\% confidence interval) according to their betweenness-centrality percentile (x-axis).
+Y2-axis (purple) shows yearly count of emails.}
+\label{fig:emailcount_top_percentile}
+\end{figure}
+
+%..................................................................................................
+\pb{Cross-area review} 
+In addition to sending more emails, we test if influential participants
+engage with different parts of the community more. The work of the IETF is
+divided into several areas (e.g., Applications \& Real-time, Security, and
+Routing). This eases administration, but might also act as a barrier to
+broader discussion and review. For example, WebRTC standards developed in
+the Applications and Real-time area might contain elements that could
+benefit from expertise from the Security area, but participants in one area
+might not review work in another. 
+
+Figure~\ref{fig:areas_participation_top_percentile} shows the mean number
+of areas where IETF participants are active (derived from the mailing lists
+they use).  We see that influential participants engage in more areas of
+the IETF, on average, and that cross-area engagement has improved over
+time, indicating that the community itself has matured. This indicates that
+influential participants benefit the IETF in enabling cross-area discussion
+and review, and can bridge administrative divisions.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/lineplot_avg_areas_top_percentile.pdf}
+\caption{Mean number of areas participated in (with 95\% confidence
+  interval) according to their betweenness-centrality percentile in the
+  x-axis, ranked from  top (0-10) to bottom percentile (91-100).}
+\label{fig:areas_participation_top_percentile}
+\end{figure}
+
+%..................................................................................................
+\pb{Participation duration}
+We next consider for how long participants remain associated with the IETF
+(measured as the delta between first and last emails sent).
+Figure~\ref{fig:age_top_percentile} shows the mean participation duration
+distribution for participants, ranked by influence.  Participation duration
+increases over time, with the most influential participants typically being
+those who have been active for longer. While this might be expected, it
+might be a good sign for the IETF community in that it implies that the
+most influential participants are also the most experienced.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/lineplot_age_top_percentile.pdf}
+\caption{Mean participation duration (with 95\% confidence interval)
+  according to their betweenness-centrality percentile in the x-axis,
+  ranked from  top (0-10) to bottom percentile (91-100).}
+\label{fig:age_top_percentile}
+\end{figure}
+
+We extend this observation by considering what happens to participants once
+they become influential. Figure \ref{fig:heatmap_top10_overlap} shows what
+proportion of the top 10\% influential participants in any given year
+(\emph{y-axis}) was also among the top 10\% influential participants in any
+other year (\emph{x-axis}). This shows that a significant majority of
+participants that become influential, continue to be influential for a
+number of years: the top 10\% are influential for at least 6-7 years on
+average.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/heatmap_top10_percent_overlap.pdf}
+\caption{Yearly overlap (\%) of top 10\% influencers.}
+\label{fig:heatmap_top10_overlap}
+\end{figure}
+
+Further, Figure \ref{fig:rate_new_influential_participants} shows that
+breaking into the top 10\% of influencers requires an increasing number of
+years of participation. This may be beneficial, showing that the IETF is
+maturing and is capable of retaining influential and experienced
+participants, but it may also point to an increasingly ossified structure
+that is not welcoming to newcomers.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/new_influencers_top10_age_longevityInTop10.pdf}
+\caption{Percentage of new influential participants breaking into top 10\%
+  influencers (black); the average years of participation before entering
+  top 10\% (purple); and minimum \#  years new influencers remain in top
+  10\% (with 95\% confidence intervals).}
+\label{fig:rate_new_influential_participants}
+\end{figure}
+
+%..................................................................................................
+\pb{Topics of Discussion} 
+The topics discussed on WG mailing lists are a good indicator of the focus
+of technical work, and it might be expected that influential participants
+will set the direction of that work.  To explore this, we use the Latent
+Dirichlet Allocation (LDA) \cite{blei2003latent,hoffman2010online} model
+from \texttt{gensim} \cite{rehurek_lrec} to induce 100 topics on the entire
+set of email texts. 
+Each topic is a distribution over words: e.g., a \emph{security} topic might
+have high probability for \emph{cypher}, \emph{rsa}, \emph{auth}, and
+related words. We can also use the model to obtain a vector for any input
+text as a sparse distribution over all topics, e.g., finding that a text is
+comprised of 30\% security and 70\% video streaming topics. With this, we
+generate a vector for each participant in a given time period by
+concatenating all messages sent by that participant in the period and
+feeding it into the LDA model. The result can be loosely interpreted as a
+distribution of topics on which each participant works.
+
+Manual inspection of the induced topics reveals some interesting trends. We
+find that topics related to \emph{routing} and \emph{email} protocols are
+seeing a steady decline in popularity, while topics like \emph{streaming}
+and \emph{cryptography} are becoming more prominent. This reflects wider
+trends in standardisation, as these efforts have adjusted to the public's
+increased awareness of privacy, especially in light of the Edward Snowden
+leaks \cite{RFC7258}. We also find that as videoconferencing became
+increasingly popular, so did the WebRTC protocol that frequently underpins
+them.
+
+We next measure the topical diversity of a participant by observing the
+entropy of their topic vector, their \emph{topic entropy}, defined as
+follows:
+\begin{equation}
+    \eta = - \sum_{i=1}^{|T|} p_i \log p_i \nonumber
+\end{equation}
+where $T = [p_1, ..., p_N]$ is a topic vector, which defines a probability
+distribution over $N$ topics, each $p_i$ is a probability of the $i$-th
+topic and $\sum_i p_i = 1$.
+
+Figure \ref{fig:topic_diversity} shows topic entropy distributions of
+participants in different time periods and influence percentiles. While we
+initially experimented with measuring diversity by simply counting the
+number of topics that account for the majority ($ \geq 95\% $) of a
+participant's topic distribution probability mass, we found that most
+participants engage in a relatively small number of topics, regardless of
+influence. However, after measuring diversity using entropy, we identify
+that the activity of the more influential participants tends to be more
+evenly spread across the topics they participate in\footnote{An example
+with 3 topics: a distribution of $[0.8, 0.1, 0.1]$ is less evenly spread
+than $[0.3, 0.4, 0.3]$.}. This difference becomes more pronounced over
+time, implying that increased topic entropy (i.e.,~more evenly participating
+in different topics) is an increasingly salient property of influencers.
+This is aligned with our earlier findings on cross-area review, showing the
+growing number of areas in which influencers participate.
+
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/icwsm-2022/topic-div.png}
+\caption{Mean topic entropy (with 95\% confidence interval) according to
+  their betweenness-centrality percentile in the x-axis, ranked from  top
+  (0-10) to bottom percentile (91-100).}
+\label{fig:topic_diversity}
+\end{figure}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Impact of Influential Participants}
+\label{subsec:impact_influence}
+
+% ICWSM 2022 paper Section 3.3
+
+While these top participants are influential within the \emph{mailing
+lists}, it is unclear how this influence translates into document
+authorship and into gaining  leadership roles within  the organisation.
+
+%..................................................................................................
+\pb{Draft authorship}
+The output of the IETF is technical standards and other documents published
+in the RFC series. RFCs are developed by WGs from a sequence of Internet-Drafts,
+with individuals acting as named authors.  Having identified the most
+influential participants in the mailing list community, we can determine
+whether or not these same participants are also the most active authors.
+
+Figure~\ref{fig:drafts_initiation_top_percentile} shows the distribution of
+the proportion of documents authored by mailing list participants, sorted
+by their influence rank. We observe a growing proportion of the community
+involved in draft authoring, skewed towards influential participants who
+tend to write more drafts.  During 2010-2019, each participant in the top
+10 percentile, authored 0.125\% to 0.175\% of the total number of drafts in
+that period. We find that 32\%-42\% of the total drafts, in different years
+during this period, were authored by the top 10\% most influential mailing
+list participants.
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/icwsm-2022/documents_proportion_published_top_percentile.pdf}
+\caption{Average drafts authored (with 95\% confidence interval) according
+  to their betweenness-centrality percentile in the x-axis, ranked from
+  top (0-10) to bottom percentile (91-100).  Right-y axis (purple) shows
+  yearly drafts per year.}
+\label{fig:drafts_initiation_top_percentile}
+\end{figure}
+
+%..................................................................................................
+\pb{Co-authorship and email graph correlation}
+Figure~\ref{fig:drafts_initiation_top_percentile} showed that influential
+mailing list participants tend to author more drafts than others.
+We next ask if they are also influencers in the draft co-authorship graph.
+
+Thus, we create a draft co-authorship graph where each author is a node,
+and draft co-authorship is an edge. We then measure influence with
+betweenness centrality of the authors in each time period.
+Table~\ref{tbl:correlation_sprmn} compares the top 20\% of influencers of
+the mailing lists with those of the co-authorship graph.  We find a
+significant overlap between both groups, ranging from 48.2\% to 67.2\%.
+There is a significant ($p < 0.05$) positive correlation between the
+rankings of the overlapping members of each community: participants that
+are influential in the mailing lists are also likely to be influential in
+draft authorship.
+
+\begin{table}
+\small 
+\begin{tabular}{llllll}
+\toprule
+\multicolumn{6}{c}{Top 20\% draft authors \& all email participants}\\ \midrule
+                
+Years   & \multicolumn{2}{c}{Sub-Network Size} & Overlap  & \multicolumn{2}{c}{Spearman's $r_{s}$} \\ \cline{2-3}  \cline{5-6}
+    &   Co-author & Email  &  &   $r_{s}$   & $p$-value \\ \midrule
+    
+2000-04   &   398 &   1390 &   48.24\%  &  .323 &   4.75e-06 \\
+2005-09   &   427 &   1662 &   67.21\% &   .332   &   7.39e-09    \\
+2010-14   &   728 &   1639 &   63.05\% &   .299   &   5.73e-11  \\
+2015-19   &   915 &   1370 &   55.85\%  &   .337   &   4.13e-15  \\ %\hline
+   
+\bottomrule
+\end{tabular}
+\caption{Overlap in the co-author and email graph.}
+\label{tbl:correlation_sprmn}
+\end{table}
+
+We also look at the top 20\% participants from the co-authorship network
+who are \emph{not} part of the top 20\% influencers in the email network in
+Figure \ref{fig:non_overlapping_coauthornetwork_authors_emailnetwork}.
+We observe that not all the prolific authors are that engaged in the email
+discussion: 40\%-50\% of non-overlapping authors are ranked between 20th to
+40th percentile of influence in the email network. These non-overlapping
+authors are typically more junior with respect to their participation
+duration.
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/icwsm-2022/coauthor_affiliation_network/lineplot_non_overlapping_authors_emailnetwork_percentile.pdf}
+\caption{Percentage of Top 20\% authors that are not 20\% influencers
+  according to their betweenness-centrality (email graph) percentile in the
+  x-axis, ranked from  top (0-10) to bottom percentile (91-100).}
+\label{fig:non_overlapping_coauthornetwork_authors_emailnetwork}
+\end{figure}
+
+%..................................................................................................
+\pb{Leadership roles} 
+WG chairs are selected from the community, and we might expect those
+selected to be influential in the community.
+Figure~\ref{fig:wg_chair_before_after} shows that this is indeed the case:
+87.5\% of WG chairs are in the top 20\% of mailing list influencers and
+67.4\% are in the top 20\% of document authors in the year before they
+became chairs. This also shows the impact of taking up a leadership role:
+influence in both the mailing list and authorship communities grows in the
+year after participants become a WG chair for the first time. 
+
+
+\begin{figure}
+\includegraphics[width=0.45\textwidth]{figures-prev/icwsm-2022/WG_chair_percentile_CDF_before_after.pdf}
+ \caption{CDF of the percentile of betweenness-centrality of WG chairs in
+  the email and co-authorship graph, one year before and after becoming
+  chairs.}
+\label{fig:wg_chair_before_after}
+\end{figure}
+
+%..................................................................................................
+\pb{Organisations}  While participants in the IETF contribute as
+individuals, they are usually affiliated with an organisation.  To study
+the potential influence of organisations, for each draft we obtain the
+authors' affiliations from the Datatracker. If this is not available, we
+use the domain name of the authors' email addresses, which we map to the
+relevant organisation (e.g., \texttt{@cisco.com} maps to Cisco). For generic
+email addresses, such as \texttt{@gmail.com}, we use the participant name
+if no affiliation is available.
+
+Figure \ref{fig:coauthor_affiliation_network2019_otheryears} shows the ten
+most frequent affiliated organisations of the top 20\% authors in the
+period 2015-2019, and the number of authors affiliated with these
+organisations in  each  period.  While the dominance of Cisco is clear,
+other organisations, such as Huawei, have gained a larger presence over
+time.  In general, a small number of organisations employ a significant
+fraction of the influential participants in the standards process. If we
+look at the period 2015-2019, for example, out of the 915 authors ranked in
+the top 20\% of most influential authors, 342 belong to the ten most
+frequently affiliated organisations, and nearly 253 are from Cisco, Huawei,
+Ericsson, or Juniper alone.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/coauthor_affiliation_network/2019_affiliations_in_otheryears_coauthor_network.pdf}
+\caption{Authors in the most common affiliations of top 20\% authors
+  (co-authorship graph) in 2015-2019.}
+\label{fig:coauthor_affiliation_network2019_otheryears}
+\end{figure}
+
+While authors from the same organisation often co-author drafts together,
+collaborations between authors from different organisations are also
+common.  Figure~\ref{fig:heatmap_2019_coauthordraft_most_frequent_org}
+shows the most common collaborations between authors from the top 15 most
+frequently affiliated organisations.  Collaborations between authors at
+competing organisations, such as between authors from Cisco, Huawei,
+Ericsson, and Juniper, occur frequently. We also computed that over the
+years, joint collaboration (authors from multiple affiliations) has
+increased: 772 co-authored drafts in the period 2000-2004 vs. 3083
+co-authored drafts in the period 2015-2019.
+
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{figures-prev/icwsm-2022/coauthor_affiliation_network/heatmap_2019_top10_affiliation_collaboration.pdf}
+\caption{Number of drafts co-authored by top 15 most frequently affiliated
+  organisations. We only include the top 20\% authors (co-authorship graph)
+  of 2015-2019.}
+\label{fig:heatmap_2019_coauthordraft_most_frequent_org}
+\end{figure}
+
+Further inspection of the collaboration trends reveals that the volume of
+collaborations between authors from Huawei and other organisations appears
+to be unaffected by the recent addition of Huawei to the U.S. Entity List
+\cite{bis:2019:entity} as the trends in Figure~\ref{fig:heatmap_2019_coauthordraft_most_frequent_org}
+also hold for 2020-2021.\footnote{\tiny\url{https://mailarchive.ietf.org/arch/msg/ietf-announce/0ywjgSS4LlO0DaWDoLJLRHxJdUk/}}
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Discussion}
+
+% ICWSM 2022 paper section 4.3
+
+We conclude that the IETF is still reasonably centralised, but that this
+has improved over the years. However, removing around 20\%-25\% most
+influential participants still fragments the entire network
+(\S\ref{subsec:measuring_influence}, Figure
+\ref{fig:purge_nodes_largest_connected_component_number_components}). The
+most influential people are the ones with highest degree of engagements
+within the community who also tend to be more involved in draft authoring
+activities (\S\ref{subsec:influencer_behaviour}, Figure
+\ref{fig:drafts_initiation_top_percentile}). However, we also observe that
+over the years more people (even the ones less influential in the email
+network) are getting involved in draft authoring activities (Figure
+\ref{fig:drafts_initiation_top_percentile}). This shows that these
+activities, while centralised to a certain degree, are still open to
+contributions from the wider IETF community.
+
+We observe that the influential participants show a much higher level of
+engagement with the community (\S\ref{subsec:influencer_behaviour}). A
+considerable proportion of total emails is sent by the top 10\% of
+influential participants (Figure \ref{fig:emailcount_top_percentile}).
+Compared to the rest of participants, they are active in more areas (Figure
+\ref{fig:areas_participation_top_percentile}), are active within the IETF
+for a longer period of time (Figure \ref{fig:age_top_percentile}), and
+participate in a more diverse set of topics (Figure
+\ref{fig:topic_diversity}). Finally, their influence extends from the
+mailing lists to other activities such as draft authorship.
+
+A significant overlap and correlation is observed between
+influential authors from co-authorship network and email networks
+(\S\ref{subsec:impact_influence}, Table \ref{tbl:correlation_sprmn}). This
+shows that a large set of authors exhibit an ability to co-author drafts as
+well as engage with participants on the email networks, thereby translating
+their influence from email networks to co-authorship and vice versa. 
+
+A considerable portion of influential participants ($\sim$30\%) are
+affiliated to one of the more prominent organisations (e.g., \emph{Cisco}
+or \emph{Ericsson}) (\S\ref{subsec:impact_influence}, Figure
+\ref{fig:coauthor_affiliation_network2019_otheryears}). Participants from
+different organisations do considerably collaborate (Figure
+\ref{fig:heatmap_2019_coauthordraft_most_frequent_org}). Moreover, the
+level of such collaboration is found to have increased with time. 
+
+
+
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Hierarchy}
-%..................................................................................................
+
 % ICWSM 2024 paper
 % - RQ1: Are higher levels of the hierarchy growing or becoming more
 %   centralised? Are they associated with an increased domination of the
@@ -974,6 +1504,21 @@ participants.
 % ICWSM 2022 paper Section 4
 
 
+% ICWSM 2022 paper section 4.3
+The statistical analysis shows that influence of draft authors in the email
+networks does impact the possibility of a draft getting adopted
+(\S\ref{subsec:results}, Table \ref{tbl:res} \& \ref{tbl:resstat}). This
+might hint at the ability of participants who hold a domain expertise to be
+able to engage better with the community. Several WG chairs are already in
+the top percentile influential category in both the email and co-authorship
+networks before taking up these leadership roles, which further elevates
+after taking up such leadership roles (Figure
+\ref{fig:wg_chair_before_after}).
+
+Most importantly the statistical analysis shows that being affiliated with
+a prominent organisation positively impacts the chances of a draft in
+getting adopted by a WG, thereby directly driving the innovation process
+(Table \ref{tbl:res} \& \ref{tbl:resstat}).
 
 \subsection{For documents}
 
