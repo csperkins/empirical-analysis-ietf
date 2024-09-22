@@ -21,7 +21,10 @@
 \uchyph=0
 
 \newlength{\figureWidthOneColumn}
-\setlength{\figureWidthOneColumn}{0.40\textwidth}
+\setlength{\figureWidthOneColumn}{0.4\textwidth}
+
+\newlength{\figureWidthTwoColumn}
+\setlength{\figureWidthTwoColumn}{0.8\textwidth}
 
 \newcommand{\todo}[1]{\textbf{\textcolor{red}{To do: #1}}}
 \newcommand{\pb}[1]{\vspace{0.75ex}\noindent{\textbf{#1}}}
@@ -1738,6 +1741,130 @@ Groups (WGs).
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.1:
 
+For \textbf{RQ1}, to determine the steepness or diffusion of the hierarchy,
+the proportion of nodes and activity are determined in each hierarchy
+level. Figure~\ref{fig:activity_proportions}a shows the number of active
+nodes in each level. The bottom level, RPs, are the largest contingent
+consisting of 90--86\% of active participants; this proportion is
+decreasing over time. The next level is WGCs which manage the WGs and are
+6--10\% of active participants; this proportion is rising over time. The
+top level is ADs which manage many WGs within an area and consist of less
+than 1\% of the total active population of the IETF; this stays constant
+over time. Therefore, the WGC level is becoming more diffused over time as
+there are about 15 RPs for every one WGC in the organisation in 2013 versus
+8 RPs per WGC in 2021. 
+
+The proportion of activity of nodes in the last year is also plotted and
+split into hierarchy level in Figure~\ref{fig:activity_proportions}b. It is
+clear that individuals at higher levels contribute a disproportionate share
+to communication and this share is increasing over time, which is
+consistent with findings in \cite{khare2022web}. Therefore, less of a
+proportion of communication is flowing from the RPs at the same time as the
+number of WGC roles is increasing. This further suggests that the IETF
+hierarchy is becoming more diffused, in terms of mailing list
+communication, which may make cooperation between hierarchy levels more
+difficult.
+
+\begin{figure}[t]
+  \centering
+  \small{a)} \\
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/active_node_proportions_year_sliding_window.png} \\
+  \small{b)} \\
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/activity_proportions_year_sliding_window.png}
+  \caption{
+    Proportions of RPs, WGCs and ADs by a) number of active individuals and
+    b) activity (number of emails sent to mailing lists). 
+  }
+  \label{fig:activity_proportions}
+\end{figure}
+
+Figure~\ref{fig:wgc_over_time}a shows the amount of nodes that inhabit the
+WGC hierarchy level over our time period. There is a $35\%$ rise in the
+amount of WGC roles whereas the amount of individuals that fill the WGC
+roles remains mostly constant.
+
+Figure~\ref{fig:wgc_over_time}b contains two estimates of the number of WGs
+over time. The estimated number of WGs is likely the most accurate in the
+middle 50\% of both plotted lines. Their discrepancy is the least (at most
+10 WGs) from late 2014 to early 2019. The start of the COVID-19 pandemic
+may also affect mailing list activity in 2020, and similar trends are
+visible in the data in \cite{mcquistin2021characterising}. A full
+explanation on how the data is estimated can be found in
+section~\ref{sec:WG_activity}.
+
+Figure~\ref{fig:wgc_over_time}c shows how many WGCs exist per WG, using
+both estimates of the WG amount from Figure~\ref{fig:wgc_over_time}b. It is
+clear there is a slow a rise in WGCs per WG over time. The ratio rises from
+between 1.7-1.9 to 2.0-2.2 within the middle 50\%, late 2014 to early
+2019.This perhaps represents a growing understanding in the IETF that it is
+desirable to have two or more chairs per WG in case of
+illness/unavailability or to avoid conflicts of interest. Therefore, this
+plot again shows that the hierarchy is becoming more diffused, even if the
+raw amount of individuals in the WGC roles has remained constant. The
+multiple roles per individual may result in even more difficulty of RPs to
+use their voice.
+
+An AD version of Figure~\ref{fig:wgc_over_time} is available, but it is
+omitted to save space as all three plots stay mostly constant throughout
+the period. There are about 15 individual ADs split amongst 15 roles in 7-8
+areas with about 2 ADs per Area. The set of IETF Areas is broadly fixed,
+while WGs are created and closed relatively frequently.
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/over_time.png}
+  \caption{
+    Overview of WGC numbers and WG numbers over time. a) shows the number
+    of WGC roles (some individuals hold multiple WGC roles) and the number
+    of individuals who are WGCs b) shows two different estimates of the
+    number of WGs (see section~\ref{sec:method}) and c) shows the mean
+    number of WGCs per WG. Notice the non-zero-based y-axis exaggerates the
+    variation in these figures.
+  }
+  \label{fig:wgc_over_time}
+\end{figure}
+
+An AD version of Figure~\ref{fig:wgc_over_time} is available, but it is
+omitted to save space as all three plots stay mostly constant throughout
+the period. There are about 15 individual ADs split amongst 15 roles in 7-8
+areas with about 2 ADs per Area. The set of IETF Areas is broadly fixed,
+while WGs are created and closed relatively frequently.
+
+Table~\ref{tab:WGC_email} shows the emails sent and received for WGC and
+ADs on mailing lists in the year before they first take that role, and the
+year after. WGCs and ADs are both active in using the mailing lists, ADs
+much more so. However, they don't become more active to any major degree
+after taking the roles. This may suggest that the individuals who take on
+higher hierarchy level roles are already contributing at a higher level.
+
+\begin{table}[!tbp]
+\centering
+    \begin{tabular}{c||c|c}
+        Status & Sent & Received \\
+         \hline \hline 
+        Before WGC & $67.26\pm99.80$ & $70.11\pm103.37$ \\
+        \hline
+        After WGC & $77.20\pm102.85$ & $85.90\pm107.38$ \\
+        \hline
+        Before AD & $218.84\pm226.92$ & $230.50\pm214.75$ \\
+        \hline
+        After AD & $209.21\pm186.46$ & $219.16\pm189.85$ \\
+    \end{tabular}
+        \caption{Mean number of emails received for one year before/after becoming a WGC (AD) for the first time. The error is one standard deviation.}
+    \label{tab:WGC_email}
+\end{table}
+
+\pb{Summary}
+In answer to RQ1 the picture is mixed, the number of individuals with WGC
+roles has remained broadly constant but the number of WGC roles has
+increased, indicating that individuals willing to become WGC have taken on
+more such roles. The number of the higher level AD roles has, by design,
+remained broadly constant over the time studied. The proportion of active
+individuals with WGC roles has grown from 6\% to 10\% and the proportion of
+the conversation taken by those roles has grown from 25\% to 35\% over the
+period studied. Therefore the hierarchy has become more diffused, which may
+mean RPs experience more difficulty in expressing their voice.
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1773,8 +1900,74 @@ originate email threads.
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.2:
 
+To quantify the effect of being in each hierarchy level has on network wide
+communication for \textbf{RQ2}, we calculate the proportion of three node
+motifs, lasting at most a month, in which each node participates over a
+year period, see section~\ref{sec:motif}. These motifs are counted,
+categorised into the three hierarchy levels and then proportions are taken
+of each motif type. 
+
+Figure~\ref{fig:motif_proportions} shows the proportions of each level for
+three node ``Inward Star", ``Outward Star", ``Mixed Star", and
+``Triangles". The Inward and Mixed Star motifs show about a $4\%$ and
+$10\%$ increase in proportion for higher levels in the hierarchy versus for
+RPs. However, about a $10\%$ increase for RPs is seen for Triangles versus
+WGCs and ADs, and Outward Star proportions remain similar for all levels of
+the hierarchy.
+
+The larger proportion for WGCs and ADs of Inward and Mixed Star motifs
+whilst the Outward Star motifs remain similar for all levels suggests that
+higher levels receive more direct communication. The higher proportion of
+RP Triangle motifs suggests their discussion is more of a group activity,
+whereas WGCs and ADs have a larger proportion of one-on-one conversations.
+Therefore, we interpret the general communication patterns within the IETF
+as a discussion amongst RPs interspersed with questions sent to and
+announcements from WGCs and ADs. This indicates some collaboration between
+layers and confidence of some RPs' to voice their opinions upwards.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/icwsm-2024/motif_strata_comparison.png}
+  \caption{
+    Communication patterns analysed by three edge temporal motifs for RPs,
+  }
+  \label{fig:motif_proportions}
+\end{figure*}
 
 
+Figure~\ref{fig:origin_emails} seems to corroborate this. We calculate the
+proportion of mailing list threads which nodes in each hierarchy level
+originate, using a year window, pushed forward by a month each calculation.
+We see that WGCs and ADs send a disproportionate number of originating
+emails to the mailing lists. WGCs send 30--50\% whereas they are 6--10\% of
+active individuals, and ADs 5--10\% versus 0.5\%. 
+
+Therefore, the larger proportion of inward motifs for higher levels is in
+part due to WGCs and ADs disproportionately originating email threads.
+Other IETF participants will then reply to the thread, boosting the
+proportion of inward motifs WGCs and ADs appear in. This may suggest the
+higher levels are good ``condensers of communication" as they receive more
+than they send.
+
+In answer to the RQ, combining the interpretations of the two plots, the
+discussion seems to happen in the following way: The ADs or WGCs are
+commonly the originators of discussion threads. Where conversation includes
+a WGC or AD the conversation tends to be directed around them and usually
+inward towards the WGC or AD. The RPs are more likely to engage in
+discussions amongst themselves (triangular communication patterns) when
+higher level individuals are not present. 
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/Origin_email_proportions.png}
+  \caption{
+    Proportion of ``origin" (non reply) emails sent by RPs, WGCs and ADs,
+    this should be interpreted in conjunction with
+    figure~\ref{fig:activity_proportions} showing the proportion of active
+    individuals in each class.
+  }
+  \label{fig:origin_emails}
+\end{figure}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Communication up and down the Hierarchy}
@@ -1803,7 +1996,55 @@ the more of a skew to upward communication.  Communication tends to flow
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.3:
 
+For \textbf{RQ3}, we determine the direction communication tends to flow
+through the hierarchy by looking at inbound and outbound communication
+flows. The network's edges are categorised based on their source and target
+node's hierarchy level. For each of the inter-level communication
+combinations the proportion of communication in the last year going in the
+``upward" hierarchy direction is calculated. For instance, if there are six
+emails from RPs to WGCs and twelve from WGCs to RPs then the proportion
+upward is $\frac{6}{6+12}=\frac{1}{3}$. 
 
+In Figure~\ref{fig:inter_strata}, these proportions are plotted, and the
+year long window is again pushed forward by one month to increase the
+resolution of changes. A proportion of higher than $0.5$ shows more
+communication flowing up the hierarchy than down. All three levels are
+mostly upward in direction, with the lowest two levels (RP$\rightarrow$
+WGC) having the largest skew in the proportion. The other two lines
+(RP$\rightarrow$AD and WGC$\rightarrow$AD) show similar periodicity, with
+the WGC$\rightarrow$AD line dropping as far below $0.5$ as above showing a
+large shift in inter-level communication patterns higher up the hierarchy.
+
+The direct measurement of message flow between the hierarchy levels seems
+to bolster our interpretation that the cooperative design of the IETF is
+working. This analysis shows that RPs are communicating much more
+preferentially upwards in the hierarchy, despite the decrease in overall
+share of RP activity. The increase within the WGC level does not have any
+noticeable effect on their level of communication, if anything there is a
+negative relationship. This again suggests both WGCs and ADs perform a kind
+of ``condenser of communication" or ``facilitator" role. In other words,
+this analysis suggests the IETF has a ``bottom-up" communication style,
+where the higher levels encourage the lower levels' voice.  This is the
+desired pattern of communication for a volunteer organisation that is
+looking to grow and encourage participants to engage and gradually take on
+leadership roles.
+
+Overall for RQ3 then, the pattern observed was communication flowing up the
+hierarchy and this corresponds to the answer found in RQ2. WGCs and ADs
+were more likely to receive communication with individuals than send
+communication to individuals whereas both were more likely than RPs to send
+out messages to the list in general. 
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/up_hierarchy_communication_ratios.png}
+  \caption{
+    Proportion of communications that are ``up" the hierarchy for different
+    groups. A proportion above 0.5 indicates that the majority of
+    communications are ``upward".
+  }
+  \label{fig:inter_strata}
+\end{figure}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Mobility Within the Hierarchy}
@@ -1839,7 +2080,87 @@ lists.
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.4:
 
+Finally, to determine how individuals and their neighbours affect each
+other's activity levels in subsequent time periods, for \textbf{RQ4}, we
+take correlations of degree between different time windows using the
+Mobility Taxonomy~\cite{barnes2023measuring} aspects called
+\textit{Mobility}, \textit{Neighbour Mobility}, \textit{Philanthropy} and
+\textit{Community} explained in the previous section. In
+Figure~\ref{fig:mob_tax}, the time window chosen is one year which is split
+into two snapshots graphs of six months, the time window then moves forward
+one month and the process is repeated. The mid point of the year time
+window is plotted. WGCs and RPs are plotted but the small number of ADs
+mean that the correlations are too noisy to show meaningful effects. 
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/icwsm-2024/hierarchy_status_comparison.png}
+  \caption{
+    Connection between roles and activity for RP and WGC viewed in terms of
+    a) Mobility b) Neighbour Mobility c) Philanthropy and d) Community over
+    time. See section~\ref{subsec:mob_tax} for definitions of these terms.
+  }
+  \label{fig:mob_tax}
+\end{figure*}
+
+The \textit{Mobility} of both RPs and WGCs is plotted in
+Figure~\ref{fig:mob_tax}a. The high amount of correlation between the
+degree of an individual in the first half of the time window with the
+second half shows that all users have a tendency to become more active in
+subsequent time periods if they are highly active in the previous period,
+but this is more pronounced in WGCs. This is found to follow a period of
+about one year for both RPs and WGC, suggesting that a person is likely to
+be as active as there were a year ago. The \textit{Neighbour Mobility}
+plot, Figure~\ref{fig:mob_tax}b, shows a similar tendency for
+neighbourhoods, but with less of a split.
+
+The \textit{Philanthropy} plot, Figure~\ref{fig:mob_tax}c, shows a higher
+correlation for WGCs than RPs between an individual's degree in the first
+snapshot with and their ND in the second. This means that individuals who
+directly interact with WGCs become more active on mailing lists
+subsequently. The \textit{Community} plot, Figure~\ref{fig:mob_tax}d, shows
+the correlation between the ND in the first snapshot with the degree in the
+second.  The higher correlation for WGCs suggests they benefit from
+interactions with highly active neighbours by themselves becoming more
+active in subsequent time periods. These trends for \textit{Philanthropy}
+and \textit{Community} show a reversal in early 2016 that coincides with a
+period where the mean number of WGCs per WG and the number of WGC roles was
+rapidly rising, see figure~\ref{fig:wgc_over_time}. A merging of the
+Applications area and Real-time Applications \& Infrastructure area in May
+2015 may be a cause of this reversal of correlation, as the assignment of
+WGs to areas was changed which may cause more non-reciprocal WGC
+communication than normal.
+
+Increased \textit{Mobility} for WGCs suggests that they gain advantage from
+their role with their activity leading to similar communication activity in
+the future. Moreover, they experience an increased effect of
+\textit{Philanthropy} and \textit{Community}. The former suggests that if a
+WGC is engaged in a higher amount of discussion, then in the future the
+individuals who they were communicating with will also be highly active.
+The latter suggests that when WGCs are surrounded by people who are active
+in discussion, they are likely to be more active themselves in the future
+too. All of this has less of an effect for RPs who show a lower correlation
+in terms of all three aspects. Our interpretation of this is that active
+WGCs are ``facilitating" discussion in the WG mailing lists; both having
+their activity boosted by their neighbours and, in turn, boosting the
+activities of their neighbours. This aligns well with the hypothesis that
+the cooperative and voluntary design of the IETF lends itself well to
+higher levels encouraging those lower to engage in discussion. 
+
+Overall the answer to RQ4 is that the WGCs have a positive effect on their
+immediate contacts and those individuals that directly discuss with WGCs
+are more likely to engage more in discussion in subsequent time periods.
+Conversely though the WGCs who discuss topics with individuals who are
+active in discussion are, themselves, more likely to engage more fully in
+discussion. This points to something like a virtuous cycle of WGCs
+encouraging and being encouraged by their direct contacts. 
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Summary}
+
+% From our ICWSM 2024 paper, Section 6:
+
+\todo{summarise hierarchy results}
 
 %..................................................................................................
 % LEDA
