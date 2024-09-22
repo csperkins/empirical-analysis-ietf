@@ -20,6 +20,9 @@
 \frenchspacing
 \uchyph=0
 
+\newlength{\figureWidthOneColumn}
+\setlength{\figureWidthOneColumn}{0.40\textwidth}
+
 \newcommand{\todo}[1]{\textbf{\textcolor{red}{To do: #1}}}
 \newcommand{\pb}[1]{\vspace{0.75ex}\noindent{\textbf{#1}}}
 
@@ -264,7 +267,7 @@ WebRTC.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/rfcs_areas.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/rfcs_areas.pdf}
   \caption{
     RFCs by area. \textit{Other} includes legacy RFCs, and RFCs from other
     non-IETF streams.
@@ -272,7 +275,9 @@ WebRTC.
   \label{fig:rfcs_by_area}
 \end{figure}
 
-\todo{Add draft publication rate as mentioned in Section \ref{sec:org-dynamics:participants}}
+\todo{Plot RFC publication count as a cumulative distribution}
+
+\todo{Add draft publication count as mentioned in Section \ref{sec:org-dynamics:participants}}
 
 %..................................................................................................
 \pb{Role of Working Groups:}
@@ -300,7 +305,7 @@ peak of 97 active working groups, and other activities, in 2011.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/unique_wgs_per_year_areas.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/unique_wgs_per_year_areas.pdf}
   \caption{
     Number of publishing working groups. \textit{Other} includes legacy
     RFCs, IRTF research groups, and non-IETF streams.
@@ -322,7 +327,7 @@ more revisions before publication.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/day_counts_yearly.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/day_counts_yearly.pdf}
   \caption{
     Days from first draft to RFC publication
   }
@@ -331,7 +336,7 @@ more revisions before publication.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/draft_counts_yearly.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/draft_counts_yearly.pdf}
   \caption{
     Number of drafts per RFC
   }
@@ -348,7 +353,7 @@ longer: median page counts have remained stable.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/page_counts_yearly_dt.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/page_counts_yearly_dt.pdf}
   \caption{
     RFC page counts
   }
@@ -372,7 +377,7 @@ similarly shows that RFCs are increasingly referring to prior work.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/update_obsolete_yearly_pct.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/update_obsolete_yearly_pct.pdf}
   \caption{
     RFCs that update or obsolete previous RFCs
   }
@@ -381,7 +386,7 @@ similarly shows that RFCs are increasingly referring to prior work.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/cite_counts_yearly.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/cite_counts_yearly.pdf}
   \caption{
     Citations from RFCs to other Internet-Drafts and RFCs per RFC
   }
@@ -403,7 +408,7 @@ before plateauing in recent years.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/documents/keyword_usage_rate.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/keyword_usage_rate.pdf}
   \caption{
     Keyword occurrences per page
   }
@@ -451,7 +456,7 @@ per year, with Pearson coefficient 0.59 since 2007.  Table
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/tma-2023/errata-by-year.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-by-year.pdf}
   \caption{
     Average errata filed per RFC for each year by RFC publication year,
     grouped by IETF area (acronyms expanded in Table~\ref{tab:errata-stats-area}).
@@ -482,7 +487,7 @@ errata.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/tma-2023/errata-submission-dates-area.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-submission-dates-area.pdf}
   \caption{
     Days from RFC publication and errata filing by IETF area (acronyms
     expanded in Table~\ref{tab:errata-stats-area}).
@@ -498,7 +503,7 @@ publication year of the RFC to which they relate.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/tma-2023/errata-by-status.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-by-status.pdf}
   \caption{
     Errata filings by status, by publication year of the RFC.
   }
@@ -552,7 +557,7 @@ erratum filing.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/tma-2023/errata-by-rfc-by-area.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-by-rfc-by-area.pdf}
   \caption{
     CDF of errata filed per RFC by grouped by IETF area (acronyms expanded
     in Table~\ref{tab:errata-stats-area}).
@@ -617,7 +622,7 @@ more likely.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/tma-2023/location-percent.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/location-percent.pdf}
   \caption{
     Errata counts by percentile location in document (0 is the beginning;
     100 is the end).
@@ -627,7 +632,7 @@ more likely.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/tma-2023/section-title-counts.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/section-title-counts.pdf}
   \caption{
     Errata counts by section title for the more frequent section titles.
   }
@@ -669,7 +674,7 @@ are needed.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/authors/top5_countries_normalised.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/top5_countries_normalised.pdf}
   \caption{
     Authorship countries (normalised)
   }
@@ -678,7 +683,7 @@ are needed.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/authors/continents_normalised.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/continents_normalised.pdf}
   \caption{
     Authorship continents (normalised)
   }
@@ -721,7 +726,7 @@ affiliations in the dataset in 2020, compared with 25.6\% in 2001.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/authors/top5_affiliations_normalised.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/top5_affiliations_normalised.pdf}
   \caption{
     Authorship affiliations (normalised)
   }
@@ -752,7 +757,7 @@ University and University Carlos III of Madrid.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/authors/top5_affiliations_normalised_acad.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/top5_affiliations_normalised_acad.pdf}
   \caption{
     Academic affiliations (normalised)
   }
@@ -771,7 +776,7 @@ of authors each year having never previously authored an RFC.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/authors/repeat_authors.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/repeat_authors.pdf}
   \caption{
     Percentage of new authors per year.
   }
@@ -834,7 +839,7 @@ interactions.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/emails/pid_count_emailing_yearly.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/pid_count_emailing_yearly.pdf}
   \caption{
     Number of Person IDs exchanging emails each year
   }
@@ -844,7 +849,7 @@ interactions.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/emails/frequency_emails_yearly_categories2.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/frequency_emails_yearly_categories2.pdf}
   \caption{
     Number of messages exchanged per year across different categories:
     messages mapped to the Datatracker (Datatracker Person-ID); messages
@@ -876,7 +881,7 @@ complexity of draft publication?}
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/emails/yearly-draft-mention-volume.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/yearly-draft-mention-volume.pdf}
   \caption{
     Number of draft mentions in each year found in the mail lists
   }
@@ -943,7 +948,7 @@ contribution duration:
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/emails/age_authors_RFCs.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/age_authors_RFCs.pdf}
   \caption{
     Contribution duration distribution of authors of RFCs:
     junior-most author of each RFC, senior-most author of
@@ -963,7 +968,7 @@ seniority levels.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/emails/rfc_authors_degree.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/rfc_authors_degree.pdf}
   \caption{
     CDF showing drift in annual degree (interaction with their network)
     of RFC authors over the period 2000-2020.
@@ -986,7 +991,7 @@ lead to more drafts.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/imc-2021/emails/junior_senior_authors_seniormem_indegree.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/junior_senior_authors_seniormem_indegree.pdf}
   \caption{
     CDF showing number of senior contributors sending messages (in-degree)
     to junior and senior authors.
@@ -1091,7 +1096,7 @@ participants, the degree of participation has spread  out over time.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/degree_CDF.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/degree_CDF.pdf}
   \caption{
     Cumulative degree distribution of the email graph for different
     year-periods.
@@ -1114,7 +1119,7 @@ become less fragmented.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/lcc_yearly_no_components.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lcc_yearly_no_components.pdf}
   \caption{
     Size of Largest Connected Component (LCC) and Number of Connected
     Components (NCC)
@@ -1161,7 +1166,7 @@ well-connected social graph.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/lcc_proportion_granular_yearly.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lcc_proportion_granular_yearly.pdf}
   \caption{
     Impact of removing participants by their influence on the size
     of the LCC.
@@ -1197,7 +1202,7 @@ participants.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/lineplot_proportion_emailscount_top_percentile.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_proportion_emailscount_top_percentile.pdf}
   \caption{
     Proportion of emails sent (\%) by participants in each period (with
     95\% confidence interval) according to their betweenness-centrality
@@ -1227,7 +1232,7 @@ and review, and can bridge administrative divisions.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/lineplot_avg_areas_top_percentile.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_avg_areas_top_percentile.pdf}
   \caption{
     Mean number of areas participated in (with 95\% confidence interval)
     according to their betweenness-centrality percentile in the x-axis,
@@ -1249,7 +1254,7 @@ most influential participants are also the most experienced.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/lineplot_age_top_percentile.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_age_top_percentile.pdf}
   \caption{
     Mean participation duration (with 95\% confidence interval) according
     to their betweenness-centrality percentile in the x-axis, ranked from
@@ -1269,7 +1274,7 @@ average.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/heatmap_top10_percent_overlap.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/heatmap_top10_percent_overlap.pdf}
   \caption{
     Yearly overlap (\%) of top 10\% influencers.
   }
@@ -1285,7 +1290,7 @@ that is not welcoming to newcomers.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/new_influencers_top10_age_longevityInTop10.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/new_influencers_top10_age_longevityInTop10.pdf}
   \caption{
     Percentage of new influential participants breaking into top 10\%
     influencers (black); the average years of participation before entering
@@ -1352,7 +1357,7 @@ growing number of areas in which influencers participate.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/topic-div.png}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/topic-div.png}
   \caption{
     Mean topic entropy (with 95\% confidence interval) according to their
     betweenness-centrality percentile in the x-axis, ranked from top (0-10)
@@ -1392,7 +1397,7 @@ list participants.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/documents_proportion_published_top_percentile.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/documents_proportion_published_top_percentile.pdf}
   \caption{
     Average drafts authored (with 95\% confidence interval) according to
     their betweenness-centrality percentile in the x-axis, ranked from top
@@ -1452,7 +1457,7 @@ duration.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/coauthor_affiliation_network/lineplot_non_overlapping_authors_emailnetwork_percentile.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/lineplot_non_overlapping_authors_emailnetwork_percentile.pdf}
   \caption{
     Percentage of Top 20\% authors that are not 20\% influencers according
     to their betweenness-centrality (email graph) percentile in the x-axis,
@@ -1475,7 +1480,7 @@ year after participants become a WG chair for the first time.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/WG_chair_percentile_CDF_before_after.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/WG_chair_percentile_CDF_before_after.pdf}
   \caption{
     CDF of the percentile of betweenness-centrality of WG chairs in the
     email and co-authorship graph, one year before and after becoming
@@ -1508,7 +1513,7 @@ Ericsson, or Juniper alone.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/coauthor_affiliation_network/2019_affiliations_in_otheryears_coauthor_network.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/2019_affiliations_in_otheryears_coauthor_network.pdf}
   \caption{
     Authors in the most common affiliations of top 20\% authors
     (co-authorship graph) in 2015-2019.
@@ -1529,7 +1534,7 @@ co-authored drafts in the period 2015-2019.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.40\textwidth]{figures-prev/icwsm-2022/coauthor_affiliation_network/heatmap_2019_top10_affiliation_collaboration.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/heatmap_2019_top10_affiliation_collaboration.pdf}
   \caption{
     Number of drafts co-authored by top 15 most frequently affiliated
     organisations. We only include the top 20\% authors (co-authorship
