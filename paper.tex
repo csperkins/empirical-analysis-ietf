@@ -33,9 +33,11 @@
        with Computational Methods}
 \author{Mladen Karan \and
         Prashant Khare \and
+        Matthew Russell Barnes \and
         Waleed Iqbal \and
         Junaid Qadir \and
         Stephen McQuistin \and
+        Richard G. Clegg \and
         Patrick Healey \and
         Matthew Purver \and
         Ignacio Castro \and
@@ -1053,7 +1055,7 @@ of critical societal importance: the IETF has a major impact on global
 Internet technologies, and understanding the social processes involved
 would give us insight into not only the driving forces behind
 standardisation, but also its resilience to the loss of major participants.
-In the following we consider the following \emph{research questions}: 
+In the following we consider the following research questions: 
 \begin{enumerate}
   \item How centralised is the active IETF community, and to what extent
     is it reliant on a small core of participants? 
@@ -1559,7 +1561,7 @@ to be unaffected by the recent addition of Huawei to the U.S. Entity List
 \cite{bis:2019:entity} as the trends in Figure~\ref{fig:heatmap_2019_coauthordraft_most_frequent_org}
 also hold for 2020-2021.\footnote{\tiny\url{https://mailarchive.ietf.org/arch/msg/ietf-announce/0ywjgSS4LlO0DaWDoLJLRHxJdUk/}}
 
-%--------------------------------------------------------------------------------------------------
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Summary}
 
 % ICWSM 2022 paper section 4.3
@@ -1609,7 +1611,8 @@ level of such collaboration is found to have increased with time.
 
 
 %--------------------------------------------------------------------------------------------------
-\subsection{Hierarchy}
+\subsection{Hierarchy and Communication Dynamics}
+\label{sec:org-dynamics:hierarchy}
 
 % ICWSM 2024 paper
 % - RQ1: Are higher levels of the hierarchy growing or becoming more
@@ -1621,6 +1624,222 @@ level of such collaboration is found to have increased with time.
 %   Does information flow “up” or “down” the hierarchy? 
 % - RQ4: What is the impact that individuals have on their direct contacts’
 %   activity over time? How does this vary across hierarchy level?
+
+In the following, we quantitatively determine the effect that organisational
+hierarchy levels have on communication patterns throughout the IETF. 
+% We model communication as a network where a node represents an individual
+% and a directed edge represents a communication sent from one individual to
+% another~\cite{panzarasa2009patterns,viswanath2009evolution,klimt2004enron}.
+% By repeating the analysis across time, we can build a full temporal
+% network~\cite{masuda2016guide} of communication interactions between people
+% in the system.In this study we consider only the network structure and the
+% status at that time of the individuals, not the content of messages. 
+We study how the email communication is impacted by the hierarchical roles
+of individuals. According to the IETF mission statement~\cite{rfc3935}, the
+IETF is made up of volunteers who collaborate to develop consensus-based
+technical standards. This collaboration should be evident in their
+communication practises.
+
+%..................................................................................................
+% ICWSM 2024 paper section 2
+
+In the following we consider the following research questions: 
+\begin{enumerate}
+  \item
+    Are higher levels of the hierarchy growing or becoming more
+    centralised? Are they associated with an increased domination
+    of the conversation?
+    (\S\ref{sec:org-dynamics:hierarchy:rq1})
+
+  \item
+    What is the association between the organisation hierarchy and general
+    communication patterns?
+    (\S\ref{sec:org-dynamics:hierarchy:rq2})
+
+  \item
+    How do people with differing roles communicate with each other?  Does
+    information flow ``up" or ``down" the hierarchy?
+    (\S\ref{sec:org-dynamics:hierarchy:rq3})
+
+  \item
+    What is the impact that individuals have on their direct contacts'
+    activity over time? How does this vary across hierarchy level?
+    (\S\ref{sec:org-dynamics:hierarchy:rq4})
+
+\end{enumerate}
+
+The first hypothesis focuses on the impact of the
+``steepness"~\cite{anderson2010functions} of the hierarchy. This refers to
+the fewer people in higher hierarchy levels the more steep the hierarchy
+is, i.e a centralised control of decision making in higher levels. The
+opposite of this is a ``diffused"~\cite{hussain2019voice} hierarchy where
+the large amount of people in higher levels stifle lower level voice by
+creating ``bystanders" who find it hard to speak up. In general, the
+conclusions about steep hierarchies are confused, where some papers
+conclude a positive and some a negative effect of steep hierarchies. We
+explore what this means for the IETF in RQ1.
+
+The second hypothesis regards the ``power
+distance"~\cite{li2021does,duan2018authoritarian,guo2020inclusive} of
+individuals, which is the number of hierarchy levels between people who are
+communicating. The focus is on the impact this has on people's voice or
+lack thereof when the distance is large versus small. The conclusions from
+this research area usually suggest that even small power distances have a
+large effect of reducing the voice of the lower of the two levels. We
+tackle this for the IETF in three different ways outlined in RQ2-4.
+
+The IETF being a voluntary organisation gives a new perspective on these
+hypotheses, as the existing literature focuses on commercial organisations.
+In contrast to the above conclusions, we demonstrate that despite the
+hierarchy becoming more ``diffused", participants in the higher levels in
+the IETF hierarchy perform a ``facilitator" role, promoting discussion with
+those they interact with and receiving a benefit themselves as a result. We
+also show that higher level participants tend to be a focus of discussion
+with remarks directed ``upward" toward them whereas Regular Participants
+(RPs) engage more in group-discussion with less focus on an individual.
+This suggests that the IETF does not conform to the notion that power
+distance has a negative effect on communication, nor that a more diffused
+hierarchy reduces the voice of lower levels.
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Methodology}
+\label{sec:org-dynamics:hierarchy:methodology}
+
+% From our ICWSM 2024 paper, section 4:
+
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Centralisation and Dominance}
+\label{sec:org-dynamics:hierarchy:rq1}
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 2:
+
+\pb{RQ1: are higher levels of the hierarchy growing or becoming more
+centralised? are they associated with an increased domination of the
+conversation?}
+
+The effect the steepness of an organisation's hierarchy has on the
+communication within is not well understood. This RQ is important because
+once we know whether the IETF hierarchy is becoming steeper, we can look at
+the effects this is having on the communication patterns of participants.
+
+In this RQ, we look at the number of individuals and/or roles that inhabit
+each hierarchy level. We also consider whether individuals in higher levels
+are more active in the conversation and quantify the evolution of the
+mailing list activity within each level of the IETF hierarchy. We find that
+the middle level, Working Group Chairs (WGCs), is gaining in overall
+proportion of activity, whilst the lowest level, RPs, is decreasing. The
+top level, Area Directors (ADs), remains constant in proportion. The
+increase in WGC activity coincides with an increase of WGCs per Working
+Groups (WGs).
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 5.1:
+
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Organisational Hierarchy and Communication Patterns}
+\label{sec:org-dynamics:hierarchy:rq2}
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 2:
+
+\pb{RQ2: What is the association between the organisation hierarchy and
+general communication patterns?}
+
+The communication patterns that different levels in the hierarchy
+experience may be  indicative of the cooperation between
+levels~\cite{li2021does,duan2018authoritarian}. For instance, if
+participants at higher levels send lots of email while receiving little,
+this suggests a lack of receptiveness of higher levels to the suggestions
+of lower levels, and low confidence of lower levels to voice their
+opinions. In contrast, we hypothesise that collaboration between layers is
+high, as outlined in the IETF mission statement, which will look more like
+the opposite of this example.
+
+In this vein, we compare the ways that different roles communicate, looking
+at the tendency for communications to be purely inbound, outbound or use
+more complex patterns. We count three edge motifs for different hierarchy
+levels as described in section~\ref{sec:motif}. We find that higher levels
+consistently experience a higher proportion of incoming communication than
+RPs, and all levels send outward communication at similar proportions over
+time. Also, the proportion of people who begin email threads are split by
+hierarchy level. Higher levels show a disproportionate tendency to
+originate email threads. 
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 5.2:
+
+
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Communication up and down the Hierarchy}
+\label{sec:org-dynamics:hierarchy:rq3}
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 2:
+
+\pb{RQ3: How do people with differing roles communicate with each other?
+Does information flow ``up" or ``down" the hierarchy?} 
+
+Our third hypothesis is that the cooperative nature of the IETF will be
+evident in the effect that power distance~\cite{li2021does} has on
+communication throughout the organisation. The raw proportion of the
+communication between hierarchy levels helps us to understand the
+confidence of lower levels to exercise their voice. This proportion, for a
+cooperative and voluntary organisation should be higher for lower hierarchy
+levels, showing a confidence in their voice.
+
+We categorise edges based on the hierarchy levels they originate from and
+are sent to. Ratios are then calculated of ``upward" versus ``downward"
+communication between RPs, WGCs and ADs. We find that the lower the level,
+the more of a skew to upward communication.  Communication tends to flow
+``up'' the hierarchy more than ``down''. 
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 5.3:
+
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Mobility Within the Hierarchy}
+\label{sec:org-dynamics:hierarchy:rq4}
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 2:
+
+\pb{RQ4: What is the impact that individuals have on their direct contacts'
+activity over time? How does this vary across hierarchy level?} 
+
+An important question~\cite{li2021does,guo2020inclusive} for any
+organisation is whether higher level participants encourage those at lower
+levels in the hierarchy to properly engage. The IETF is cooperative and
+voluntary by design, therefore we hypothesise a high level of encouragement
+from higher levels to lower. We measure whether activity in one time period
+is associated with activity in a subsequent time period both for
+individuals and for neighbourhoods. If those who communicate with higher
+levels receive a boost in their communication as a result, this is an
+indication of such encouragement.
+
+In particular, we perform Mobility Taxonomy analysis to determine the
+effect individual IETF participants have on their future number of
+connections, and the average number of connections of their neighbours.  We
+find that WGCs have an increased tendency, versus RPs, to remain active
+(\textit{Mobility}), an increased tendency for their neighbours to be
+active subsequent to high WGC activity (\textit{Philanthropy}) and for them
+to gain activity after their neighbours are active (\textit{Community}).
+We interpret this as WGCs filling a ``facilitator" role on the mailing
+lists.
+
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 5.4:
+
+
 
 %..................................................................................................
 % LEDA
