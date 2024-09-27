@@ -196,6 +196,123 @@ and therefore not all RFCs are widely implemented.
 %--------------------------------------------------------------------------------------------------
 \subsection{Data Sources}
 
+% The following is adapted from our IMC 2021 paper and our IFIP TMA 2023
+% paper, Section II:
+
+We rely on a number of data sources to conduct our study.
+
+%..................................................................................................
+\pb{IETF Datatracker:}
+The Datatracker\footnote{\url{https://datatracker.ietf.org/}} is the main
+administrative database used by the IETF, IRTF, and IAB to coordinate their
+work. It contains information about contributors, working groups,
+documents, and meetings. The Datatracker provides comprehensive metadata
+about authors, and the evolution of drafts as they work their way through
+the standardisation process. The Datatracker was introduced in the early
+2000s and its functionality has gradually been extended over time. It
+contains limited historical data about RFCs produced before its creation,
+but the IETF has back-filled some data from other records.  We have
+extracted relevant metadata from the Datatracker, using its programmatic
+REST API, for all RFCs published since 2001. This gives us data pertaining
+to 4,512 authors, as well as richer metadata for 5,707 RFCs.
+
+%..................................................................................................
+\pb{RFC Editor:}
+The RFC Editor maintains an index of all RFC publications, alongside
+metadata related to each document, including its standardisation status,
+publication stream, authors, and errata. We gather all entries for RFCs
+published through the end of 2020, giving a total of 8,711 RFCs.
+
+RFCs are not changed after publication, but the RFC Editor maintains a
+public database of reported errata. The errata filing are separated into
+\emph{technical errata}, mistakes in the technical content of the RFC that
+are likely to result in incorrect, non-conforming, implementations of the
+standards, and \emph{editorial errata} including spelling and punctuation
+errors that do not otherwise impact the technical content.
+Errata filed against RFCs published on the IETF stream are checked for
+correctness by the RFC authors, working group chairs, and area directors.
+IRTF errata are checked by the authors and the Internet Research Steering
+Group. The IAB and Independent Submissions Editor check errata for their
+streams. We collected\footnote{RFC errata are available at
+\url{https://www.rfc-editor.org/errata.php}. We thank the RFC Editor for
+making the underlying database available to us in machine-readable form for
+this analysis.} the 6,759 errata reports submitted from January 2001 to the
+end of December 2022 for analysis.
+
+%..................................................................................................
+\pb{Email archives and entity resolution:}
+The IETF maintains reasonably complete email archives relating to working
+group discussions, meeting, and other activities.\footnote{\url{https://mailarchive.ietf.org/}
+with public IMAP access also available.} We gather all available messages
+contained within this archive, covering 2,439,240 messages, sent from
+74,646 unique email addresses, across 1,153 lists. This snapshot was taken
+on April 18th 2021.
+
+A key challenge is attributing each email to an individual contributor.
+Although each, naturally, contains a \texttt{From:} header, we find that some
+contributors use multiple addresses. Beyond this, it is necessary to map
+each email to the respective person in the Datatracker and RFC Editor
+datasets.  Thus, we perform entity resolution on email senders, and match
+email senders with their Datatracker profiles. We assign each sender a
+unique identifier, which is associated with a set of name and address
+variations from the Datatracker. 
+
+Entity resolution takes place in multiple stages.  First, we check if the
+sender's email address has a Datatracker profile. If so, we associate all
+of their Datatracker metadata with that person's unique identifier, and
+label the message as having been sent by that identifier.  Next, if an
+email's sender does not appear in the Datatracker, we check, based on their
+name, if they have already been assigned a Datatracker record. If so, the
+message is labelled as having been sent by that identifier, and the set of
+names and addresses associated with that identifier is updated to include
+the email's sender name and address.
+
+These two stages -- matching with the Datatracker, and merging previously
+seen names and addresses -- accounts for the majority (60\%) of messages.
+If an email's sender is not in the Datatracker, and the name and address
+has not been previously seen, a new person identifier is generated. This
+accounts for a small portion (~10\%) of messages. This is reasonable, given
+that Datatracker profiles have become necessary for many of the IETF's
+day-to-day activities.
+
+As a final processing step, we label each identifier as either representing
+a \emph{contributor}, a \emph{role-based} address, or an \emph{automated}
+sender. A contributor refers to any standard user participating in the
+IETF; role-based identifiers reflect addresses that are used by the holders
+of a particular organisational role, such as the IETF chair; and automated
+identifiers are those addresses that are system-specific, such as GitHub or
+IETF notification and announcement addresses. Role-based and automated
+identifiers account for the remaining 30\% of messages.
+
+Note, within the mail archive, spam-indicating headers are present for most
+messages since 2009, and we confirm pre-filtering is performed by the IETF
+mail servers.  As an extra validation step, we ran a spam filter over all
+the archived messages and discarded those marked as spam. Both sources
+indicate there is very little spam (less than 1\%), so it should not have
+significant impact on our findings.
+
+% \pb{Manually labelled dataset:} 
+% We also use data collated by Nikkhah et al.~\cite{nikkhah2017statistical}.
+% This dataset labels the ``success'', alongside other features like scope
+% and value, of 251 RFCs.  155 of these also appear in our set of RFCs that
+% have Datatracker metadata available. We later use this to explore the
+% features that best predict the success of an RFC.
+
+% \pb{Microsoft Academic citation data:}
+% We use the Microsoft Academic Knowledge API to identify indexed academic
+% work that cites each RFC. We use the Microsoft Academic Graph instead of
+% other sources (\eg Google Scholar) as it provides time-stamped citations.
+
+%..................................................................................................
+\pb{Reproducibility and data access:}
+We have developed a library, \texttt{ietfdata}, that fetches the RFC
+Index, communicates with the IETF Datatracker API, and retrieves messages
+from the IETF IMAP mail archives. This library appropriately regulates
+access, caches data to minimise the impact on the infrastructure, and
+performs necessary post-processing. This library is available as open
+source and Ongoing development is coordinated on GitHub.%
+\footnote{\url{https://github.com/glasgow-ipl/ietfdata}}
+
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Ethical Considerations}
@@ -210,7 +327,8 @@ in regular contact with the IETF Tools Team and Secretariat, as well as the
 operators of the Datatracker and mailing list archive.  We have extensively
 discussed our work with IETF leadership (IETF and IAB Chairs, the IETF
 Executive Director, and the IRTF Chair, who is a co-author on this paper)
-to ensure that our access falls within their acceptable use policies.
+and the RFC Editor to ensure that our access falls within their acceptable
+use policies.
 
 Participation in the IETF is dependent on agreement to abide by the
 policies and procedures described at \url{https://www.ietf.org/about/note-well},
