@@ -413,8 +413,19 @@ WebRTC.
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/rfcs_areas.pdf}
   \caption{
-    RFCs by area. \textit{Other} includes legacy RFCs, and RFCs from other
-    non-IETF streams.
+    Number of RFCs published over time, subdivided by IETF Area.
+    The areas are 
+    \emph{art} -- applications and real-time;
+    \emph{app} -- applications;
+    \emph{int} -- internetworking;
+    \emph{ops} -- operations and management;
+    \emph{rai} -- real-time applications and infrastructure;
+    \emph{rtg} -- routing;
+    \emph{sec} -- security; and
+    \emph{tsv} -- transport and services.
+    The \emph{other} category includes legacy RFCs, pre-dating the creation
+    of the IETF, and RFCs published in non-IETF publication streams such as
+    the IRTF, IAB, and the Independent stream.
   }
   \label{fig:rfcs_by_area}
 \end{figure}
@@ -428,11 +439,15 @@ RFCs.
 
 %..................................................................................................
 \pb{Role of Working Groups:}
-From the creation of the IETF in 1986, the growing community with its
+From the creation of the IETF in 1986 the growing community, with its
 interests in an increasing set of applications and protocols, has been
-split into working groups. These working groups are chartered with a focus
-on a well-defined programme of work, and exist within areas that have a
-broader focus.  As shown in Figure~\ref{fig:rfcs_by_area}, the output of
+split into a number of \emph{working groups}.\footnote{There are 126
+active working groups at the time of writing, organised into 7 areas.
+The number of groups varies over time, but is typically in the range
+100-150.} These working groups are each chartered with a well-defined
+programme of work and exist within \emph{areas} that have a broader focus.  
+
+As shown in Figure~\ref{fig:rfcs_by_area}, the output of
 different areas has remained relatively stable over time. The most notable
 trends begin with the creation of the Real-time Applications and
 Infrastructure (rai) area from within the Transport (tsv) area, and its
@@ -446,31 +461,30 @@ To give a sense for the broader productivity of the IETF,
 Figure~\ref{fig:pub_wgs_yearly} shows the number of working groups that
 publish RFCs each year. This highlights how the structure of the IETF has
 grown to accommodate its larger community: in the early 1990s, fewer than
-20 working groups were actively publishing RFCs, while in recent years
-there has typically been at least 60 different publishing groups, with a
-peak of 97 active working groups, and other activities, in 2011.
+20 working groups were published an RFC each year, while in recent years
+there has typically been at least 60 working group publishing RFCs, with
+a peak of 97 working groups publishing RFCs in 2011 (the number of groups
+publishing RFCs is less than the total number of groups, because it takes
+time for the work of a new group to reach maturity).
 
 \begin{figure}
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/unique_wgs_per_year_areas.pdf}
   \caption{
-    Number of publishing working groups. \textit{Other} includes legacy
-    RFCs, IRTF research groups, and non-IETF streams.
+    Number of groups publishing RFCs over time, subdivided by IETF Area.
+    The areas are as described in Figure~\ref{fig:rfcs_by_area}.
   }
   \label{fig:pub_wgs_yearly}
 \end{figure}
 
+%..................................................................................................
+\pb{Factors Affecting Publication Rate:} 
+The standards development process is taking longer.
 Figure~\ref{fig:rfcs_days_to_pub} plots the median number of days from the
-submission of an RFC's first draft, through to its publication as an RFC.
-This shows a clear trend: RFCs are taking longer to make their way through
-the standardisation and publication process. The median number of days to
-publication was 469 in 2001, rising to 1,170 in 2020. Further,
-Figure~\ref{fig:drafts_year} shows the median number of Internet-Drafts
-that are posted before an RFC is published. Days to publication and number
-of drafts are strongly correlated, suggesting that the time is spent making
-changes to the document. This may go some way towards explaining the
-decline in output of the IETF: each RFC is taking longer to produce, with
-more revisions before publication. 
+submission of the first draft of a document through to its publication as
+an RFC. This shows a clear trend: RFCs are taking longer to make their way
+through the standardisation and publication process. The median number of
+days to publication was 469 in 2001, rising to 1,170 in 2020. 
 
 \begin{figure}
   \centering
@@ -481,6 +495,13 @@ more revisions before publication.
   \label{fig:rfcs_days_to_pub}
 \end{figure}
 
+Similarly, Figure~\ref{fig:drafts_year} shows the median number of
+revisions each document undergoes before being published as an RFC. Days to
+publication and number of revisions are strongly correlated, suggesting
+that the time is spent making changes to the document. This may go some way
+towards explaining the decline in output of the IETF: each RFC is taking
+longer to produce, with more revisions before publication. 
+
 \begin{figure}
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/draft_counts_yearly.pdf}
@@ -490,13 +511,13 @@ more revisions before publication.
   \label{fig:drafts_year}
 \end{figure}
 
-%..................................................................................................
-\pb{RFC Length:}
-One may conjecture that this slowdown is driven by longer RFCs that contain
-more material. To explore this, Figure~\ref{fig:pages_year} shows the
-median page count of RFCs. This shows that the increase in the duration of
-the standardisation process for RFCs cannot be attributed to RFCs becoming
-longer: median page counts have remained stable. 
+
+What factors affect the publication rate?  One may conjecture that this
+slowdown is driven by longer RFCs that contain more material. Yet from the
+median page count of RFCs, shown in Figure~\ref{fig:pages_year}, no clear
+trend being visible. The increase in the duration of the standardisation
+process for RFCs cannot be attributed to RFCs becoming longer: page counts
+have remained stable. 
 
 \begin{figure}
   \centering
@@ -507,17 +528,15 @@ longer: median page counts have remained stable.
   \label{fig:pages_year}
 \end{figure}
 
-%..................................................................................................
-\pb{Relationships between RFCs:}
-RFCs themselves may be becoming more complex as a result of them needing to
-describe their relationship with older standards. As the Internet has
-evolved and matured, applications and protocols must be maintained, and new
-standards need to interoperate with existing RFCs.
-Figure~\ref{fig:updates_year} highlights this, showing the proportion of
-RFCs that are published each year that update (i.e., extend or augment) or
-obsolete (i.e., replace) one or more previously published RFCs. Intuitively,
-this percentage has slowly increased as the IETF has matured: in 2020, more
-than 30\% of RFCs updated or made obsolete a previous RFC.
+The publication rate might also be slowing because RFCs are becoming more
+complex. This could occur, for example, as a result of having to maintain
+compatibility with older RFCs as the Internet has evolved and matured.
+Figure~\ref{fig:updates_year} shows that this is the case, plotting the
+proportion of RFCs that are published each year that update (i.e., extend
+or augment) or obsolete (i.e., replace) one or more previously published
+RFCs.  This percentage has slowly increased as the IETF has matured: in
+2020, more than 30\% of RFCs updated or made obsolete a previous RFC.
+%
 Figure~\ref{fig:citations_year} expands on this, showing the median number
 of citations from each RFC to other Internet-Drafts and RFCs. This
 similarly shows that RFCs are increasingly referring to prior work.
@@ -540,15 +559,13 @@ similarly shows that RFCs are increasingly referring to prior work.
   \label{fig:citations_year}
 \end{figure}
 
-%..................................................................................................
-\pb{Use of requirements-setting language:}
-Figure~\ref{fig:keyword_usage_rates} further confirms the growing
-complexity of RFCs, showing how the use of keywords has evolved over time.
-Keywords are used in RFCs to indicate the normative requirements an RFC
-imposes on implementations. Figure~\ref{fig:keyword_usage_rates} shows the
-total number of occurrences of each of the RFC 2119~\cite{RFC2119} keywords
-(i.e., MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT,
-RECOMMENDED, MAY, OPTIONAL), divided by the page count of the RFC. As
+Figure~\ref{fig:keyword_usage_rates} further confirms the growing complexity
+of RFCs, showing how the use of normative language keywords has evolved
+over time.  Keywords are used in RFCs to indicate the normative requirements
+an RFC imposes on implementations. Figure~\ref{fig:keyword_usage_rates}
+shows the total number of occurrences of each of the RFC 2119~\cite{RFC2119}
+keywords (i.e., MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD
+NOT, RECOMMENDED, MAY, OPTIONAL), divided by the page count of the RFC. As
 shown, the median number of keywords per page grew from 2001 through to
 2010, indicating a growing number of requirements being expressed in RFCs,
 before plateauing in recent years.
@@ -562,21 +579,14 @@ before plateauing in recent years.
   \label{fig:keyword_usage_rates}
 \end{figure}
 
-
-\todo{Should we include ``Academic impact of RFCs'' from IMC 2021?}
-
-
 %..................................................................................................
 \pb{Summary:}
-RFCs are taking longer to produce, and they go through a greater number of
-revisions before publication. Further, they increasingly update or
+RFCs are taking longer to produce, and they go through a greater number
+of revisions before publication. Further, they increasingly update or
 reference previously published RFCs, and make greater use of
-requirements-setting keywords. Yet, while these measures indicate that the
-overall complexity of standards documents is increasing, none of these
-factors strongly correlate with the time taken to publish RFCs. This
-indicates that these factors aren't driving the increasing duration of the
-standardisation process. In the sections that follow, we explore trends in
-authorship and community interaction that may also impact the process.
+requirements-setting keywords. These are all hallmarks of a maturing
+standards development organisation that must increasingly consider
+compatibility with the installed based in the development of its standards.
 
 
 %--------------------------------------------------------------------------------------------------
