@@ -2013,7 +2013,7 @@ communicating. The focus is on the impact this has on people's voice or
 lack thereof when the distance is large versus small. The conclusions from
 this research area usually suggest that even small power distances have a
 large effect of reducing the voice of the lower of the two levels. We
-tackle this for the IETF in three different ways outlined in 
+tackle this for the IETF in three different ways in
 \S\ref{sec:org-dyn:hierarchy:rq2} -- \S\ref{sec:org-dyn:hierarchy:rq4}.
 
 The voluntary nature of the IETF offers a new perspective on these
@@ -2034,7 +2034,7 @@ lower levels.
 
 % From our ICWSM 2024 paper, section 4:
 
-
+\todo{Do we need a separate methodology section?}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Centralisation and Dominance}
@@ -2047,47 +2047,44 @@ lower levels.
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 2:
 
-The effect the steepness of an organisation's hierarchy has on the
-communication within is not well understood. This RQ is important because
-once we know whether the IETF hierarchy is becoming steeper, we can look at
-the effects this is having on the communication patterns of participants.
+% The effect the steepness of an organisation's hierarchy has on the
+% communication within is not well understood. This RQ is important because
+% once we know whether the IETF hierarchy is becoming steeper, we can look at
+% the effects this is having on the communication patterns of participants.
 
-In this RQ, we look at the number of individuals and/or roles that inhabit
-each hierarchy level. We also consider whether individuals in higher levels
-are more active in the conversation and quantify the evolution of the
-mailing list activity within each level of the IETF hierarchy. We find that
-the middle level, Working Group Chairs (WGCs), is gaining in overall
-proportion of activity, whilst the lowest level, RPs, is decreasing. The
-top level, Area Directors (ADs), remains constant in proportion. The
-increase in WGC activity coincides with an increase of WGCs per Working
-Groups (WGs).
+In this section, we look at the number of individuals that inhabit each
+level of the IETF hierarchy and their communication patterns, and quantify
+the evolution of the mailing list activity within each level of the IETF.
+We find that the middle level, Working Group Chairs, is gaining in overall
+proportion of activity, whilst activity of participants at the lowest level
+is decreasing. The top level of the hierarchy, area directors, remains
+constant in proportion. The increase in working group chair activity
+coincides with an increase in the number of chairs per working group.
 
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.1:
 
-For \textbf{RQ1}, to determine the steepness or diffusion of the hierarchy,
-the proportion of nodes and activity are determined in each hierarchy
-level. Figure~\ref{fig:activity_proportions}a shows the number of active
-nodes in each level. The bottom level, RPs, are the largest contingent
-consisting of 90--86\% of active participants; this proportion is
-decreasing over time. The next level is WGCs which manage the WGs and are
-6--10\% of active participants; this proportion is rising over time. The
-top level is ADs which manage many WGs within an area and consist of less
-than 1\% of the total active population of the IETF; this stays constant
-over time. Therefore, the WGC level is becoming more diffused over time as
-there are about 15 RPs for every one WGC in the organisation in 2013 versus
-8 RPs per WGC in 2021. 
+\pb{Role of Working Group Chairs:}
+Figure \ref{fig:activity_proportions}(a) shows the number of participants
+at each level of the hierarchy in IETF: Regular participants are the
+largest contingent, comprising 90--86\% of active participants; this
+proportion is decreasing over time.  The next level is Working Group
+Chairs, comprising  6--10\% of active participants; this proportion is
+rising and becoming more diffused over time, with about 15 regular
+participants for every working group chair in the organisation in 2013
+versus 8 participants per chair in 2021.  The top level is Area Directors
+who consist of less than 1\% of the total active population of the IETF;
+this stays constant over time.  
 
-The proportion of activity of nodes in the last year is also plotted and
-split into hierarchy level in Figure~\ref{fig:activity_proportions}b. It is
-clear that individuals at higher levels contribute a disproportionate share
-to communication and this share is increasing over time, which is
-consistent with findings in \cite{khare2022web}. Therefore, less of a
-proportion of communication is flowing from the RPs at the same time as the
-number of WGC roles is increasing. This further suggests that the IETF
-hierarchy is becoming more diffused, in terms of mailing list
-communication, which may make cooperation between hierarchy levels more
-difficult.
+The fraction of emails sent by participants at each level of the hierarchy
+is shown in Figure~\ref{fig:activity_proportions}(b). Individuals at higher
+levels contribute a disproportionate share to communication and this share
+is increasing over time, consistent with \S\ref{sec:org-dyn:influence}. A
+smaller proportion of email are sent by regular participants at the same
+time as the number of working group chairs is increasing, further
+suggesting that the IETF hierarchy is becoming more diffused, in terms of
+mailing list communication, which may make cooperation between hierarchy
+levels more difficult.
 
 \begin{figure}[t]
   \centering
@@ -2096,71 +2093,71 @@ difficult.
   \small{b)} \\
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/activity_proportions_year_sliding_window.png}
   \caption{
-    Proportions of RPs, WGCs and ADs by a) number of active individuals and
-    b) activity (number of emails sent to mailing lists). 
+    Proportion of regular participants, working group chairs, and area
+    directors by (a) number of active individuals and (b) mailing list
+    activity.
   }
   \label{fig:activity_proportions}
 \end{figure}
 
-Figure~\ref{fig:wgc_over_time}a shows the amount of nodes that inhabit the
-WGC hierarchy level over our time period. There is a $35\%$ rise in the
-amount of WGC roles whereas the amount of individuals that fill the WGC
-roles remains mostly constant.
+%..................................................................................................
+\pb{Number of Working Group Chairs:}
+Figure~\ref{fig:wgc_over_time}(a) shows the number of working group chairs
+our time. There is a $35\%$ rise in the number of chairs while the amount
+of individuals that fill the chair roles remains mostly constant.
 
-Figure~\ref{fig:wgc_over_time}b contains two estimates of the number of WGs
-over time. The estimated number of WGs is likely the most accurate in the
-middle 50\% of both plotted lines. Their discrepancy is the least (at most
-10 WGs) from late 2014 to early 2019. The start of the COVID-19 pandemic
-may also affect mailing list activity in 2020, and similar trends are
-visible in the data in \cite{mcquistin2021characterising}. A full
-explanation on how the data is estimated can be found in
-section~\ref{sec:WG_activity}.
+Figure~\ref{fig:wgc_over_time}(b) contains two estimates of the number of
+working groups over time, based on tracking group events (i.e., Datatracker
+metadata) and mailing list activity since groups may be recorded as being
+active but have no activity, and vice-versa.  The discrepancy between the
+two estimates is the least (at most 10 working groups) from late 2014 to
+early 2019. 
 
-Figure~\ref{fig:wgc_over_time}c shows how many WGCs exist per WG, using
-both estimates of the WG amount from Figure~\ref{fig:wgc_over_time}b. It is
-clear there is a slow a rise in WGCs per WG over time. The ratio rises from
+Figure~\ref{fig:wgc_over_time}(c) shows how many chairs exist per working
+group, using both estimates of the number of working groups from
+Figure~\ref{fig:wgc_over_time}(b). It is clear there is a slow a rise in
+the number of chairs per working group over time. The ratio rises from
 between 1.7-1.9 to 2.0-2.2 within the middle 50\%, late 2014 to early
 2019.This perhaps represents a growing understanding in the IETF that it is
-desirable to have two or more chairs per WG in case of
+desirable to have two or more chairs per working group in case of
 illness/unavailability or to avoid conflicts of interest. Therefore, this
 plot again shows that the hierarchy is becoming more diffused, even if the
-raw amount of individuals in the WGC roles has remained constant. The
-multiple roles per individual may result in even more difficulty of RPs to
-use their voice.
-
-An AD version of Figure~\ref{fig:wgc_over_time} is available, but it is
-omitted to save space as all three plots stay mostly constant throughout
-the period. There are about 15 individual ADs split amongst 15 roles in 7-8
-areas with about 2 ADs per Area. The set of IETF Areas is broadly fixed,
-while WGs are created and closed relatively frequently.
-
+raw amount of individuals in the chair roles has remained constant. The
+multiple roles per individual may result in even more difficulty of regular
+participants to use their voice.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/over_time.png}
   \caption{
-    Overview of WGC numbers and WG numbers over time. a) shows the number
-    of WGC roles (some individuals hold multiple WGC roles) and the number
-    of individuals who are WGCs b) shows two different estimates of the
-    number of WGs (see section~\ref{sec:method}) and c) shows the mean
-    number of WGCs per WG. Notice the non-zero-based y-axis exaggerates the
-    variation in these figures.
+    Changes in the number of working groups and working group chairs over
+    time: (a) shows the number of chairs and the number of individuals who
+    are chairs; (b) shows two different estimates of the number of working
+    groups; and c) shows the mean number of chairs per working group.
+    Notice the non-zero-based y-axis exaggerates the variation in these
+    figures.
   }
   \label{fig:wgc_over_time}
 \end{figure}
 
-An AD version of Figure~\ref{fig:wgc_over_time} is available, but it is
-omitted to save space as all three plots stay mostly constant throughout
-the period. There are about 15 individual ADs split amongst 15 roles in 7-8
-areas with about 2 ADs per Area. The set of IETF Areas is broadly fixed,
-while WGs are created and closed relatively frequently.
+%..................................................................................................
+\pb{Number of Area Directors:}
+A version of Figure~\ref{fig:wgc_over_time} considering area directors
+rather than working group chairs is available, but omitted to save space as
+all three plots stay mostly constant throughout the period. There are about
+15 area directors split amongst 15 roles in 7-8 areas with typically 2 area
+directors per Area. The set of IETF Areas changes slowly, while working
+groups are created and closed relatively frequently.
 
-Table~\ref{tab:WGC_email} shows the emails sent and received for WGC and
-ADs on mailing lists in the year before they first take that role, and the
-year after. WGCs and ADs are both active in using the mailing lists, ADs
-much more so. However, they don't become more active to any major degree
-after taking the roles. This may suggest that the individuals who take on
-higher hierarchy level roles are already contributing at a higher level.
+%..................................................................................................
+\pb{Activity prior to appointment:}
+Table~\ref{tab:WGC_email} shows the amount of email sent and received for
+working group chairs and area directors on mailing lists in the year before
+they first take that role, and the year after. Chairs and area directors
+are both active in using the mailing lists, area directors much more so.
+However, they don't become more active to any major degree after taking the
+roles. This may suggest that the individuals who take on higher hierarchy
+level roles are already contributing at a higher level.
 
 \begin{table}[!tbp]
 \centering
@@ -2179,16 +2176,21 @@ higher hierarchy level roles are already contributing at a higher level.
     \label{tab:WGC_email}
 \end{table}
 
+%..................................................................................................
 \pb{Summary}
-In answer to RQ1 the picture is mixed, the number of individuals with WGC
-roles has remained broadly constant but the number of WGC roles has
-increased, indicating that individuals willing to become WGC have taken on
-more such roles. The number of the higher level AD roles has, by design,
-remained broadly constant over the time studied. The proportion of active
-individuals with WGC roles has grown from 6\% to 10\% and the proportion of
-the conversation taken by those roles has grown from 25\% to 35\% over the
+The answer to the question of whether the higher levels of the hierarchy
+growing or becoming more centralised, and whether they're associated with
+an increased domination of the conversation, is mixed.  The number of
+individuals with working group chair roles has remained broadly constant
+but the number of such roles has increased, indicating that individuals
+willing to become chairs have taken on more such roles.  The number of the
+higher level area director roles has, by design, remained broadly constant
+over the time studied. The proportion of active individuals with working
+group chairs roles has grown from 6\% to 10\% and the proportion of the
+conversation taken by those roles has grown from 25\% to 35\% over the
 period studied. Therefore the hierarchy has become more diffused, which may
-mean RPs experience more difficulty in expressing their voice.
+mean regular participants experience more difficulty in expressing their
+voice.
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
