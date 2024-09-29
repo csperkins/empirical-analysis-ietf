@@ -118,7 +118,7 @@ In this paper, we ...
 This paper summarises and expands on our prior work
 \cite{mcquistin:2021:characterising,khare:2022:web-we-weave,
 healey:2023:power,mcquistin:2023:errare,khare:2023:tracing,
-karan:2023:leda,healey:2023:power-frontiers,barnes:2024:temporal}
+karan:2023:leda,healey:2023:power-frontiers,barnes:2024:temporal}.
 
 % Paragraph 5: "We structure the remainder of this paper as follows." Give
 % the reader a road-map for the rest of the paper. Try to avoid redundant
@@ -876,35 +876,44 @@ because these RFCS receive more review.
 \section{Trends in Participant Demographics}
 \label{sec:trends-demographics}
 
-% The following is from our IMC 2021 paper, Section 3.2:
+In this section, we look at the authorship of published RFCs to explore
+how participation in the IETF has changed over time. We show that the
+geographic distribution of RFC authors has shifted over time, with the
+proportion of authors from the US decreasing and a corresponding rise in
+authors from Europe and China (\S\ref{sec:trends-demographics:geographic}).
+We similarly explore shifts in affiliation, showing increasing influence of
+Huawei and ongoing shifts in the fortunes of many prominent US and European
+technology companies (\S\ref{sec:trends-demographics:affiliation}). The
+ongoing influence of Cisco and strong input from academic institutions is
+also noted.
 
+% The following is from our IMC 2021 paper, Section 3.2.
+
+%--------------------------------------------------------------------------------------------------
+\subsection{Geographic Distribution of Authors}
+\label{sec:trends-demographics:geographic}
 
 The IETF Datatracker maintains metadata about document authors, including
 their names, email addresses, affiliations, and location information. This
 dataset does not cover the entire RFC corpus, with metadata available for
-authors of RFCs published from 2001, and where it has been provided.
-Country data is available for around 70\% of authors, while affiliation
-information is given for around 80\%. In this section, we look at the
-authorship of all of the RFCs published each year, using the available
-metadata. An author is counted once in a year for each affiliation or
-location they hold.
+authors of RFCs published from 2001, and where it has been provided country
+data is available for around 70\% of authors, while affiliation information
+is provided for around 80\% of authors. 
 
-%--------------------------------------------------------------------------------------------------
-\subsection{Geographic Distribution of Authors}
-Figures~\ref{fig:author_countries_normalised} and
-\ref{fig:author_continents_normalised} show the proportion of authors from
-countries and continents, respectively. The IETF has signalled that it
-wishes to encourage greater geographical diversity~\cite{rfc7704,
-ietfblog:diversity}. Without an explicit goal, we frame our findings within
-the context of global population distribution.  We find that North America,
-while still disproportionately over represented, is becoming less dominant.
-75\% of authors were from North America in 2001, and this has declined to
-44\% in 2020. At the same time, representation of both Europe and Asia has
-grown, from 17\% to 40\% and 6\% to 14\%, respectively.  However, Africa
-and South America remain heavily underrepresented, with only $\approx$0.5\%
-of authors coming from either continent in 2020.  This suggests that, if
-the IETF is to become more geographically representative, further efforts
-are needed.
+Figure~\ref{fig:author_countries_normalised} shows how the proportion of
+RFC authors from different countries varies over time, with Figure
+\ref{fig:author_continents_normalised} breaking this down by continent.
+The IETF has signalled that it wishes to encourage greater geographical
+diversity~\cite{RFC7704,ietfblog:diversity}.  Without an explicit goal, we
+frame our findings within the context of global population distribution.
+We find that North America, while still disproportionately over represented,
+is becoming less dominant.  75\% of authors were from North America in 2001,
+and this has declined to 44\% in 2020. At the same time, representation of
+both Europe and Asia has grown, from 17\% to 40\% and 6\% to 14\%, respectively.
+However, Africa and South America remain heavily under-represented, with
+only $\approx$0.5\% of authors coming from either continent in 2020.  This
+suggests that, if the IETF is to become more geographically representative,
+further efforts are needed.
 
 \begin{figure}
   \centering
@@ -926,6 +935,8 @@ are needed.
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Author Affiliations}
+\label{sec:trends-demographics:affiliation}
+
 Figure~\ref{fig:author_affiliations_normalised} shows the top 10
 affiliations by proportion of authors each year. Affiliation data is
 gathered from the Datatracker, and processed to normalise affiliation
