@@ -1105,7 +1105,7 @@ year since around 2010. The figure also shows (solid blue line) how the
 number of unique participants (with entity resolution performed as
 discussed in Section \ref{sec:background:data}) observed every year in the
 mail lists, showing a decreasing trend in the number of contributors since
-2007. We note that that the number of participants is broadly correlated
+2007. We note that the number of participants is broadly correlated
 with the rate of RFC publication (Figure \ref{fig:rfcs_by_area}), likely
 indicating that many participants disengage once the document they were
 working on is published.
@@ -1629,21 +1629,22 @@ that is not welcoming to newcomers.
 
 %..................................................................................................
 \pb{Topics of Discussion:} 
-The topics discussed on WG mailing lists are a good indicator of the focus
-of technical work, and it might be expected that influential participants
-will set the direction of that work.  To explore this, we use the Latent
-Dirichlet Allocation (LDA) \cite{blei2003latent,hoffman2010online} model
-from \texttt{gensim} \cite{rehurek_lrec} to induce 100 topics on the entire
-set of email texts. 
-Each topic is a distribution over words: e.g., a \emph{security} topic might
-have high probability for \emph{cypher}, \emph{rsa}, \emph{auth}, and
-related words. We can also use the model to obtain a vector for any input
-text as a sparse distribution over all topics, e.g., finding that a text is
-comprised of 30\% security and 70\% video streaming topics. With this, we
-generate a vector for each participant in a given time period by
-concatenating all messages sent by that participant in the period and
-feeding it into the LDA model. The result can be loosely interpreted as a
-distribution of topics on which each participant works.
+The topics discussed on working group mailing lists are a good indicator
+of the focus of technical work, and it might be expected that influential
+participants will set the direction of that work. To explore this, we use
+the Latent Dirichlet Allocation (LDA) \cite{blei2003latent,hoffman2010online}
+model from \texttt{gensim} \cite{rehurek_lrec} to induce 100 topics on the
+entire set of email texts. 
+
+Each topic is a distribution over words. For example, a \emph{security}
+topic might have high probability for \emph{cypher}, \emph{rsa},
+\emph{auth}, and related words. We can also use the model to obtain a
+vector for any input text as a sparse distribution over all topics, e.g.,
+finding that a text is comprised of 30\% security and 70\% video streaming
+topics. With this, we generate a vector for each participant in a given
+time period by concatenating all messages sent by that participant in the
+period and feeding it into the LDA model. The result can be loosely
+interpreted as a distribution of topics on which each participant works.
 
 Manual inspection of the induced topics reveals some interesting trends. We
 find that topics related to \emph{routing} and \emph{email} protocols are
@@ -1651,7 +1652,7 @@ seeing a steady decline in popularity, while topics like \emph{streaming}
 and \emph{cryptography} are becoming more prominent. This reflects wider
 trends in standardisation, as these efforts have adjusted to the public's
 increased awareness of privacy, especially in light of the Edward Snowden
-leaks \cite{RFC7258}. We also find that as videoconferencing became
+leaks \cite{RFC7258,RFC9446}. We also find that as videoconferencing became
 increasingly popular, so did the WebRTC protocol that frequently underpins
 them.
 
