@@ -161,6 +161,7 @@ data.
 
 %--------------------------------------------------------------------------------------------------
 \subsection{An IETF Primer}
+\label{sec:background:ietf}
 
 % The following is from our IMC 2021 paper:
 
@@ -217,6 +218,7 @@ and therefore not all RFCs are widely implemented.
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Data Sources}
+\label{sec:background:data}
 
 % The following is adapted from our IMC 2021 paper and our IFIP TMA 2023
 % paper, Section II:
@@ -463,7 +465,7 @@ RFCs.
 \pb{Role of Working Groups:}
 From the creation of the IETF in 1986 the growing community, with its
 interests in an increasing set of applications and protocols, has been
-split into a number of \emph{working groups}.\footnote{There are 126
+split into a number of \emph{working groups}.\footnote{There are 122
 active working groups at the time of writing, organised into 7 areas.
 The number of groups varies over time, but is typically in the range
 100-150.} These working groups are each chartered with a well-defined
@@ -1060,7 +1062,6 @@ more representative, further efforts are needed.
 \section{Organisational Dynamics of the IETF}
 \label{sec:org-dyn}
 
-
 While the IETF does hold regular plenary and interim meetings, much of the
 interaction between participants takes place on the public mailing lists of
 the various working groups. In the following (\S\ref{sec:org-dyn:participants}),
@@ -1097,40 +1098,76 @@ vital role, with 1,153 mailing lists, containing 2,439,240 emails from
 74,646 unique email addresses.
 
 \pb{Volume of Discussion:}
-Figure~\ref{fig:pid_count_emailing_yearly} presents the number of emails
-sent across the last 25 years, showing that email volumes have grown
-significantly with time, plateauing at around 130,000 annual messages since
-around 2010. The figure also shows how the number of unique Person ID
-counts (as described in \S\ref{sec:data}) observed every year in the mail
-lists, showing a decreasing trend in the number of contributors.
-
-Figure~\ref{fig:emailvol_by_year_catg} shows the relative email volume by
-type. We see that an increasing fraction of messages originate from
-automated addresses. This is largely as a result of the growing use of
-GitHub, and other version control systems, for managing drafts. There were
-122 active IETF working groups at the time of writing: of these, 17 listed
-a GitHub repository in their metadata. The QUIC working group, as one
-example, has replaced the typical email list discussions with GitHub
-issues: indeed, this is a significant part of the surge observed in 2016.
-Given that most working groups use mailing lists to manage their activity,
-we do not further analyse interactions that take place on GitHub in this
-paper. As a result, Figure~\ref{fig:emailvol_by_year_catg} understates the
-volume of interactions: the plateau observed in recent years is at least
-somewhat attributable to the shift to GitHub and similar services. As this
-shift continues, it will become important for future work to consider these
-interactions.
-\todo{We have more discussion of GitHub?}
-
+Figure~\ref{fig:pid_count_emailing_yearly} shows the number of emails sent
+across the last 25 years (dashed red line), showing that email volumes have
+grown significantly with time, plateauing at around 130,000 messages per
+year since around 2010. The figure also shows (solid blue line) how the
+number of unique participants (with entity resolution performed as
+discussed in Section \ref{sec:background:data}) observed every year in the
+mail lists, showing a decreasing trend in the number of contributors since
+2007. We note that that the number of participants is broadly correlated
+with the rate of RFC publication (Figure \ref{fig:rfcs_by_area}), likely
+indicating that many participants disengage once the document they were
+working on is published.
 
 \begin{figure}
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/pid_count_emailing_yearly.pdf}
   \caption{
-    Number of Person IDs exchanging emails each year
+    Number of email messages per year and number of unique participants
+    exchanging emails per year.
   }
   \label{fig:pid_count_emailing_yearly}
 \end{figure}
 
+Figure~\ref{fig:emailvol_by_year_catg} breaks down the messages sent into
+four categories based on the sending address:
+\begin{enumerate}
+  \item \emph{Datatracker-mapped} addresses represent those participants
+    sending email in a given year that have an IETF Datatracker account
+    associated with their email address. Datatracker accounts are needed to
+    submit drafts and register for meetings, and to allow those in
+    leadership roles to perform administrative actions, so this indicates
+    the fraction of participants who are strongly engaged with the IETF.
+
+  \item \emph{Automated} addresses are those sent by automated systems
+    rather than directly by participants. This includes the automated
+    announcement of new draft submissions and meeting, last calls for
+    comments, etc., sent by the Datatracker, but there is also a growing
+    number messages sent by GitHub and other version control systems used
+    for managing drafts.
+    There were 122 active IETF working groups at the time of writing.
+    Of these, 17 listed a GitHub repository in their metadata. The QUIC
+    working group, as one example, has replaced the typical email list
+    discussions with GitHub issues: indeed, this is a significant part of
+    the surge observed in 2016.  Given that most working groups use mailing
+    lists to manage their activity, we do not further analyse interactions
+    that take place on GitHub. 
+
+  \item \emph{Role-based} addresses represent those sent by people in
+    formal leadership or administrative roles in the context of their role.
+    There are a very limited number of these addresses, e.g., the IETF,
+    IRTF, and IAB Chairs, the IETF Executive Director. As seen, these
+    addresses are used sparingly. Note that working group chairs and area
+    directors use their individual email addresses when managing their
+    working group or area, and so appear as Datatracker mapped addresses.
+
+  \item \emph{Unmapped} addresses are those that do not fall into the other
+    categories. They typically represent participants that lurk on a
+    mailing list and provide occasional input, but who are not document
+    authors and do not attend meetings. This category has reduced over time
+    as more types of interaction require a Datatracker account and as
+    comments from occasional contributors are increasingly submitted via
+    issue trackers on GitHub and similar services.
+
+\end{enumerate}
+
+The increasing use of GitHub suggests that the data in
+Figure~\ref{fig:pid_count_emailing_yearly} likely understates the volume of
+interactions. The plateau observed in the number of messages sent in recent
+years is at least somewhat attributable to the shift to GitHub and similar
+services. As this shift continues, it will become important for future work
+to consider these interactions.
 
 \begin{figure}
   \centering
