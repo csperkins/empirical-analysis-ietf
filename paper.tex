@@ -155,7 +155,7 @@ Force (IRTF) stream, the Internet Architecture Board (IAB) stream, and the
 Independent Submission stream.
 
 There is also a fifth, legacy stream, comprising RFCs published prior to
-the adoption of separate publication streams in July 2007 \cite{rfc4844}.
+the adoption of separate publication streams in July 2007 \cite{RFC4844}.
 While the IETF is an open standards forum that develops technical standards
 and operational guidelines for the Internet, the IRTF is an associated
 organisation that promotes longer-term research, and the IAB provides
@@ -593,6 +593,21 @@ compatibility with the installed based in the development of its standards.
 \subsection{RFC Errata}
 \label{sec:trends-documents:errata}
 
+% The following is from our TMA 2023 paper, Section I:
+
+Mistakes can and do occur in published RFCs.  These errors can be reported
+to the RFC Editor, and the RFC Editor makes the reports publicly available
+and coordinates with the IETF, and the other publication streams, on their
+verification. These errata can clarify editorial concerns as well as correct
+substantive technical errors. Since the presence of significant errors in
+its specification can undermine the success of a protocol, studying the
+nature of these errata and their subsequent fixes is important.
+
+In the following, we analyse the 6,759 errata filed with the RFC Editor
+between 2001–2022, inclusive, documenting 3,288 editorial issues and 3,471
+technical issues, and covering 2,240 RFCs, to understand the frequency
+and causes of problems in RFCs.
+
 % The following is from our TMA 2023 paper, Section III:
 
 %..................................................................................................
@@ -601,23 +616,24 @@ Figure~\ref{fig:errata_per_year} presents the number of errata filed, on
 average per RFC, since 1969 based on the year of RFC publication.  The peak
 in the number of errata per RFC occurs in 1981. Only 29 RFCs were published
 that year, but they include major documents such as RFCs 791, 792, and 793
-(the original versions of the IP~\cite{rfc791}, ICMP~\cite{rfc792}, and
-TCP~\cite{rfc793} standards), with 17, 7, and 47 errata, respectively.
+(the original versions of the IP~\cite{RFC791}, ICMP~\cite{RFC792}, and
+TCP~\cite{RFC793} standards), with 17, 7, and 47 errata, respectively.
 These important protocols clearly garnered a great deal of scrutiny and
 revision.  The second highest peak occurs in 2006.  In contrast to the
 previous examples, this has the highest number of RFCs published per year
 (459), including RFC 4601 \cite{RFC4601} that has the most errata (114).
 Since this second peak, there has been a steady decrease in the number of
 errata filed.  This broadly correlates with the number of RFCs published
-per year, with Pearson coefficient 0.59 since 2007.  Table
-\ref{tab:top-10-rfcs-by-errata} lists the top RFCs by errata filing count.
+per year, with Pearson coefficient 0.59 since 2007.
+Table \ref{tab:top-10-rfcs-by-errata} lists the top RFCs by errata filing
+count.
 
 \begin{figure}
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-by-year.pdf}
   \caption{
-    Average errata filed per RFC for each year by RFC publication year,
-    grouped by IETF area (acronyms expanded in Table~\ref{tab:errata-stats-area}).
+    Average number of errata filed per RFC in each year, by RFC publication year,
+    grouped by IETF area. The areas are as described in Figure~\ref{fig:rfcs_by_area}.
   }
   \label{fig:errata_per_year}
 \end{figure}
@@ -647,8 +663,9 @@ errata.
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-submission-dates-area.pdf}
   \caption{
-    Days from RFC publication and errata filing by IETF area (acronyms
-    expanded in Table~\ref{tab:errata-stats-area}).
+    Cumulative distribution of the number of days from RFC publication to
+    errata filing by IETF area.
+    The areas are as described in Figure~\ref{fig:rfcs_by_area}.
   }
   \label{fig:errata_submission_days}
 \end{figure}
@@ -656,8 +673,12 @@ errata.
 
 %..................................................................................................
 \pb{Errata Status:}
-Figure~\ref{fig:errata_status} categorises the errata by status and
-publication year of the RFC to which they relate. 
+Figure~\ref{fig:errata_status} categorises the errata by verification
+status and publication year of the RFC to which they relate. 
+The largest share (42.5\%) of errata are \emph{verified}: errata that have
+been has been confirmed as necessary and accurate. This suggests that many
+errata identify real problems with RFCs and are useful to the community.
+
 
 \begin{figure}
   \centering
@@ -668,18 +689,15 @@ publication year of the RFC to which they relate.
   \label{fig:errata_status}
 \end{figure}
 
-The largest share (42.5\%) of errata are \emph{verified}: errata that have
-been has been confirmed as necessary and accurate. This suggests that many
-errata are useful to the community. The next largest share (30.3\%) are
-those labelled \emph{hold for document update}.  These are errata that are
-not a necessary update to the RFC, but may be considered on future
-revisions. For example, \emph{erratum 6278} describes an oversight in RFC
-8610~\cite{rfc8610}; the solution to this is non-trivial, and so will be
-considered in the next version of the specification. Of the 930 RFCs that
-have \emph{hold for document update} errata filed against them, only 40\%
-have been updated or obsoleted by a subsequent RFC.  We flag that this may
-be a cause for concern, or at least a missed opportunity for improvements
-to standards.
+The next largest share (30.3\%) are those labelled \emph{hold for document
+update}.  These are errata that are not a necessary update to the RFC, but
+may be considered on future revisions. For example, \emph{erratum 6278}
+describes an oversight in RFC 8610~\cite{RFC8610}; the solution to this is
+non-trivial, and so will be considered in the next version of the
+specification. Of the 930 RFCs that have \emph{hold for document update}
+errata filed against them, only 40\% have been updated or obsoleted by a
+subsequent RFC.  We flag that this may be a cause for concern, or at least
+a missed opportunity for improvements to standards.
 
 The third largest category (13\%) is \emph{rejected}, which covers errata
 that are invalid (like \emph{erratum 6323}, which was rejected because the
@@ -689,9 +707,11 @@ change to the RFC that should be done by publishing a new RFC (like
 rather than reporting an error). Such a large fraction of rejected
 submissions is unexpected and may flag issues with people's understanding
 of the errata process and its place within the wider standardisation
-process.  Finally, 14.2\% of errata are \emph{reported} but unverified.
-Again, we are surprised to see unverified errata from over a decade ago,
-suggesting the process should be expedited. 
+process.
+
+Finally, 14.2\% of errata are \emph{reported} but unverified.  Again, we
+are surprised to see unverified errata from over a decade ago, suggesting
+the process should be expedited. 
 
 
 %..................................................................................................
@@ -701,40 +721,46 @@ per RFC, in each IETF area. Non-IETF RFCs, e.g., IRTF and independent stream
 RFCs, and legacy IETF RFCs, are labelled as ``None''.  We confirm errata in
 standards are common: of the 4,373 standards-track RFCs in our dataset,
 32.7\% have attracted at least one erratum filing.  However, there are
-three notable outliers.  First, RFCs published by the Sub-IP (subip) Area
-have very few errata, with only 5\% of subip RFCs attracting errata
-filings. This is because this temporary area -- established in 2001 and
-concluded in 2005 -- only published 19 RFCs, resulting in a far smaller
-sample than the other areas. For comparison, the next smallest area,
-General (gen), published 39 RFCs. \emph{gen} RFCs attract a greater number
-of errata on average, vs. \emph{subip} RFCs, likely due to their broader
-relevance.  Second, we see that both the Application (app) and Security
-(sec) Areas' RFCs are more likely to have errata filed for them, with
-35.9\% of Application and 39\% of Security RFCs attracting at least one
-erratum filing.
+three notable outliers:
+\begin{enumerate}
+  \item RFCs published by the Sub-IP (subip) Area have very few errata,
+    with only 5\% of subip RFCs attracting errata filings. This temporary
+    area -- established in 2001 and concluded in 2005 -- only published 19
+    RFCs, resulting in a far smaller sample than the other areas. For
+    comparison, the next smallest area, General (gen), published 39 RFCs.
+    \emph{gen} RFCs attract a greater number of errata on average, vs.
+    \emph{subip} RFCs, likely due to their broader relevance.  
+
+  \item We see that both the Application (app) and Security (sec) Area
+    RFCs are more likely to have errata filed for them than other areas,
+    with 35.9\% of Application and 39\% of Security RFCs attracting at
+    least one erratum filing.
+
+  \item Table~\ref{tab:errata-stats-area} details the split between
+    \emph{technical} and \emph{editorial} errata across each area.  While
+    there is broadly an even split, there are areas where one type of
+    errata is more dominant. For example, in the Routing (rtg) area, 60.8\%
+    of filings are editorial, while in the Applications (app) area, 59\%
+    were technical.  It remains to determine why this is the case, and, in
+    particular, to establish whether there is something inherent about the
+    RFCs published by these areas that makes them more prone to containing
+    errata, and to containing one type of errata vs. another. For example,
+    in the Routing area, structured notation is frequently used to define
+    routing entities; editorial errata are often filed in those
+    definitions. Targeting such areas with improved alternate review
+    procedures may be beneficial.
+
+\end{enumerate}
 
 \begin{figure}
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-by-rfc-by-area.pdf}
   \caption{
-    CDF of errata filed per RFC by grouped by IETF area (acronyms expanded
-    in Table~\ref{tab:errata-stats-area}).
+    Cumulative distribution of errata filed per RFC by grouped by IETF
+    area.  The areas are as described in Figure~\ref{fig:rfcs_by_area}.
   }
   \label{fig:errata_per_rfc}
 \end{figure}
-
-Finally, Table~\ref{tab:errata-stats-area} details the split between
-\emph{technical} and \emph{editorial} errata across each area. While there
-is broadly an even split, there are areas where one type of errata is more
-dominant. For example, in the Routing (rtg) area, 60.8\% of filings are
-editorial, while in the Applications (app) area, 59\% were technical.  It
-remains to determine why this is the case, and, in particular, to establish
-whether there is something inherent about the RFCs published by these areas
-that makes them more prone to containing errata, and to containing one type
-of errata vs. another. For example, in the Routing area, structured
-notation is frequently used to define routing entities; editorial errata
-are often filed in those definitions. Targeting such areas with improved
-alternate review procedures may be beneficial.
 
 Tables~\ref{tab:errata-stats-stream} and \ref{tab:errata-stats-status}
 further categorise errata by the stream and status, at the time of
