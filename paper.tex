@@ -1701,27 +1701,34 @@ growing number of areas in which influencers participate.
 
 % ICWSM 2022 paper Section 3.3
 
-While these top participants are influential within the \emph{mailing
-lists}, it is unclear how this influence translates into document
-authorship and into gaining  leadership roles within  the organisation.
+While the top participants are defined by the betweenness centrality metric
+(\S\ref{subsec:measuring_influence}) as being influential within the IETF
+mailing lists, it is unclear how this influence translates into document
+authorship and leadership roles within the IETF.  We explore these aspects
+of influence in the following.
 
 %..................................................................................................
-\pb{Draft authorship}
+\pb{Document authorship:}
 The output of the IETF is technical standards and other documents published
-in the RFC series. RFCs are developed by WGs from a sequence of Internet-Drafts,
-with individuals acting as named authors.  Having identified the most
-influential participants in the mailing list community, we can determine
-whether or not these same participants are also the most active authors.
+in the RFC series. RFCs are developed by working groups from a sequence of
+Internet-drafts, with individuals acting as named authors. Having identified
+the most influential participants in the mailing list community, we can
+determine whether or not these same participants are also the most active
+authors.
 
 Figure~\ref{fig:drafts_initiation_top_percentile} shows the distribution of
 the proportion of documents authored by mailing list participants, sorted
-by their influence rank. We observe a growing proportion of the community
-involved in draft authoring, skewed towards influential participants who
-tend to write more drafts.  During 2010-2019, each participant in the top
-10 percentile, authored 0.125\% to 0.175\% of the total number of drafts in
-that period. We find that 32\%-42\% of the total drafts, in different years
-during this period, were authored by the top 10\% most influential mailing
-list participants.
+by their influence rank. We observe that:
+(i) influential participants in the email graph, i.e., those ranked top in
+betweenness centrality, tend to write more drafts than do participants with
+lower centrality; and
+(ii) the number of drafts per participant is increasing over time for all
+participants.
+For example, during 2010-2019, each participant in the top 10 percentile,
+authored 0.125\% to 0.175\% of the total number of drafts in that period.
+We find that 32\%-42\% of the total drafts, in different years during this
+period, were authored by the top 10\% most influential mailing list
+participants.
 
 \begin{figure}
   \centering
@@ -1736,13 +1743,13 @@ list participants.
 \end{figure}
 
 %..................................................................................................
-\pb{Co-authorship and email graph correlation}
+\pb{Document co-authorship and correlation with the email graph:}
 Figure~\ref{fig:drafts_initiation_top_percentile} showed that influential
-mailing list participants tend to author more drafts than others.
+participants on the mailing lists tend to author more drafts than others.
 We next ask if they are also influencers in the draft co-authorship graph.
 
-Thus, we create a draft co-authorship graph where each author is a node,
-and draft co-authorship is an edge. We then measure influence with
+To do this, we create a draft co-authorship graph where each author is a
+node, and draft co-authorship is an edge. We then measure influence with
 betweenness centrality of the authors in each time period.
 Table~\ref{tbl:correlation_sprmn} compares the top 20\% of influencers of
 the mailing lists with those of the co-authorship graph.  We find a
@@ -1777,11 +1784,11 @@ draft authorship.
 We also look at the top 20\% participants from the co-authorship network
 who are \emph{not} part of the top 20\% influencers in the email network in
 Figure \ref{fig:non_overlapping_coauthornetwork_authors_emailnetwork}.
-We observe that not all the prolific authors are that engaged in the email
-discussion: 40\%-50\% of non-overlapping authors are ranked between 20th to
-40th percentile of influence in the email network. These non-overlapping
-authors are typically more junior with respect to their participation
-duration.
+We observe that that are some prolific authors are that \emph{not} engaged
+in the email discussion: 40\%-50\% of non-overlapping authors are ranked
+between 20th to 40th percentile of influence in the email network. These
+non-overlapping authors are typically more junior with respect to their
+participation duration.
 
 \begin{figure}
   \centering
@@ -1795,16 +1802,16 @@ duration.
 \end{figure}
 
 %..................................................................................................
-\pb{Leadership roles} 
-WG chairs are selected from the community, and we might expect those
-selected to be influential in the community.
+\pb{Influencers and leadership roles:} 
+Working group chairs are selected from the community, so we might expect
+those selected to be influential in the community.
 Figure~\ref{fig:wg_chair_before_after} shows that this is indeed the case:
-87.5\% of WG chairs are in the top 20\% of mailing list influencers and
-67.4\% are in the top 20\% of document authors in the year before they
-became chairs. This also shows the impact of taking up a leadership role:
-influence in both the mailing list and authorship communities grows in the
-year after participants become a WG chair for the first time. 
-
+87.5\% of working group chairs are in the top 20\% of mailing list
+influencers and 67.4\% are in the top 20\% of document authors in the year
+before they became chairs. This also shows the impact of taking up a
+leadership role: influence in both the mailing list and authorship
+communities grows in the year after participants become a working group
+chair for the first time. 
 
 \begin{figure}
   \centering
@@ -1818,18 +1825,19 @@ year after participants become a WG chair for the first time.
 \end{figure}
 
 %..................................................................................................
-\pb{Organisations}  While participants in the IETF contribute as
-individuals, they are usually affiliated with an organisation.  To study
-the potential influence of organisations, for each draft we obtain the
-authors' affiliations from the Datatracker. If this is not available, we
-use the domain name of the authors' email addresses, which we map to the
-relevant organisation (e.g., \texttt{@cisco.com} maps to Cisco). For generic
-email addresses, such as \texttt{@gmail.com}, we use the participant name
-if no affiliation is available.
+\pb{Influence of organisations:}
+While participants in the IETF are expected to contribute as individuals,
+they are usually affiliated with an organisation.  To study the potential
+influence of those organisations, for each draft we obtain the authors'
+affiliations from the Datatracker. If this is not available, we use the
+domain name of the authors' email addresses, which we map to the relevant
+organisation (e.g., \texttt{@cisco.com} maps to Cisco). For generic email
+addresses, such as \texttt{@gmail.com}, we use the participant name if no
+affiliation is available.
 
 Figure \ref{fig:coauthor_affiliation_network2019_otheryears} shows the ten
-most frequent affiliated organisations of the top 20\% authors in the
-period 2015-2019, and the number of authors affiliated with these
+most frequent affiliated organisations of the top 20\% of draft authors in
+the period 2015-2019, and the number of authors affiliated with these
 organisations in  each  period.  While the dominance of Cisco is clear,
 other organisations, such as Huawei, have gained a larger presence over
 time.  In general, a small number of organisations employ a significant
@@ -1873,9 +1881,9 @@ co-authored drafts in the period 2015-2019.
 
 Further inspection of the collaboration trends reveals that the volume of
 collaborations between authors from Huawei and other organisations appears
-to be unaffected by the recent addition of Huawei to the U.S. Entity List
-\cite{bis:2019:entity} as the trends in Figure~\ref{fig:heatmap_2019_coauthordraft_most_frequent_org}
-also hold for 2020-2021.\footnote{\tiny\url{https://mailarchive.ietf.org/arch/msg/ietf-announce/0ywjgSS4LlO0DaWDoLJLRHxJdUk/}}
+to be unaffected by the addition of Huawei to the U.S. Entity List
+\cite{bis:2019:entity} as the trends in Figure 
+\ref{fig:heatmap_2019_coauthordraft_most_frequent_org} also hold for 2020-2021.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Summary}
