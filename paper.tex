@@ -1370,44 +1370,48 @@ In this section we consider the following research questions:
 \end{enumerate}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% ICWSM 2022 paper Section 3
 \subsubsection{Measuring Influence: The IETF as a Social Graph}
-
 \label{subsec:measuring_influence}
 
-Much of the interaction between IETF participants occurs on public mailing
-lists.  For each year, we build a social graph based on the \emph{active
-community} of participants (nodes) who have interactions (edges) with any
-other participant in the previous 5 years. 
+% ICWSM 2022 paper Section 3
 
-In Section \ref{sec:org-dyn:participants}, we demonstrated that there
-are three categories of participants in IETF - (a) \textit{young
-contributors} -- who leave within one year of their first year mailing list
-contribution; (b) \textit{mid-age contributors} -- participants who stay
-active for up-to 5 years; and (c) \textit{senior contributors} -- who
-remain active for more than 5 years. Following this, a 5 year period window
-is chosen to observe interactions. There are no direct
-participant-to-participant email exchanges in our dataset: the emails and
-responses we capture are sent to the public mailing lists, and we observe
-an interaction between two participants when one replies to an email sent
-by another on any mailing list. This yields a social graph based on
-1,049,793 emails (out of 2.1M) from 22,138 unique participants across 840
-mailing lists.
+To measure influence of participants in the IETF we extend the analysis in
+Section \ref{sec:org-dyn:participants} and, for each year, build a social
+graph based on the \emph{active community} of participants (nodes) who have
+email interactions (edges) with any other participant in the previous five
+years. 
+
+We previously demonstrated that there are three categories of participants
+in IETF: \textit{young contributors} who leave within one year of their
+first year mailing list contribution; \textit{mid-age contributors} who
+stay active for up-to five years; and \textit{senior contributors} who
+remain active for more than five years (\S\ref{sec:org-dyn:participants}).
+Following this, a 5-year period window is chosen to observe interactions.
+There are no direct participant-to-participant email exchanges in our
+dataset: the emails and responses we capture are sent to the public mailing
+lists, and we observe an interaction between two participants when one
+replies to an email sent by another on any mailing list. This yields a
+social graph based on 1,049,793 emails (out of 2.1M; not all messages
+receive a reply) from 22,138 unique participants across 840 mailing lists.
 
 %..................................................................................................
 % ICWSM 2022 paper Section 3.1
 \pb{Participation}
 To examine the variation in participation between IETF participants, in
-Figure~\ref{fig:degree_cdf} we plot the cumulative degree distribution of
-the social graph -- i.e., the cumulative number of people a participant
-interacts with.  We observe a core group that always interacts with
+Figure~\ref{fig:degree_cdf} we plot the cumulative degree distribution
+of the social graph (i.e., the cumulative number of people with which a
+participant interacts). We observe a core group that always interacts with
 substantially more people than the rest of the community, with around 80\%
-of the participants having degree  $<$15, but 5\%-10\% having degree $>$40.
-However,  this difference decreases over time: in 2005-2009 around 6\% of
+of the participants interacting with less than 15 others (i.e., having
+degree~$<15$), but 5\%-10\% interacting with more than 40 others.
+This difference decreases over time: in 2005-2009 only around 6\% of
 participants had degree $>$40, but by the period 2015-2019 this increases
-to $\sim10\%$.  This shows that while there is always a core of more active
-participants, the degree of participation has spread  out over time.
-\todo{Repetitive with Section \ref{sec:org-dyn:participants}?}
+to around 10\%.
+While there is always a core of more active participants, the amount of
+interaction has increased over time.
+This confirms the results in Figure \ref{fig:degree_dist_rfc_authors},
+for RFC authors, and shows that they also apply to interactions in the
+community at large.
 
 \begin{figure}
   \centering
@@ -1430,14 +1434,14 @@ attendees,\footnote{\url{https://datatracker.ietf.org/stats/meeting/overview/}}
 suggesting a lag between participating for the first time and integrating
 into the wider community.  In contrast, the size of the LCC increases until
 2006 before stabilising.  Overall, we observe that the IETF community has
-become less fragmented.
+become less fragmented over time.
 
 \begin{figure}
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lcc_yearly_no_components.pdf}
   \caption{
     Size of Largest Connected Component (LCC) and Number of Connected
-    Components (NCC)
+    Components (NCC) of the email graph.
   }
   \label{fig:lcc_size_yearly}
 \end{figure}
@@ -1450,22 +1454,22 @@ resilience of the IETF.  To study the influence of participants and their
 role in interconnecting the wider community, we compute the betweenness
 centrality of each participant in a given time
 period~\cite{kourtellis2013identifying, weitzel2012measuring,
-sole2014centrality}. We also considered other graph based influence metrics
-such as eigenvector centrality: eigenvector centrality reflects the
-importance of a node as per its neighbours, while betweenness centrality is
-based on shortest paths which is independent of the influence of
-neighbours.
-
-However, we found a very strong correlation between the two measures, 
-in line with similar experiments \cite{valente2008correlated,he2016correlation}:
-the Spearman's rank correlation of participants ranked by betweenness
-centrality and eigenvector centrality ranged between 0.51-0.72, with a
-strong statistical significance ($p < 0.01$) for the period 2000-2019. We
-therefore use just betweenness centrality in our analysis; this is often
-studied and acknowledged as a measure of influence in social and complex
-networks, particularly built on online communication
-\cite{hagen2018crisis,chen2012identifying, ghalmane2019centrality}.
-
+sole2014centrality}.%
+\footnote{
+  We considered other graph based influence metrics such as eigenvector
+  centrality: eigenvector centrality reflects the importance of a node as
+  per its neighbours, while betweenness centrality is based on shortest
+  paths which is independent of the influence of neighbours.  However, we
+  found a very strong correlation between the two measures, in line with
+  similar experiments \cite{valente2008correlated,he2016correlation}: the
+  Spearman's rank correlation of participants ranked by betweenness
+  centrality and eigenvector centrality ranged between 0.51-0.72, with a
+  strong statistical significance ($p < 0.01$) for the period 2000-2019. We
+  therefore use just betweenness centrality in our analysis; this is often
+  studied and acknowledged as a measure of influence in social and complex
+  networks, particularly built on online communication
+  \cite{hagen2018crisis,chen2012identifying, ghalmane2019centrality}.
+}
 Figure~\ref{fig:purge_nodes_largest_connected_component_number_components}
 then shows the effect of removing the most influential participants (in 1\%
 increments from most to least, moving left-to-right on the x-axis) on the
