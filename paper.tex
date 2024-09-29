@@ -1448,13 +1448,12 @@ become less fragmented over time.
 
 %..................................................................................................
 % ICWSM 2022 paper Section 3.1
-\pb{Influence}
+\pb{Influence:}
 Relying on a small group to interconnect the community could undermine the
 resilience of the IETF.  To study the influence of participants and their
 role in interconnecting the wider community, we compute the betweenness
-centrality of each participant in a given time
-period~\cite{kourtellis2013identifying, weitzel2012measuring,
-sole2014centrality}.%
+centrality of each participant in a given time period
+\cite{kourtellis2013identifying,weitzel2012measuring,sole2014centrality}%
 \footnote{
   We considered other graph based influence metrics such as eigenvector
   centrality: eigenvector centrality reflects the importance of a node as
@@ -1470,6 +1469,7 @@ sole2014centrality}.%
   networks, particularly built on online communication
   \cite{hagen2018crisis,chen2012identifying, ghalmane2019centrality}.
 }
+to determine the most influential participants in the email graph.
 Figure~\ref{fig:purge_nodes_largest_connected_component_number_components}
 then shows the effect of removing the most influential participants (in 1\%
 increments from most to least, moving left-to-right on the x-axis) on the
@@ -1494,30 +1494,30 @@ well-connected social graph.
 \end{figure}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% ICWSM 2022 paper Section 3.2
 \subsubsection{Behaviour of Influential Participants}
 \label{subsec:influencer_behaviour}
 
-\todo{This is somewhat repetitive with Section \ref{sec:org-dyn:participants}}
+% ICWSM 2022 paper Section 3.2
 
-We now characterise the behaviour of the most influential participants, in
-terms of the volume of emails sent, length of time active within the
-community, and topics discussed. 
+We now characterise the behaviour of the most influential participants, as
+measured by betweenness centrality (\S\ref{subsec:measuring_influence}), in
+terms of the volume of emails they send, the length of time they ate active
+within the community, and the topics discussed. 
 
 %..................................................................................................
-\pb{Email volume}
+\pb{Email volume:}
 Figure~\ref{fig:emailcount_top_percentile} shows that each participant in
 the top 10\% most influential participants sends on average around
 0.05\%-0.08\% of total emails in a given period.  Collectively, the top
 10\% most influential participants account for 43.75\%, on average, of the
-total emails, a substantially larger proportion than the others.
+total number of emails sent, a substantially larger proportion than the
+other participants.
 
-This dynamic seems stable over time, making differences even more acute.
-At the same time, the overall number of emails sent increases up to 2010
-and remains roughly stable from then onward.  Along with the results from
-\S\ref{subsec:measuring_influence}, this shows a worrying, if slowly
-improving, dependence of the IETF on a small number of influential
-participants.
+This ratio seems broadly stable over yet the overall number of emails sent
+increases up to 2010 and remains roughly constant from then onward.  Along
+with the results from \S\ref{subsec:measuring_influence}, this shows a
+worrying, if slowly improving, dependence of the IETF on a small number of
+highly influential participants.
 
 \begin{figure}
   \centering
@@ -1531,23 +1531,27 @@ participants.
 \end{figure}
 
 %..................................................................................................
-\pb{Cross-area review} 
+\pb{Cross-area review:} 
 In addition to sending more emails, we test if influential participants
-engage with different parts of the community more. The work of the IETF is
-divided into several areas (e.g., Applications \& Real-time, Security, and
-Routing). This eases administration, but might also act as a barrier to
-broader discussion and review. For example, WebRTC standards developed in
-the Applications and Real-time area might contain elements that could
-benefit from expertise from the Security area, but participants in one area
-might not review work in another. 
+engage with different parts of the community more often than do typical
+participants. That is, we measure if influential participants are more
+likely to make contributions to working groups in multiple IETF Areas.
 
 Figure~\ref{fig:areas_participation_top_percentile} shows the mean number
-of areas where IETF participants are active (derived from the mailing lists
-they use).  We see that influential participants engage in more areas of
-the IETF, on average, and that cross-area engagement has improved over
-time, indicating that the community itself has matured. This indicates that
-influential participants benefit the IETF in enabling cross-area discussion
-and review, and can bridge administrative divisions.
+of areas where participants in the IETF are active (based on the set of
+mailing lists they sent do). We see that more influential participants
+engage in more areas of the IETF, on average, than do less influential
+participants: not only do influential participants send more email, they
+send email to working groups in more areas of the IETF. This indicates
+that influential participants benefit the IETF in enabling cross-area
+discussion and review, and can bridge administrative divisions.
+
+It can also be seen that cross-area engagement has improved over time,
+with participants as a whole sending email to groups in more areas over
+tine. This shows that the IETF community as a whole is discussing more 
+broadly than it used to, perhaps further indication of the increasing
+complexity of the standards development and widespread concern about
+feature interactions.
 
 \begin{figure}
   \centering
@@ -1561,15 +1565,20 @@ and review, and can bridge administrative divisions.
 \end{figure}
 
 %..................................................................................................
-\pb{Participation duration}
-We next consider for how long participants remain associated with the IETF
-(measured as the delta between first and last emails sent).
+\pb{Participation duration:}
+We next consider how long participants remain associated with the IETF,
+measured as the time between sending their first and last emails to one of
+the mailing lists.
+
 Figure~\ref{fig:age_top_percentile} shows the mean participation duration
-distribution for participants, ranked by influence.  Participation duration
+distribution for participants, ranked by influence. Participation duration
 increases over time, with the most influential participants typically being
 those who have been active for longer. While this might be expected, it
 might be a good sign for the IETF community in that it implies that the
 most influential participants are also the most experienced.
+The short participation duration of the less influential participants
+matches the participant churn discussed in Figure \ref{fig:author_new}
+in \S\ref{sec:trends-demographics:affiliation}.
 
 \begin{figure}
   \centering
@@ -1582,14 +1591,13 @@ most influential participants are also the most experienced.
   \label{fig:age_top_percentile}
 \end{figure}
 
-We extend this observation by considering what happens to participants once
-they become influential. Figure \ref{fig:heatmap_top10_overlap} shows what
-proportion of the top 10\% influential participants in any given year
-(\emph{y-axis}) was also among the top 10\% influential participants in any
-other year (\emph{x-axis}). This shows that a significant majority of
-participants that become influential, continue to be influential for a
-number of years: the top 10\% are influential for at least 6-7 years on
-average.
+We further consider whether participants who become influential, remain
+influential. Figure \ref{fig:heatmap_top10_overlap} shows what proportion
+of the top 10\% influential participants in any given year (\emph{y-axis})
+was also among the top 10\% influential participants in any other year
+(\emph{x-axis}). This shows that a significant majority of participants
+that become influential, continue to be influential for a number of years:
+the top 10\% are influential for at least 6-7 years on average.
 
 \begin{figure}
   \centering
@@ -1600,7 +1608,7 @@ average.
   \label{fig:heatmap_top10_overlap}
 \end{figure}
 
-Further, Figure \ref{fig:rate_new_influential_participants} shows that
+Finally, Figure \ref{fig:rate_new_influential_participants} shows that
 breaking into the top 10\% of influencers requires an increasing number of
 years of participation. This may be beneficial, showing that the IETF is
 maturing and is capable of retaining influential and experienced
@@ -1620,7 +1628,7 @@ that is not welcoming to newcomers.
 \end{figure}
 
 %..................................................................................................
-\pb{Topics of Discussion} 
+\pb{Topics of Discussion:} 
 The topics discussed on WG mailing lists are a good indicator of the focus
 of technical work, and it might be expected that influential participants
 will set the direction of that work.  To explore this, we use the Latent
