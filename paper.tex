@@ -132,7 +132,7 @@ complexity, and correctness.
 Section \ref{sec:trends-demographics} moves on to consider the people who
 are involved in Internet standards development and how the demographics of
 the community have shifted over time.
-Section \ref{sec:org-dynamics} studies the interaction between participants,
+Section \ref{sec:org-dyn} studies the interaction between participants,
 explores who has influence and impact in the IETF and how that influence
 is evident in their activities, and the dynamics of communications within
 the IETF.
@@ -358,7 +358,7 @@ policy at \url{https://www.ietf.org/privacy-statement}. These make explicit
 provision that mailing list archives and the metadata contained in the
 Datatracker system will be made public, and it is this public data that
 we process to extract the aggregate statistics presented in Sections
-\ref{sec:trends-documents}, \ref{sec:trends-demographics}, \ref{sec:org-dynamics},
+\ref{sec:trends-documents}, \ref{sec:trends-demographics}, \ref{sec:org-dyn},
 \ref{sec:language} as well as the features analysed in Section
 \ref{sec:success-factors}. We transfer and store data securely, and retain
 it only for the time needed to perform the analysis.  Since we operate
@@ -457,7 +457,7 @@ WebRTC.
 In addition to the published RFCs, we track work-in-progress documents,
 known as Internet-drafts, that are intended for eventual publication as
 RFCs.
-\todo{Add internet-draft counts over time as mentioned in Section \ref{sec:org-dynamics:participants}}
+\todo{Add internet-draft counts over time as mentioned in Section \ref{sec:org-dyn:participants}}
 
 %..................................................................................................
 \pb{Role of Working Groups:}
@@ -1058,13 +1058,35 @@ more representative, further efforts are needed.
 
 %==================================================================================================
 \section{Organisational Dynamics of the IETF}
-\label{sec:org-dynamics}
+\label{sec:org-dyn}
 
-\todo{Add introduction to organisational dynamics section}
+
+While the IETF does hold regular plenary and interim meetings, much of the
+interaction between participants takes place on the public mailing lists of
+the various working groups. In the following (\S\ref{sec:org-dyn:participants}),
+we characterise the mailing list interactions considering the volume of
+discussion, the number of drafts discussed, the duration of individual
+participation, and how interactions between participants change over time.
+
+We then consider influence and impact of participants (\S\ref{sec:org-dyn:influence}).
+We measure how centralised is the active IETF community and how reliant is
+it on a small core of participants; how the most influential participants
+behave; how influence, determined by mailing list participation, relates to
+wider impact in the IETF; and whether the organisational affiliation of
+participants influences adoption of new work.
+
+Finally, we consider the hierarchy and communication dynamics in the IETF
+(\S\ref{sec:org-dyn:hierarchy}). We ask whether participation in IETF
+leadership roles is growing or becoming more centralised onto a small group
+of participants; whether the formal organisational hierarchy is reflected
+in the patterns of communication between participants; how people in
+different roles communicate and whether information flows up or down the
+hierarchy; and whether contact with people in leadership positions
+influences mobility within the IETF.
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Characterising Participant Interactions}
-\label{sec:org-dynamics:participants}
+\label{sec:org-dyn:participants}
 
 % IMC 2021 paper Section 3.3
 
@@ -1287,7 +1309,7 @@ participants.
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Characterising Influence and Impact}
-\label{sec:org-dynamics:influence}
+\label{sec:org-dyn:influence}
 
 % ICWSM 2022 paper
 % - Measuring influence
@@ -1296,7 +1318,7 @@ participants.
 
 % This is modified from the Introduction to the ICWSM 2022 paper:
 
-As we showed in Section \ref{sec:org-dynamics:participants}, protocol
+As we showed in Section \ref{sec:org-dyn:participants}, protocol
 standardisation is an inherently social process with most day-to-day work
 happening on public mailing lists, aided by meetings, video conference
 calls, and open document and code repositories.  We are specifically
@@ -1328,7 +1350,7 @@ lists.  For each year, we build a social graph based on the \emph{active
 community} of participants (nodes) who have interactions (edges) with any
 other participant in the previous 5 years. 
 
-In Section \ref{sec:org-dynamics:participants}, we demonstrated that there
+In Section \ref{sec:org-dyn:participants}, we demonstrated that there
 are three categories of participants in IETF - (a) \textit{young
 contributors} -- who leave within one year of their first year mailing list
 contribution; (b) \textit{mid-age contributors} -- participants who stay
@@ -1355,7 +1377,7 @@ However,  this difference decreases over time: in 2005-2009 around 6\% of
 participants had degree $>$40, but by the period 2015-2019 this increases
 to $\sim10\%$.  This shows that while there is always a core of more active
 participants, the degree of participation has spread  out over time.
-\todo{Repetitive with Section \ref{sec:org-dynamics:participants}?}
+\todo{Repetitive with Section \ref{sec:org-dyn:participants}?}
 
 \begin{figure}
   \centering
@@ -1442,7 +1464,7 @@ well-connected social graph.
 \subsubsection{Behaviour of Influential Participants}
 \label{subsec:influencer_behaviour}
 
-\todo{This is somewhat repetitive with Section \ref{sec:org-dynamics:participants}}
+\todo{This is somewhat repetitive with Section \ref{sec:org-dyn:participants}}
 
 We now characterise the behaviour of the most influential participants, in
 terms of the volume of emails sent, length of time active within the
@@ -1863,7 +1885,7 @@ level of such collaboration is found to have increased with time.
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Hierarchy and Communication Dynamics}
-\label{sec:org-dynamics:hierarchy}
+\label{sec:org-dyn:hierarchy}
 
 % ICWSM 2024 paper
 % - RQ1: Are higher levels of the hierarchy growing or becoming more
@@ -1900,22 +1922,22 @@ In the following we consider the following research questions:
     Are higher levels of the hierarchy growing or becoming more
     centralised? Are they associated with an increased domination
     of the conversation?
-    (\S\ref{sec:org-dynamics:hierarchy:rq1})
+    (\S\ref{sec:org-dyn:hierarchy:rq1})
 
   \item
     What is the association between the organisation hierarchy and general
     communication patterns?
-    (\S\ref{sec:org-dynamics:hierarchy:rq2})
+    (\S\ref{sec:org-dyn:hierarchy:rq2})
 
   \item
     How do people with differing roles communicate with each other?  Does
     information flow ``up" or ``down" the hierarchy?
-    (\S\ref{sec:org-dynamics:hierarchy:rq3})
+    (\S\ref{sec:org-dyn:hierarchy:rq3})
 
   \item
     What is the impact that individuals have on their direct contacts'
     activity over time? How does this vary across hierarchy level?
-    (\S\ref{sec:org-dynamics:hierarchy:rq4})
+    (\S\ref{sec:org-dyn:hierarchy:rq4})
 
 \end{enumerate}
 
@@ -1954,7 +1976,7 @@ hierarchy reduces the voice of lower levels.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Methodology}
-\label{sec:org-dynamics:hierarchy:methodology}
+\label{sec:org-dyn:hierarchy:methodology}
 
 % From our ICWSM 2024 paper, section 4:
 
@@ -1962,7 +1984,7 @@ hierarchy reduces the voice of lower levels.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Centralisation and Dominance}
-\label{sec:org-dynamics:hierarchy:rq1}
+\label{sec:org-dyn:hierarchy:rq1}
 
 % RQ1: Are higher levels of the hierarchy growing or becoming more
 % centralised? Are they associated with an increased domination of
@@ -2117,7 +2139,7 @@ mean RPs experience more difficulty in expressing their voice.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Organisational Hierarchy and Communication Patterns}
-\label{sec:org-dynamics:hierarchy:rq2}
+\label{sec:org-dyn:hierarchy:rq2}
 
 % RQ2: What is the association between the organisation hierarchy and
 % general communication patterns?
@@ -2219,7 +2241,7 @@ higher level individuals are not present.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Communication up and down the Hierarchy}
-\label{sec:org-dynamics:hierarchy:rq3}
+\label{sec:org-dyn:hierarchy:rq3}
 
 % RQ3: How do people with differing roles communicate with each other?
 % Does information flow ``up" or ``down" the hierarchy?
@@ -2296,7 +2318,7 @@ out messages to the list in general.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Mobility Within the Hierarchy}
-\label{sec:org-dynamics:hierarchy:rq4}
+\label{sec:org-dyn:hierarchy:rq4}
 
 % RQ4: What is the impact that individuals have on their direct contacts'
 % activity over time? How does this vary across hierarchy level?
