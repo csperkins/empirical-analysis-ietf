@@ -1212,62 +1212,58 @@ discussion of increasing complexity of draft publication?}
 \end{figure}
 
 %..................................................................................................
-\pb{Contribution duration.}
-We now look into the longevity of contributors, in terms of the number of
-years that they actively participate in any IETF mailing lists. We define
-the \textit{contribution duration} of a participant as the length of time
-that they have contributed to the mailing lists.  To do this, we look at
-the contributors who first contribute to mailing lists between the years
-2000 to 2013. We limit our analysis to 2013, since the longevity of
+\pb{Duration of Participation:}
+We now look into the duration of participation, in terms of the number of
+years that people actively participate in any IETF mailing lists.
+
+We define the \textit{contribution duration} of a participant as the length
+of time that they have contributed to the mailing lists.  To do this, we
+study the participants who first send email to mailing lists between the
+years 2000 to 2013. We limit our analysis to 2013, since the longevity of
 contributors that first participate more recently cannot be determined.
 For each year, in the period 2000 to 2013, we look at those who first
-contribute in each year and the number of years that they then go on to
+sent email in each year and the number of years that they then go on to
 remain active in the mailing lists. For example, a participant who first
 sent an e-mail to an IETF list in 2010, and last sent an e-mail to an IETF
 list in 2018, will have a contribution duration of 9 years.
 
-We generate Gaussian Mixture Models for observing different clusters of the
-maximum duration that contributors remain active for.  These models
-identified three broad clusters that contributors can be categorised
-within:
+First, to understand duration of participation, we first generate Gaussian
+Mixture Models for observing different clusters of the maximum duration of
+contribution. These models identified three broad clusters into which the
+participants can be categorised: \emph{young contributors} for whom the
+time between their first and last emails to the IETF lists in one year or
+less; \emph{mid-age contributors} who go onto remain active participants in
+the email lists for more than one year, but less than five years; and
+\emph{senior contributors} who remain participants in the mailing list for
+five or more years.
 
-\begin{itemize}
-  \item \emph{Young contributors} who leave within 1 year of joining.
-  \item \emph{Mid-age contributors} who go onto remain associated for
-    more than 1 year, but less than 5 years.
-  \item \emph{Senior contributors} who go onto remain associated for 5 or
-    more years.
-\end{itemize}
+Next, to begin to understand how contribution duration relates to RFC
+authorship, we look at the email interactions of the authors of each RFC.
+Specifically, we look at the distribution of the contribution duration of
+the authors of RFCs, considering the \emph{mean contribution duration} of
+all of the authors of the RFC at the time of publication, the contribution
+of the \emph{junior-most author} (the author with the lowest contribution
+duration at the time of publication), and the contribution of the
+\emph{senior-most author} (the author with the highest contribution
+duration at time of publication.  Figure~\ref{fig:age_dist_rfc_authors}
+shows the distribution of contribution duration of each of these three
+measures. This shows that the majority of junior-most authors have
+participated for less than 5 years in the IETF (i.e., they are young or
+mid-age contributors), whereas the majority of senior-most authors are
+senior contributors who have participated in the IETF for significantly
+more than 5 years (in fact, 35\% of authors exceed 15 years of IETF
+participation).  This shows that RFCs tend to be authored by a mix of
+seniority levels.
 
-We use these contribution categories defined above to characterise the
-interactions between contributors belonging to different categories, as
-well as the authors of each RFC. We look at outgoing and incoming
-interactions with RFC authors in the period between the first draft and
-publication of the RFC. If this period is less than two years, we look at
-the activities of authors for two years before the RFC was published.
-Interactions are defined from the viewpoint of the RFC authors:
+% We look at outgoing and incoming interactions with RFC authors in the
+% period between the first draft and publication of the RFC. If this period
+% is less than two years, we look at the activities of authors for two
+% years before the RFC was published.  Interactions are defined from the
+% viewpoint of the RFC authors: \emph{outgoing interactions} where an RFC
+% author responds to an email from other contributors (i.e., email sent);
+% and \emph{incoming interactions} where contributors respond to an email
+% by the author (i.e., email received).
 
-\begin{itemize}
-  \item \textit{Outgoing interaction}, where an RFC author responds
-    to an email from other contributors (i.e., email sent).
-
-  \item \textit{Incoming interaction}, where contributors respond to
-    an email by the author (i.e., email received).
-\end{itemize}
-
-For each interaction type, we count the number of messages and number of
-unique contributors involved in those interactions. For each RFC, we
-analyse the interaction activities based on three measures of author
-contribution duration:
-
-\begin{itemize}
-  \item \emph{Junior-most author}, i.e., the author with the lowest
-    contribution duration at the time of publication.
-  \item \emph{Senior-most author}, i.e., the author with the highest
-    contribution duration at time of publication.
-  \item \emph{Mean contribution duration} of all of the authors of the
-    RFC at the time of publication.
-\end{itemize}
 
 \begin{figure}
   \centering
@@ -1280,14 +1276,6 @@ contribution duration:
   }
 \label{fig:age_dist_rfc_authors}
 \end{figure}
-
-Figure~\ref{fig:age_dist_rfc_authors} shows the distribution of
-contribution duration of each of these three measures. This shows that the
-majority of junior-most authors have participated for less than 5 years in
-the IETF, whereas the majority of senior-most authors have participated in
-the IETF for more than 10 years. In fact, 35\% of authors exceed 15 years
-of IETF participation, showing that RFCs tend to be authored by a mix of
-seniority levels.
 
 \begin{figure}
   \centering
