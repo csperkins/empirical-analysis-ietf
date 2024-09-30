@@ -26,14 +26,14 @@
 # =================================================================================================
 # Project specific build rules:
 
-PAPER_PDF = paper.pdf
-PAPER_TEX = $(PAPER_PDF:.pdf=.tex)
+PAPER_PDF := paper.pdf
+PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
-IETF_DATA = data/ietf/rfc-index.xml
+IETF_DATA := data/ietf/rfc-index.xml
 
-RESULTS = results/rfcs-by-year-stream.csv
+RESULTS := results/rfcs-by-year-stream.csv
 
-FIGURES = figures/rfcs-by-year-stream.pdf
+FIGURES := figures/rfcs-by-year-stream.pdf
 
 all: $(PAPER_PDF)
 
