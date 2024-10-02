@@ -2328,10 +2328,10 @@ communication" as they receive more than they send.
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/Origin_email_proportions.png}
   \caption{
-    Proportion of ``origin" (non reply) emails sent by RPs, WGCs and ADs,
-    this should be interpreted in conjunction with
-    figure~\ref{fig:activity_proportions} showing the proportion of active
-    individuals in each class.
+    Proportion of ``origin" (non reply) emails sent by regular
+    participants, working group chairs, and area directors, this should be
+    interpreted in conjunction with Figure~\ref{fig:activity_proportions}
+    showing the proportion of active individuals in each class.
   }
   \label{fig:origin_emails}
 \end{figure}
@@ -2348,7 +2348,7 @@ themselves (triangular communication patterns) when higher level
 individuals are not present. 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-\subsubsection{Communication up and down the Hierarchy}
+\subsubsection{Communication Up and Down the Hierarchy}
 \label{sec:org-dyn:hierarchy:rq3}
 
 % RQ3: How do people with differing roles communicate with each other?
@@ -2359,70 +2359,79 @@ individuals are not present.
 
 Our third hypothesis is that the cooperative nature of the IETF will be
 evident in the effect that power distance~\cite{li2021does} has on
-communication throughout the organisation. The raw proportion of the
-communication between hierarchy levels helps us to understand the
-confidence of lower levels to exercise their voice. This proportion, for a
-cooperative and voluntary organisation should be higher for lower hierarchy
-levels, showing a confidence in their voice.
+communication. The proportion of the communication between hierarchy levels
+helps us to understand the confidence of lower levels to exercise their
+voice: that is, the willingness of regular participants to challenge the
+working group chairs and of the working group chairs to challenge area
+directors.  This proportion, in a cooperative and voluntary organisation,
+should be higher for those in lower positions in the hierarchy, showing a
+confidence in their voice.
 
-We categorise edges based on the hierarchy levels they originate from and
-are sent to. Ratios are then calculated of ``upward" versus ``downward"
-communication between RPs, WGCs and ADs. We find that the lower the level,
-the more of a skew to upward communication.  Communication tends to flow
-``up'' the hierarchy more than ``down''. 
+% We categorise edges based on the hierarchy levels they originate from and
+% are sent to. Ratios are then calculated of ``upward'' versus ``downward''
+% communication between regular participants, working group chairs, and area
+% directors. We find that the lower the level, the more of a skew to upward
+% communication.  Communication tends to flow ``up'' the hierarchy more than
+% ``down''. 
 
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.3:
 
-For \textbf{RQ3}, we determine the direction communication tends to flow
-through the hierarchy by looking at inbound and outbound communication
-flows. The network's edges are categorised based on their source and target
-node's hierarchy level. For each of the inter-level communication
-combinations the proportion of communication in the last year going in the
-``upward" hierarchy direction is calculated. For instance, if there are six
-emails from RPs to WGCs and twelve from WGCs to RPs then the proportion
-upward is $\frac{6}{6+12}=\frac{1}{3}$. 
+We determine the direction communication tends to flow through the
+hierarchy by looking at inbound and outbound communication flows. The
+network's edges are categorised based on their source and target node's
+hierarchy level. For each of the inter-level communication combinations the
+proportion of communication in the last year going in the ``upward''
+hierarchy direction is calculated. For instance, if there are six emails
+from regular participants to working group chairs, and twelve from working
+group chairs to regular participants, then the proportion upward is
+$\frac{6}{6+12}=\frac{1}{3}$. 
 
 In Figure~\ref{fig:inter_strata}, these proportions are plotted, and the
 year long window is again pushed forward by one month to increase the
 resolution of changes. A proportion of higher than $0.5$ shows more
 communication flowing up the hierarchy than down. All three levels are
-mostly upward in direction, with the lowest two levels (RP$\rightarrow$
-WGC) having the largest skew in the proportion. The other two lines
-(RP$\rightarrow$AD and WGC$\rightarrow$AD) show similar periodicity, with
-the WGC$\rightarrow$AD line dropping as far below $0.5$ as above showing a
-large shift in inter-level communication patterns higher up the hierarchy.
-
-The direct measurement of message flow between the hierarchy levels seems
-to bolster our interpretation that the cooperative design of the IETF is
-working. This analysis shows that RPs are communicating much more
-preferentially upwards in the hierarchy, despite the decrease in overall
-share of RP activity. The increase within the WGC level does not have any
-noticeable effect on their level of communication, if anything there is a
-negative relationship. This again suggests both WGCs and ADs perform a kind
-of ``condenser of communication" or ``facilitator" role. In other words,
-this analysis suggests the IETF has a ``bottom-up" communication style,
-where the higher levels encourage the lower levels' voice.  This is the
-desired pattern of communication for a volunteer organisation that is
-looking to grow and encourage participants to engage and gradually take on
-leadership roles.
-
-Overall for RQ3 then, the pattern observed was communication flowing up the
-hierarchy and this corresponds to the answer found in RQ2. WGCs and ADs
-were more likely to receive communication with individuals than send
-communication to individuals whereas both were more likely than RPs to send
-out messages to the list in general. 
+mostly upward in direction, with the lowest two levels (regular participant
+$\rightarrow$ working group chair) having the largest skew in the
+proportion. The other two lines (regular participant $\rightarrow$ area
+director; working group chair $\rightarrow$ area director) show similar
+periodicity, with the working group chairs $\rightarrow$AD line dropping as
+far below $0.5$ as above showing a large shift in inter-level communication
+patterns higher up the hierarchy.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/up_hierarchy_communication_ratios.png}
   \caption{
-    Proportion of communications that are ``up" the hierarchy for different
+    Proportion of communications that are ``up'' the hierarchy for different
     groups. A proportion above 0.5 indicates that the majority of
-    communications are ``upward".
+    communications are ``upward''.
   }
   \label{fig:inter_strata}
 \end{figure}
+
+The direct measurement of message flow between the hierarchy levels seems
+to bolster our interpretation that the cooperative design of the IETF is
+working. This analysis shows that regular participants are communicating
+much more preferentially upwards in the hierarchy, despite the decrease in
+overall share of their activity. The increase within the working group
+chair level does not have any noticeable effect on their level of
+communication, if anything there is a negative relationship. This again
+suggests both working group chairs and area directors perform a kind of
+``condenser of communication'' or ``facilitator'' role. In other words,
+this analysis suggests the IETF has a ``bottom-up'' communication style,
+where the higher levels encourage the lower levels' voice.  This is the
+desired pattern of communication for a volunteer organisation that is
+looking to grow and encourage participants to engage and gradually take on
+leadership roles.
+
+\pb{Summary:}
+The pattern observed was communication flowing up the hierarchy, broadly
+matching that observed in \S\ref{sec:org-dyn:hierarchy:rq2}.  Working group
+chairs and area directors were more likely to receive communication with
+individuals than send communication to individuals whereas both were more
+likely than regular participants to send out messages to the list in
+general. 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Mobility Within the Hierarchy}
