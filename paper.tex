@@ -2203,53 +2203,102 @@ voice.
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 2:
 
-The communication patterns that different levels in the hierarchy
-experience may be  indicative of the cooperation between
-levels~\cite{li2021does,duan2018authoritarian}. For instance, if
-participants at higher levels send lots of email while receiving little,
-this suggests a lack of receptiveness of higher levels to the suggestions
-of lower levels, and low confidence of lower levels to voice their
-opinions. In contrast, we hypothesise that collaboration between layers is
-high, as outlined in the IETF mission statement, which will look more like
-the opposite of this example.
+In this section, we explore communication patterns within the IETF, to
+understand how participants in different roles (regular participants,
+working group chairs, area directors) communicate and whether those
+patterns of communication are indicative of healthy cooperation in the
+running of the organisation \cite{li2021does,duan2018authoritarian}.
 
-In this vein, we compare the ways that different roles communicate, looking
-at the tendency for communications to be purely inbound, outbound or use
-more complex patterns. We count three edge motifs for different hierarchy
-levels as described in section~\ref{sec:motif}. We find that higher levels
-consistently experience a higher proportion of incoming communication than
-RPs, and all levels send outward communication at similar proportions over
-time. Also, the proportion of people who begin email threads are split by
-hierarchy level. Higher levels show a disproportionate tendency to
-originate email threads. 
+For instance, if those in leadership positions send lots of email while
+receiving little, this suggests a lack of receptiveness of the leadership
+to the suggestions from regular participants, and low confidence of those
+regular participants to voice their opinions. In contrast, we hypothesise
+that if the IETF operates as outlined in its mission statement, in a more
+cooperative manner, then communication between those in different roles
+will be more symmetric.
+
+\pb{Temporal Motifs:}
+We compare the ways that people in different roles communicate, looking
+at the tendency for communications to be purely inbound, purely outbound,
+or to follow more complex patterns. 
+%
+% From our ICWSM 2024 paper, Section 2:
+%
+We describe these in terms of \emph{temporal motifs}: patterns in the
+sequence in which edges are added to the communication graph over time.
+Specifically, we analyse every possible combination of three temporally
+ordered links~\cite{paranjape2017motifs} between at most three nodes.
+The time order in which the nodes occur is important.  The direction of
+edge 1 is arbitrary, but every edge temporally after it has their direction
+oriented with respect to it. 
+
+Figure \ref{fig:motif_types} shows all possible types of interaction and
+classifies them into five types: motifs with two nodes; ``Outward Star",
+announcements or dissemination of information; ``Inward Star", questions or
+condensing of information; ``Mixed Star", one-on-one discussion; and
+``Triangle" is group discussion with no individual as the focus. Motifs
+with only two nodes  are rare in this network and we do not present the
+results.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/motifs.pdf}
+  \caption{
+    Classification of three edge motif types with the numbers representing
+    the order of communication.  Light blue squares are  ``Outward Star''
+    motifs; purple are ``Inward Star'' motifs; orange are ``Mixed Star''
+    motifs and grey are ``Triangle'' motifs. The box in the bottom left hand
+    corner represents motifs with only two nodes.
+  }
+  \label{fig:motif_types}
+\end{figure}
+
+Raphtory~\cite{steer2020raphtory} is used to count the prevalence of these
+motifs. We start with the list of 36 different combinations of three
+directed edges shown in figure~\ref{fig:motif_types}. The graph is then
+split into time windows and then the motifs are counted combinatorially for
+each window; each of a node's edges are followed from their origin to three
+edge steps away. Finally, we combine the motif counts using the categories
+shown in figure~\ref{fig:motif_types} by the colour of the squares.
+
+% We find that those in leadership positions (working group chairs, area
+% directors) consistently experience a higher proportion of incoming
+% communication than regular participants, and all levels send outward
+% communication at similar proportions over time. Also, the proportion of
+% people who begin email threads are split by hierarchy level. Higher levels
+% show a disproportionate tendency to originate email threads. 
 
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.2:
 
-To quantify the effect of being in each hierarchy level has on network wide
-communication for \textbf{RQ2}, we calculate the proportion of three node
+\pb{Impact of Role on Communication Patterns:}
+To quantify the effect of being in a leadership position has on network
+wide communication, we calculate the proportion of three node temporal
 motifs, lasting at most a month, in which each node participates over a
-year period, see section~\ref{sec:motif}. These motifs are counted,
-categorised into the three hierarchy levels and then proportions are taken
-of each motif type. 
+year period. These temporal motifs are counted, categorised into the three
+hierarchy levels (regular participant, working group chair, area director)
+and then proportions are taken of each temporal motif type. 
 
 Figure~\ref{fig:motif_proportions} shows the proportions of each level for
 three node ``Inward Star", ``Outward Star", ``Mixed Star", and
 ``Triangles". The Inward and Mixed Star motifs show about a $4\%$ and
-$10\%$ increase in proportion for higher levels in the hierarchy versus for
-RPs. However, about a $10\%$ increase for RPs is seen for Triangles versus
-WGCs and ADs, and Outward Star proportions remain similar for all levels of
+$10\%$ increase in proportion for higher levels in the hierarchy versus
+regular participants. However, about a $10\%$ increase for regular
+participants is seen for Triangles versus working group chairs and area
+directors, and Outward Star proportions remain similar for all levels of
 the hierarchy.
 
-The larger proportion for WGCs and ADs of Inward and Mixed Star motifs
-whilst the Outward Star motifs remain similar for all levels suggests that
-higher levels receive more direct communication. The higher proportion of
-RP Triangle motifs suggests their discussion is more of a group activity,
-whereas WGCs and ADs have a larger proportion of one-on-one conversations.
-Therefore, we interpret the general communication patterns within the IETF
-as a discussion amongst RPs interspersed with questions sent to and
-announcements from WGCs and ADs. This indicates some collaboration between
-layers and confidence of some RPs' to voice their opinions upwards.
+The larger proportion of those in leadership roles in Inward and Mixed Star
+temporal motifs, whilst Outward Star motifs remain similar for all levels,
+suggests that those in leadership receive more direct communication. The
+higher proportion of Triangle motifs for regular participants suggests
+their discussion is more of a group activity, whereas working group chairs
+and area directors have a larger proportion of one-on-one conversations.  
+We therefore interpret the general communication patterns within the IETF
+as a discussion amongst participants interspersed with questions sent to,
+and announcements from, the working group chairs and area directors.  This
+indicates some collaboration between layers and confidence of some regular
+participants' to voice their opinions upwards.
 
 \begin{figure*}[t]
   \centering
@@ -2264,24 +2313,16 @@ layers and confidence of some RPs' to voice their opinions upwards.
 Figure~\ref{fig:origin_emails} seems to corroborate this. We calculate the
 proportion of mailing list threads which nodes in each hierarchy level
 originate, using a year window, pushed forward by a month each calculation.
-We see that WGCs and ADs send a disproportionate number of originating
-emails to the mailing lists. WGCs send 30--50\% whereas they are 6--10\% of
-active individuals, and ADs 5--10\% versus 0.5\%. 
-
-Therefore, the larger proportion of inward motifs for higher levels is in
-part due to WGCs and ADs disproportionately originating email threads.
+We see that working group chairs and area directors send a disproportionate
+number of originating emails to the mailing lists (working group chairs
+send 30--50\% whereas they are 6--10\% of active individuals, and area
+directors 5--10\% versus 0.5\%). 
+Therefore, the larger proportion of inward motifs for those in leadership
+roles is in part due to their disproportionately originating email threads.
 Other IETF participants will then reply to the thread, boosting the
-proportion of inward motifs WGCs and ADs appear in. This may suggest the
-higher levels are good ``condensers of communication" as they receive more
-than they send.
-
-In answer to the RQ, combining the interpretations of the two plots, the
-discussion seems to happen in the following way: The ADs or WGCs are
-commonly the originators of discussion threads. Where conversation includes
-a WGC or AD the conversation tends to be directed around them and usually
-inward towards the WGC or AD. The RPs are more likely to engage in
-discussions amongst themselves (triangular communication patterns) when
-higher level individuals are not present. 
+proportion of inward motifs working group chairs and area directors appear
+in. This may suggest the higher levels are good ``condensers of
+communication" as they receive more than they send.
 
 \begin{figure}[t]
   \centering
@@ -2294,6 +2335,17 @@ higher level individuals are not present.
   }
   \label{fig:origin_emails}
 \end{figure}
+
+\pb{Summary:}
+Combining the interpretations of Figures \ref{fig:motif_proportions} and
+\ref{fig:origin_emails}, the discussion seems to happen in the following
+way: area directors or working group chairs are commonly the originators
+of discussion threads. Where conversation includes a working group chair
+or area director the conversation tends to be directed around them and
+usually inward towards the working group chair or area director. The
+regular participants are more likely to engage in discussions amongst
+themselves (triangular communication patterns) when higher level
+individuals are not present. 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Communication up and down the Hierarchy}
