@@ -2443,9 +2443,9 @@ general.
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 2:
 
-An important question~\cite{li2021does,guo2020inclusive} for any
-organisation is whether higher level participants encourage those at lower
-levels in the hierarchy to properly engage. The IETF is cooperative and
+An important question for any organisation is whether higher level
+participants encourage those at lower levels in the hierarchy to properly
+engage \cite{li2021does,guo2020inclusive}. The IETF is cooperative and
 voluntary by design, therefore we hypothesise a high level of encouragement
 from higher levels to lower. We measure whether activity in one time period
 is associated with activity in a subsequent time period both for
@@ -2453,93 +2453,135 @@ individuals and for neighbourhoods. If those who communicate with higher
 levels receive a boost in their communication as a result, this is an
 indication of such encouragement.
 
-In particular, we perform Mobility Taxonomy analysis to determine the
-effect individual IETF participants have on their future number of
-connections, and the average number of connections of their neighbours.  We
-find that WGCs have an increased tendency, versus RPs, to remain active
-(\textit{Mobility}), an increased tendency for their neighbours to be
-active subsequent to high WGC activity (\textit{Philanthropy}) and for them
-to gain activity after their neighbours are active (\textit{Community}).
-We interpret this as WGCs filling a ``facilitator" role on the mailing
-lists.
+% In particular, we perform Mobility Taxonomy analysis to determine the
+% effect individual IETF participants have on their future number of
+% connections, and the average number of connections of their neighbours.  We
+% find that working group chairs have an increased tendency, versus regular
+% participants, to remain active (\textit{Mobility}), an increased tendency
+% for their neighbours to be active subsequent to high working group chair
+% activity (\textit{Philanthropy}) and for them to gain activity after their
+% neighbours are active (\textit{Community}).  We interpret this as working
+% group chairs filling a ``facilitator'' role on the mailing lists.
+
+
+%..................................................................................................
+% From our ICWSM 2024 paper, Section 4.3:
+
+\pb{Mobility Taxonomy:}
+We aim to measure the association of the activity of nodes, and their
+neighbours, with their activity in a subsequent time period. To determine
+this association we use the temporal graph analysis technique called the
+Mobility Taxonomy~\cite{barnes2023measuring}, which involves correlating
+the degree and average neighbourhood degree (ND) between two adjoining time
+windows, both half of the chosen time window length for other analysis. The
+temporal graph analysis tool Raphtory~\cite{steer2020raphtory} is used to
+calculate the raw degree and ND numbers before performing these
+correlations. 
+
+There are six combinations to correlate node degree and ND in time window
+one and two, the combinations are outlined in detail
+in~\cite{barnes2023measuring}. The four measures used in this paper are
+\textit{Mobility}, \textit{Neighbour Mobility}, \textit{Philanthropy} and
+\textit{Community}.  Each represents the correlation of the degree of a
+node (or set of nodes) at an earlier or later period of time.
+\textit{Mobility} can be thought of as the tendency for a node that is
+active in the first time window to be equally as active in the second.
+\textit{Neighbour Mobility} is similar but for a node's neighbourhood.
+\textit{Philanthropy} can be thought of as the tendency of a node's
+neighbourhood to be active in window two if that node is active in window
+one. Finally, \textit{Community} is the reverse of \textit{Philanthropy} as
+the activity of a node in window two is compared to that node's neighbours
+activity in window one.
+
+Only the nodes which are active in the first window are considered for the
+second window. Nodes inactive in the second time window are said to have a
+degree of 0. The ND in the second time window is taken over the same set of
+neighbours that existed in the first; that is we look at a node's
+neighbours in the first window and measure their degree in the second for
+consistency of comparison. 
+
 
 
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.4:
 
-Finally, to determine how individuals and their neighbours affect each
-other's activity levels in subsequent time periods, for \textbf{RQ4}, we
-take correlations of degree between different time windows using the
-Mobility Taxonomy~\cite{barnes2023measuring} aspects called
-\textit{Mobility}, \textit{Neighbour Mobility}, \textit{Philanthropy} and
-\textit{Community} explained in the previous section. In
+\pb{Participant Mobility:}
+To determine how individuals and their neighbours affect each other's
+activity levels in subsequent time periods, we take correlations of degree
+between different time windows using this Mobility Taxonomy. 
 Figure~\ref{fig:mob_tax}, the time window chosen is one year which is split
 into two snapshots graphs of six months, the time window then moves forward
 one month and the process is repeated. The mid point of the year time
-window is plotted. WGCs and RPs are plotted but the small number of ADs
-mean that the correlations are too noisy to show meaningful effects. 
+window is plotted. Working group chairs and regular participants are
+plotted but the small number of area directors mean that the correlations
+are too noisy to show meaningful effects. 
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\figureWidthTwoColumn]{figures-prev/icwsm-2024/hierarchy_status_comparison.png}
   \caption{
-    Connection between roles and activity for RP and WGC viewed in terms of
-    a) Mobility b) Neighbour Mobility c) Philanthropy and d) Community over
-    time. See section~\ref{subsec:mob_tax} for definitions of these terms.
+    Connection between roles and activity for regular participants and
+    working group chairs viewed in terms of a) Mobility b) Neighbour
+    Mobility c) Philanthropy and d) Community over time.
   }
   \label{fig:mob_tax}
 \end{figure*}
 
-The \textit{Mobility} of both RPs and WGCs is plotted in
-Figure~\ref{fig:mob_tax}a. The high amount of correlation between the
-degree of an individual in the first half of the time window with the
-second half shows that all users have a tendency to become more active in
-subsequent time periods if they are highly active in the previous period,
-but this is more pronounced in WGCs. This is found to follow a period of
-about one year for both RPs and WGC, suggesting that a person is likely to
-be as active as there were a year ago. The \textit{Neighbour Mobility}
-plot, Figure~\ref{fig:mob_tax}b, shows a similar tendency for
-neighbourhoods, but with less of a split.
+The \textit{Mobility} of regular participants and working group chairs is
+plotted in Figure~\ref{fig:mob_tax}(a). The high amount of correlation
+between the degree of an individual in the first half of the time window
+with the second half shows that all users have a tendency to become more
+active in subsequent time periods if they are highly active in the previous
+period, but this is more pronounced in working group chairs. This is found
+to follow a period of about one year for both regular participants and
+working group chairs, suggesting that a person is likely to be as active as
+there were a year ago. The \textit{Neighbour Mobility} plot,
+Figure~\ref{fig:mob_tax}(b), shows a similar tendency for neighbourhoods, but
+with less of a split.
 
-The \textit{Philanthropy} plot, Figure~\ref{fig:mob_tax}c, shows a higher
-correlation for WGCs than RPs between an individual's degree in the first
-snapshot with and their ND in the second. This means that individuals who
-directly interact with WGCs become more active on mailing lists
-subsequently. The \textit{Community} plot, Figure~\ref{fig:mob_tax}d, shows
-the correlation between the ND in the first snapshot with the degree in the
-second.  The higher correlation for WGCs suggests they benefit from
-interactions with highly active neighbours by themselves becoming more
-active in subsequent time periods. These trends for \textit{Philanthropy}
-and \textit{Community} show a reversal in early 2016 that coincides with a
-period where the mean number of WGCs per WG and the number of WGC roles was
-rapidly rising, see figure~\ref{fig:wgc_over_time}. A merging of the
+The \textit{Philanthropy} plot, Figure~\ref{fig:mob_tax}(c), shows a higher
+correlation for working group chairs than regular participants between an
+individual's degree in the first snapshot with and their ND in the second.
+This means that individuals who directly interact with working group chairs
+become more active on mailing lists subsequently. The \textit{Community}
+plot, Figure~\ref{fig:mob_tax}(d), shows the correlation between the ND in
+the first snapshot with the degree in the second.  The higher correlation
+for working group chairs suggests they benefit from interactions with
+highly active neighbours by themselves becoming more active in subsequent
+time periods. These trends for \textit{Philanthropy} and \textit{Community}
+show a reversal in early 2016 that coincides with a period where the mean
+number of chairs per working group, and the number of working group chairs,
+rapidly rising, see Figure~\ref{fig:wgc_over_time}. A merging of the
 Applications area and Real-time Applications \& Infrastructure area in May
 2015 may be a cause of this reversal of correlation, as the assignment of
-WGs to areas was changed which may cause more non-reciprocal WGC
+working group chairs to areas was changed which may cause more non-reciprocal 
 communication than normal.
 
-Increased \textit{Mobility} for WGCs suggests that they gain advantage from
-their role with their activity leading to similar communication activity in
-the future. Moreover, they experience an increased effect of
-\textit{Philanthropy} and \textit{Community}. The former suggests that if a
-WGC is engaged in a higher amount of discussion, then in the future the
-individuals who they were communicating with will also be highly active.
-The latter suggests that when WGCs are surrounded by people who are active
-in discussion, they are likely to be more active themselves in the future
-too. All of this has less of an effect for RPs who show a lower correlation
-in terms of all three aspects. Our interpretation of this is that active
-WGCs are ``facilitating" discussion in the WG mailing lists; both having
-their activity boosted by their neighbours and, in turn, boosting the
-activities of their neighbours. This aligns well with the hypothesis that
-the cooperative and voluntary design of the IETF lends itself well to
-higher levels encouraging those lower to engage in discussion. 
+\pb{Summary:}
+Increased \textit{Mobility} for working group chairs suggests that they
+gain advantage from their role with their activity leading to similar
+communication activity in the future. Moreover, they experience an
+increased effect of \textit{Philanthropy} and \textit{Community}. The
+former suggests that if a working group chair is engaged in a higher amount
+of discussion, then in the future the individuals who they were
+communicating with will also be highly active.  The latter suggests that
+when working group chairs are surrounded by people who are active in
+discussion, they are likely to be more active themselves in the future too.
+All of this has less of an effect for regular participants who show a lower
+correlation in terms of all three aspects. Our interpretation of this is
+that active working group chairs are ``facilitating'' discussion in the WG
+mailing lists; both having their activity boosted by their neighbours and,
+in turn, boosting the activities of their neighbours. This aligns well with
+the hypothesis that the cooperative and voluntary design of the IETF lends
+itself well to higher levels encouraging those lower to engage in
+discussion. 
 
-Overall the answer to RQ4 is that the WGCs have a positive effect on their
-immediate contacts and those individuals that directly discuss with WGCs
-are more likely to engage more in discussion in subsequent time periods.
-Conversely though the WGCs who discuss topics with individuals who are
+Working group chairs have a positive effect on their immediate contacts.
+Those individuals that directly discuss with working group chairs are more
+likely to engage more in discussion in subsequent time periods.  Conversely
+though the working group chairs who discuss topics with individuals who are
 active in discussion are, themselves, more likely to engage more fully in
-discussion. This points to something like a virtuous cycle of WGCs
+discussion. This points to something like a virtuous cycle of chairs
 encouraging and being encouraged by their direct contacts. 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
