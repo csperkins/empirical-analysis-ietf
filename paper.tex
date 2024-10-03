@@ -2772,7 +2772,7 @@ for that \underline{or} not?''}.
 % Influence paper RQ3: How does linguistic behaviour of participants
 % change as they gain influence?
 
-\pb{Changes in Use of Language with Changes in Role:}
+\pb{Changes in Language with Changes in Role:}
 Finally, we look at how linguistic behaviour of participants changes as
 they gain influence in the IETF.
 We consider at participants who went from low to high influence over time:
@@ -2796,7 +2796,9 @@ compared to their previous self when they were new to IETF and had little
 influence. 
 
 %..................................................................................................
-\pb{Discussion:}
+% The following is from our ACL 2023 Tracing Linguistic Markers of
+% Influence paper, Section 4.2.
+\pb{What Kinds of Language are Used?}
 To better understand these LIWC categories and what kind of words play a
 role in the behaviour of individual categories, we calculate the frequency
 of words in each LIWC category as they appear in the emails. 
@@ -2843,27 +2845,79 @@ participants. Such words collectively drifted the weight of the category
 towards influential participants.
 
 %..................................................................................................
+% The following is from our Frontiers in Psychology paper:
+
+\pb{Use of Sensitive Language:}
+We briefly consider the use of sensitive language, relating to politics,
+race, and religion, in IETF email communications.
+
+Using email data for 2019, the last year prior to the pandemic, we
+categorise the emails according to the role of their sender, based
+on the relative social power of the sender within a working group:
+\emph{working group chair} for emails sent by the current chair of the
+working group to which the email was sent;
+\emph{other chair} for emails sent by the chair of a different working
+group; and
+\emph{regular participant} for emails sent by people who were not, and had
+not been at the time of sampling, a workgroup chair.
+Due to their small numbers, we exclude area directors.
+
+We use three LIWC categories to infer the presence of potentially sensitive
+language in the emails: 
+\liwc{Politics}---words commonly used in political discussions;
+\liwc{Ethnicity}---words that identify national, regional, linguistic,
+  ethnic, or racial identities; and
+\liwc{Religion}--use of religious words.
+Each email is coded according to the working group and role of the sender.
+The emails are pre-processed to remove subject lines, headers, and any
+embedded quotes from previous emails, yielding 101,857 texts by 2,300
+individuals across 176 group mailing lists.  Each text is assigned a score
+on each of the three language categories using the LIWC software and the
+resulting scores are averaged for each individual sender for statistical
+analysis.
+
+Results are shown in Figure \ref{fig:sensitive}. The consistent pattern
+is that people with organizational responsibilities (working group chair,
+other chair) are less likely to use words potentially connected with
+sensitive topics than regular participants without organizational
+responsibilities, even though they are all part of the same discussions
+on the same email lists.
+Averaging across the two working group chair categories, the means indicate
+that people in positions of social power are 3.2 times less likely to use
+sensitive language overall than those who are not (by category:
+\liwc{Politics} 2.0 times; \liwc{Religion} 2.3 times; \liwc{Ethnicity} 5.5
+times).
+It is worth noting, however, that in absolute terms potentially sensitive
+language use is rare in this dataset, as might be expected for primarily
+work-related communication. The modal LIWC score in both raw data and the
+averages scores is zero
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/frontiers/sensitive.pdf}
+  \caption{
+    Patterns of language use by organizational role. Estimated marginal
+    means for the LIWC categories: (A) Politics, (B) Ethnicity, and (C)
+    Religion. Error bars show 95% confidence intervals.
+  }
+  \label{fig:sensitive}
+\end{figure*}
+
+%..................................................................................................
+% The following is from our ACL 2023 Tracing Linguistic Markers of
+% Influence paper
 \pb{Summary:}
 Using two aspects of influence, based on centrality in the email social
-graph and based on organisation role, we were able to unfold several traits
-that differentiate influential participants from others. Many of our
-findings seem corroborated by studies in organisational theory. 
+graph and based on organisation role, we were able to unfold several
+traits that differentiate influential participants from others. Many
+of our findings seem corroborated by studies in organisational theory.
 We observed that influential people exhibit more collaborative and
-community-oriented traits, and also stronger signs of engagement in
-discussions. We also observed that as people go on to become influential
-participants, they evolve in their communication and are seen to be more
-engaging and descriptive in their linguistic style. 
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-% Frontiers in Psychology paper
-% - Use of Language, discussing how it shifts as people become more senior
-
-% LEDA
-% - a taxonomy of dialogue acts (DAs) and a labeled dataset of emails
-
+community-oriented traits, show stronger signs of engagement in
+discussions, and are systematically less likely to use potentially
+sensitive language.
+We also observed that as people go on to become influential participants,
+they evolve in their communication and are seen to be more engaging and
+descriptive in their linguistic style. 
 
 
 %==================================================================================================
