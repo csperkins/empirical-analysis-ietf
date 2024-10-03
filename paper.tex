@@ -3148,6 +3148,316 @@ group, thereby directly driving the innovation process (Table \ref{tbl:res}
 
 % IMC 2021 paper Section 4
 
+The trends that we observed in Section~\ref{sec:trends-documents}
+highlight that, over time, the complexity of the standardisation process is
+increasing: RFCs take longer to produce, and relate to a larger number of
+other documents; authors come from a changing and diversifying set of
+affiliations and countries; and the volume of email interaction for each
+RFC is increasing, with differences in how senior and junior authors and
+contributors interact.  We next seek to understand how these factors might
+impact the successful deployment of an RFC in-the-wild, and to test if such
+success can be predicted.
+
+% IMC 2021 paper Section 4.1
+
+We build on the work of Nikkhah et al.~\cite{nikkhah2017statistical}.
+However, while the focus of that paper was on a set of features that were
+derived from the standards documents themselves, we augment this with a set
+of features derived from the author and email interaction datasets
+described in the previous section.
+
+To explore the factors that influence protocol deployment, we follow a
+multi-step process:
+\begin{enumerate}
+  \item We reproduce the logistic regression model in~\cite{nikkhah2017statistical},
+    to obtain similar results (as shown in Table~\ref{tbl:mlres}).
+    That paper published an expert annotated dataset, labelling RFCs as
+    ``successfully deployed'' or not. This pertains to whether the RFC was
+    implemented in-the-wild and saw widespread (largely commercial) uptake.
+    This dataset covers 251 RFCs published between 1983 and 2011, and
+    includes 20 features. We create a baseline logistic regression model
+    with $F_1 = 0.762$, $\mathit{AUC} = 0.650$. The results are similar to
+    those reported in~\cite{nikkhah2017statistical} ($\mathit{AUC} = 0.670$).
+
+  \item We curate a set of additional \emph{classification features} driven
+    by our findings in Section~\ref{sec:trends-documents}. These are derived
+    from the RFCs, their authors, and the mailing list interactions. Given
+    that these features are only available for RFCs where Datatracker
+    metadata is available, we model these features across a subset of the
+    original labelled RFCs from~\cite{nikkhah2017statistical}, looking only
+    at the 155 RFCs where all features can be calculated. We will show that
+    modelling these RFCs with the expanded feature set substantially
+    expands the predictive power of the (Step 1) baseline logistic
+    regression model, with $F_1 = 0.820$, $\mathit{AUC} = 0.822$.
+
+  \item We then train classification models to predict if an RFC will be
+    deployed, using our expanded feature set.  We test the model with the
+    manually labelled RFCs and show that we can successfully classify
+    RFCs as deployed or not, with a decision tree-based model having
+    $F_1 = 0.822$, $\mathit{AUC} = 0.838$. 
+\end{enumerate}
+
+\begin{table}
+  \centering
+  \begin{tabular}{lrrr}
+    \toprule
+      Model                              & $F_1$ & $\mathit{AUC}$ & $F1_{\mathrm{macro}}$ \\
+    \midrule
+      Most frequent class                & .757  &      .500      &     .379     \\
+      Baseline                           & .758  &      .616      &     .597     \\
+      Baseline + FS                      & .762  &      .650      &     .610     \\
+    \midrule
+      Most frequent class                & .724  &      .500      &     .379     \\
+      Baseline                           & .670  &      .559      &     .547     \\
+      Baseline + FS                      & .690  &      .620      &     .563     \\
+      Logistic regression all feats      & .728  &      .724      &     .666     \\
+      Logistic reg. all feats + FS & .820  &      .822      &     .789     \\
+      Decision tree all feats + FS       & .822  &      .838      &     .788     \\
+    \bottomrule
+  \end{tabular}
+\caption{
+  Classifier scores on the entire dataset (251 RFCs, above) and those with
+  our features available (155 RFCs), with or without feature selection (FS).
+}
+\label{tbl:mlres}
+\end{table}
+
+
+%..................................................................................................
+% IMC 2021 paper Section 4.2
+\pb{Classification Features:}
+We begin with the set of features that were originally derived in
+\cite{nikkhah2017statistical}:
+IETF Area; Scope (Local, End-to-End (E2E), Bounded (BN), or Unbounded
+(UB)); Type (New (N), New with Incumbent (NI), Backward compatible
+extension (EB), or Extension (E)); Change to others (CO); Scalability
+(SCAL); Security (SCRT); Performance (PERF); Adds value (AV); and Network
+effect (NE). We refer the reader to~\cite{nikkhah2017statistical} for a
+full explanation of each of these feature. 
+
+We further define an additional set of document-based features, derived
+from our characterisations in \S\ref{sec:trends-documents}: days from first
+draft to RFC publication; number of drafts before RFC publication; number
+of outbound citations to RFCs/Internet-Drafts; page count; number of
+inbound citations from articles listed in Microsoft Academic, one and two
+years after publication; number of inbound citations from other RFCs
+published within one and two years after publication; RFC updates or
+obsoletes a previous RFC; keywords per page; and topics (where we use
+Latent Dirichlet Allocation (LDA) \cite{blei2003latent} to induce 50 topics
+on the texts of all existing RFCs, and use the 50-dimensional probability
+distribution over topics for a given RFC as the feature vector).
+
+Next, we derive a set of author-based features, from the work described in
+\S\ref{sec:trends-demographics}: number of authors on the RFC; if at least
+one author of previously published  RFC; if at least one author in North
+America, Europe, or Asia; if at least one author from Cisco, Huawei, or
+Ericsson; authors with diverse affiliations; authors in more than one
+continent;  at least one academic author; and at least one consultant
+author.
+
+Finally, we derive a set of features based on email interactions, from
+\S\ref{sec:org-dyn:participants}: number of emails mentioning the
+Internet-Drafts that precede publication of the RFC; mean number of emails
+sent to all RFC authors, for each sender contribution-duration category
+(young, mid-age,  senior); mean number of contributors sending emails to
+any RFC author, for each contribution-duration category; number of emails
+sent to most junior and senior RFC authors, for each sender
+contribution-duration category; and number of contributors sending emails
+to most junior and senior RFC authors, for each contribution-duration
+category.
+
+%..................................................................................................
+% IMC 2021 paper Section 4.3
+\pb{Modelling Methodology:}
+With our expanded feature set, we next build a classifier to predict the
+success (i.e., deployment) of RFCs.
+
+Our expanded feature set, including all variants of each feature, is very
+large, totalling 177 features. Given that our additional features can only
+be calculated for a limited number of data points (155 RFCs),  it would be
+infeasible to conduct statistical analysis, and to build a predictive
+model, as there are too few data points. To address this, we take a number
+of steps to reduce the feature space, while maintaining interpretability:
+
+\begin{enumerate}
+  \item Since the largest feature groups are the topics (50) and
+    interaction features (54) we reduce both by applying the $\chi^2$ test
+    to leave only the top 5 features in each group. 
+
+  \item We remove collinearity by using the Variance Inflation Criterion
+    (VIF), removing all features with a VIF value above 5. 
+
+  \item We apply forward Feature Selection (FS) to identify features of
+    high predictive value, following~\cite{nikkhah2017statistical}.
+    Starting from an empty feature set, in each iteration of the forward
+    procedure, we expand the feature set with the feature that provides the
+    largest increase in the $AUC$ score. The procedure ends when there are
+    no more unused features that yield score improvements over the current
+    feature set. 
+\end{enumerate}
+The final set of features with and without FS is given in Tables
+\ref{tbl:statsnofs} and \ref{tbl:statsfs} respectively.
+
+Using the above feature set, we then train two classification models relying
+on logistic regression and a decision tree.  For assessing predictive
+performance of the models we use leave-one-out cross-validation, while for
+the final statistical analysis we fit a logistic regression model on the
+entire dataset and report the statistically significant coefficients (at
+significance level $p \leq 0.1$).
+
+\input{tables-prev/imc-2021/lr_fsnone-trim.tex}
+\input{tables-prev/imc-2021/lr_fsauc-trim.tex}
+
+\begin{table}
+  \centering
+  \begin{tabular}{lrrr}
+    \toprule
+      Model & $F_1$ & $\mathit{AUC}$ & $F1_{macro}$ \\
+    \midrule
+      Most frequent class                & .757   & .500   & .379 \\
+      Baseline                           & .758   & .616   & .597 \\
+      Baseline + FS                      & .762   & .650   & .610 \\
+    \midrule
+      Most frequent class                & .724   & .500   & .379 \\
+      Baseline                           & .670   & .559   & .547 \\
+      Baseline + FS                      & .690   & .620   & .563 \\
+      Logistic regression all feats      & .728   & .724   & .666 \\
+      Logistic regression all feats + FS & .820   & .822   & .789 \\
+      Decision tree all feats + FS       & .822   & .838   & .788 \\
+    \bottomrule
+  \end{tabular}
+  \caption{
+    Classifier scores on the entire dataset (251 RFCs, above) and those
+    with our features available (155 RFCs), with or without feature
+    selection (FS).
+  }
+  \label{tbl:mlres}
+\end{table}
+
+
+%..................................................................................................
+% IMC 2021 paper Section 4.4
+\pb{Evaluative Results:}
+Using the trained models, we next evaluate their accuracy and explore which
+features are most predictive of RFC deployment. 
+
+As evaluative metrics, we use the $F_1$ score and the area under the ROC
+curve ($AUC$), as in \cite{nikkhah2017statistical}. We find the standard
+$F_1$ score gives overly optimistic performance estimates due the data
+being skewed towards the positive class. Consequently, we also report an
+$F1_{macro}$ score that takes into account both the positive and negative
+class, reflecting performance more realistically. As a baseline comparison,
+we present results of our re-implementation of \cite{nikkhah2017statistical}
+using their feature set.
+
+The prediction results of the models and feature sets are summarized in
+Table \ref{tbl:mlres}. Our baseline model performs at a similar level to
+that from \cite{nikkhah2017statistical}.  We further obtain considerable
+performance improvements with our additional features. Furthermore, we find
+that additional performance can be obtained by using feature selection.
+The best performing model, with an F1 score of 0.822, is the decision tree
+trained on the entire feature set.
+Note, we also tested several non-linear models (neural networks, support
+vector machines with non-linear kernels). These attained similar or worse
+results as our decision tree model, and therefore we omit them due to space
+constraints. 
+
+We next investigate the most important features in predicting success.  We
+posit that these can offer useful insight for working group chairs and RFC
+editors.  The feature importance results are presented in
+Tables~\ref{tbl:statsnofs} and \ref{tbl:statsfs}.  Some meaningful patterns
+emerge here. We observe features such as adding value, being scalable,
+obsoleting other RFCs, page count, increased keyword usage, no incumbent
+RFC to compete against and limited scope all being positively correlated
+with the likelihood of an RFC becoming deployed. In contrast, we find that
+having a broad (unbounded) scope negatively impacts deployment.
+
+We also observe some curious trends that speak to the limitations of our
+dataset. The model finds that having an author in Asia is negatively
+correlated with deployment, though with only borderline statistical
+significance. Further analysis shows that only 10\% of labelled RFCs have
+an author in Asia.  As shown in \S\ref{sec:trends-demographics}, we see
+that demographics of the IETF are changing, with a recent notable increase
+in author representation from Asia. This might suggest that new authors
+need time to learn what makes a deployable protocol; equally our deployment
+data may be biased towards the Internet in North America and Europe. This
+finding requires much more exploration.
+
+We further see that some of the topics extracted by LDA are also useful.
+For example, Topic 13 is characterised by a cluster of terms associated
+with MPLS, a widely deployed routing protocol. We find a negative
+correlation with this topic, but this is likely because there is a
+significant number of RFCs that propose modifications or additional
+features for the protocol, some of which do not see deployment. Overall,
+most of the results are in line with expectations, but more annotated data
+is required for further insights.   
+
+%..................................................................................................
+% IMC 2021 paper Section 4.5
+\pb{Discussion:}
+% Building on existing work.
+Features associated with building on existing RFCs positively correlate
+with deployment. RFCs that obsolete earlier versions of the same protocol
+are likely to be deployed, indicating that the IETF community is good at
+identifying and maintaining protocols that are seeing use. This is also
+highlighted by the significance of the inbound RFC citation and ``adds
+value'' features. These show that RFCs that are later cited by other
+documents, or that add value to other protocols in the stack, are more
+likely to be deployed. Protocols that are extensible, and can be extended
+and adapted for new uses, are more likely to see deployment. The discussion
+in \cite{clark:2002:tussle} on careful choice of extension points
+resonates; as do the implications for starting new work.
+
+% Limited scope.
+We find that having end-to-end scope (i.e., where only the endpoints of a
+connection needs to implement the RFC) is positively correlated with
+deployment, whereas having an unbounded scope (i.e., where the entire
+Internet may need to be updated) is negatively correlated. This indicates
+that well-scoped RFCs, that are cognisant of their deployment challenges,
+are more likely to see deployment. A recent IAB workshop \cite{rfc8980}
+noted that deployment often occurs in unforeseen ways: limiting the changes
+needed to deploy a protocol facilities this.
+
+% Normative requirements.
+The number of keywords (e.g., SHOULD, MUST) used per page, which shows the
+number of normative requirements an RFC imposes on implementations, also
+correlates with deployment. This suggests that well-specified requirements
+lead to robust, interoperable, implementations that see wide use.
+Unsurprisingly, features such as citation rates are also predictive of
+deployment.
+
+% Diversity.
+Notwithstanding the limitations of the dataset, we find that the majority
+of author demographic features are not significant. While \S\ref{sec:trends-demographics}
+identified recent shifts in the demographics of authors, these do not
+appear to have a major influence in the deployment of the RFCs that they
+write.
+
+% Meeting a need.
+Our results broadly support the conclusions of \cite{RFC5218}, where the
+IAB noted that, in addition to being technically sound, a successful
+protocol must meet a need, be incrementally deployable, and be open to
+extension and maintenance.
+
+%..................................................................................................
+\pb{Summary:}
+Our results show that RFCs that build on existing work, have well-defined
+requirements, limited scope, and meet a need have improved chances of being
+widely deployed. These document-based features have implications for how
+the IETF should design and specify protocols.
+
+We found that the majority of our author-based features, including
+geographic and affiliation diversity, did not significantly impact the
+deployment prospects of RFCs. Further work is needed to expand the dataset
+to ensure that this result holds across a larger set of RFCs.
+
+Finally, the focus of our modelling in this paper has been on the impact of
+document, author, and interaction-based features on protocol deployment.
+However, this is only one part of the lifecycle of an RFC. It remains to
+consider the impact of these, and other, features on the key stages of an
+Internet-Draft's development towards becoming an RFC, such as working group
+adoption.
+
 %==================================================================================================
 \section{Related Work}
 \label{sec:related}

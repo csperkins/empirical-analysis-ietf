@@ -1,0 +1,29 @@
+\begin{table}
+\begin{tabular}{lrr}
+\toprule
+Feature Name & Coef. & P>|Z| \\
+\midrule
+\textbf{Inbound RFC citations, one year} & \textbf{0.611} & \textbf{0.011} \\
+\textbf{Obsoletes others (Yes)} & \textbf{0.531} & \textbf{0.001} \\
+-00 draft mentions & -0.219 & 0.187 \\
+\textbf{Scope, Unbounded (UB)} & \textbf{-1.0986} & \textbf{0.033} \\
+\textbf{Has author in Asia (Yes)} & \textbf{-0.8755} & \textbf{0.100} \\
+Has author in N. America (Unknown) & -0.6061 & 0.232 \\
+\textbf{Keywords per page} & \textbf{0.3409} & \textbf{0.083} \\
+\textbf{Topic 45} & \textbf{0.3289} & \textbf{0.097} \\
+Has an academic author (Yes) & -0.087 & 0.835 \\
+Type, Backward Compatible (EB) & 0.3502 & 0.135 \\
+\textbf{Topic 13 (MPLS)} & \textbf{-0.5629} & \textbf{0.068} \\
+\textbf{Topic 31} & \textbf{-2.0698} & \textbf{0.021} \\
+Topic 44 & 0.3992 & 0.129 \\
+Has continent diversity (Yes) & -0.1911 & 0.538 \\
+Young $\rightarrow$ Senior-author (messages) & 0.2168 & 0.244 \\
+Topic 19 & -1.2596 & 0.111 \\
+Draft Count (DC) & 0.1845 & 0.262 \\
+Scope, Local (L) & 1.3863 & 0.215 \\
+Has author from Ericsson (Yes) & 0.5596 & 0.372 \\
+\bottomrule
+\end{tabular}
+\caption{Statistical analysis using logistic regression w/ feature selection. Statistically significant rows ($p \leq 0.1$) are highlighted.}
+\label{tbl:statsfs}
+\end{table}
