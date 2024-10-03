@@ -29,11 +29,11 @@
 PAPER_PDF := paper.pdf
 PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
-IETF_DATA := data/ietf/rfc-index.xml
+DOWNLOADS := data/ietf/rfc-index.xml
 
-RESULTS := results/rfcs-by-year-stream.csv
+RESULTS   := results/rfcs-by-year-stream.csv
 
-FIGURES := figures/rfcs-by-year-stream.pdf
+FIGURES   := figures/rfcs-by-year-stream.pdf
 
 all: $(PAPER_PDF)
 
@@ -41,6 +41,8 @@ $(PAPER_PDF): $(FIGURES)
 
 # -------------------------------------------------------------------------------------------------
 # Rules to fetch data:
+
+fetch: $(DOWNLOADS)
 
 data:
 	mkdir $@
@@ -103,7 +105,7 @@ $(call xargs,scripts/latex-build.sh --clean,$(1))
 endef
 
 clean-data: clean
-	rm -rf $(IETF_DATA)
+	rm -rf $(DOWNLOADS)
 	if [ -d data/ietf ]; then rmdir data/ietf; fi
 	if [ -d data      ]; then rmdir data;      fi
 
@@ -127,7 +129,7 @@ MAKEFLAGS += --output-sync --warn-undefined-variables --no-builtin-rules --no-bu
 .NOTINTERMEDIATE:
 
 # List of targets that don't represent files:
-.PHONY: all clean
+.PHONY: all clean clean-data fetch 
 
 # =================================================================================================
 # vim: set ts=2 sw=2 tw=0 ai:
