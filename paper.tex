@@ -1,4 +1,5 @@
 \documentclass[twocolumn,10pt]{article}
+\pdfoutput=1 % This must be in the first 5 lines to tell arXiv to use pdfLaTeX
 \usepackage[l2tabu,orthodox]{nag}
 \usepackage[utf8x]{inputenc}
 \usepackage[british]{babel}
@@ -16,6 +17,7 @@
 \usepackage{algpseudocode}
 \usepackage{color}
 \usepackage[cm]{fullpage}
+\usepackage{multirow}
 
 \frenchspacing
 \uchyph=0
@@ -28,6 +30,8 @@
 
 \newcommand{\todo}[1]{\textbf{\textcolor{red}{To do: #1}}}
 \newcommand{\pb}[1]{\vspace{0.75ex}\noindent{\textbf{#1}}}
+\newcommand{\liwc}[1]{\textsc{#1}}
+\newcommand{\word}[1]{\textit{`#1'}}
 
 %==================================================================================================
 \begin{document}
@@ -36,6 +40,7 @@
        with Computational Methods}
 \author{Mladen Karan \and
         Prashant Khare \and
+        Ravi Shekhar \and
         Matthew Russell Barnes \and
         Waleed Iqbal \and
         Junaid Qadir \and
@@ -2557,6 +2562,7 @@ Applications area and Real-time Applications \& Infrastructure area in May
 working group chairs to areas was changed which may cause more non-reciprocal 
 communication than normal.
 
+%..................................................................................................
 \pb{Summary:}
 Increased \textit{Mobility} for working group chairs suggests that they
 gain advantage from their role with their activity leading to similar
@@ -2617,13 +2623,240 @@ hierarchy levels.
 \section{Language and Influence}
 \label{sec:language}
 
-% Tracing Linguistic Markers
-% - RQ1: How do linguistic traits differ between more and less influential
-%   participants? 
-% - RQ2: How do linguistic traits vary for participants at different levels
-%   of the organisation hierarchy? 
-% - RQ3: How does linguistic behaviour of participants change as they gain
-%   influence?
+Moving on from discussing the people involved in the IETF (\S\ref{sec:trends-demographics})
+and their interactions (\S\ref{sec:org-dyn}), we now consider communications
+within the IETF from the perspective of language to explore whether there
+are differences in linguistic patterns and language use in more influential
+participants, and to consider how the use of language reflects the
+consensus-driven nature of the standards development process.
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% The following is adapted from our ACL 2023 Tracing Linguistic Markers of
+% Influence paper, section 2.
+
+\pb{Linguistic Inquiry and Word Count} (LIWC) \cite{pennebaker2015development}
+is a well-recognised psycholinguistic lexicon; it provides word counts for
+85 different linguistic, psychological, personal concern, and informal
+language marker categories. We generate a \emph{LIWC representation} of
+the emails sent by a participant in the analysis that follows. This is
+calculated by aggregating the word counts within each linguistic category
+for each participant using the LIWC 2015 dictionary (academic license).
+We filter out 104 ambiguous words that are present in LIWC but have
+technology, security, and network context meaning in IETF, using manually
+curated lists, for e.g., attack, argument, secure etc., 
+
+We also normalise by the total number of emails sent by that participant. 
+Such a normalisation is more appropriate here than normalising by total
+number of words written, as many IETF emails include long technical
+sections.  This generates a representation of a participant as their mean
+usage of each LIWC category; while this is a relatively reduced,
+low-dimensional representation of a person's language, it has the advantage
+of being interpretable and psychologically well-motivated. 
+
+A limitation is that we used the standard LIWC-based analysis approach,
+which is purely lexical and does not take into account the context in which
+a word appears. Consequently, many words that have very specific senses in
+the context of the IETF get miscounted as occurrences of LIWC categories.
+This could be addressed in future by a more advanced method of mapping to
+LIWC categories that would account for context. 
+
+%..................................................................................................
+% The following is from our ACL 2023 Tracing Linguistic Markers of
+% Influence paper RQ1: How do linguistic traits differ between more
+% and less influential participants? 
+
+\pb{Language and Influence:} How do linguistic traits differ between more
+and less influential participants? That is, are there differences in the
+way influential participants, based on centrality in the email social
+graph, make use of language compared to those who are less influential?
+
+We study mailing list data from the period 2015-2019, comprising 300,806
+emails from 5,363 unique participants. We used a 5-year subset of the data
+due to the computation cost, while still giving a reasonable period to
+observe the participation consistency in the IETF community, and chose the
+last period prior to the distortion of the pandemic.  For each participant,
+we calculate the centrality-based influence score and LIWC representation,
+We fit a linear regression model using LIWC representations to predict
+influence percentile and observe the magnitude and directions of
+significant coefficients.
+
+The following LIWC categories are highly correlated ($p < 0.05$) with
+centrality-based influence: \liwc{we, informal, risk, adjective, anger,
+they}, and \liwc{bio}.  Categories such as \liwc{netspeak, sexual, health,
+death, body} are correlated with lower influence. This suggests that
+influential people tend to indicate a collaborative and community-oriented
+approach with first-person plural (\liwc{we}) and third-person plural
+category (\liwc{they}) usage. This is consistent with
+\cite{kacewicz2014pronoun} and \cite{guinote2017power}, who show that
+influential people use more first-person plural. They also use more
+organisational language, which is shown by the negative correlation of
+informal slang language categories (\liwc{netspeak, sexual, body}). We see
+some unexpected hidden trends due to word ambiguity (e.g., words like
+`\textit{trust}' and `\textit{live}'), which are discussed below.
+
+%..................................................................................................
+% The following is from our ACL 2023 Tracing Linguistic Markers of
+% Influence paper RQ2: How do linguistic traits vary for participants
+% at different levels of the organisation hierarchy? 
+
+\pb{Language and Organisational Role:}
+How do linguistic traits vary for participants at different levels of the
+organisation hierarchy? 
+
+Centrality-based influence considers participants based on their email
+network, but role-based influence, based on the position of a person in the
+organisational hierarchy (regular participant, working group chair, area
+director) is equally crucial as they are involved in organisational
+decision making.\footnote{In the top 10\% \textit{mail-based} influential
+participants, less than 30\% are WG chairs with significant
+\textit{role-based} influence.} 
+For the same time period, 2025-2019, we split the data into two categories:
+(a) emails sent by working group chairs, and (b) emails sent by regular
+participants who have never been a working group chair (the number of area
+directors is small, so we exclude them from this analysis).  We calculate
+the LIWC representations for each person, train a logistic regression model
+to predict category, and observe the LIWC category coefficients.
+
+
+From \ref{table:all_results}, we see that working group chairs are more
+social and collaborative, as is shown by \liwc{we} and \liwc{social}
+categories. This is in line with our findings for influence-based
+centrality above and resuslts on leadership engagement from the literature
+\cite{strzalkowski2012modeling, liu2022pronoun, kacewicz2014pronoun,
+guinote2017power}.
+Chairs also use more tentative statements (\liwc{tentat}) in discussions,
+primarily focused on technical feedback and revisions, or suggesting
+alternatives. For example:
+\textit{``With the risk of disturbing with statements, but avoiding too
+many questions:This \underline{seems} against the goal of reducing
+headers.''} 
+and
+\textit{``Question is do we need to carry around an outer IP-in-IP header
+for that \underline{or} not?''}.
+
+\begin{table*}[]
+  \small
+  \begin{center}
+  \begin{tabular}{l|l|l}
+  \toprule
+    \multirow{2}{*}{Language and influence} 
+      & High influence
+      & \liwc{bio, we, informal, they, negemo, anger, risk, adjective}  \\ 
+    \cmidrule{2-3}
+      & Low influence
+      & \liwc{sexual, death, ingest, netspeak, health, female, body, affiliation, conj} \\ 
+  \hline
+    \multirow{2}{*}{Language and role} 
+      & WG Chair influence
+      & \liwc{tentat, ipron, social, see, feel, we} \\
+    \cmidrule{2-3}
+      & non-WG Chair
+      & \liwc{cogproc, relativ, affiliation, i, reward} \\
+  \hline
+    \multirow{2}{*}{Changes in Language}
+      & Top 10 percentile
+      & \liwc{adverb, prep, anger, auxverb, male, cogproc, achiev, risk, focuspresent} \\
+    \cmidrule{2-3}
+      & Below 50$^{th}$ percentile
+      & \liwc{function, ppron, shehe, ipron, number, certain, sexual, informal} \\
+  \hline
+  \end{tabular}
+  \end{center}
+  \caption{LIWC categories where $p<0.05$.}
+  \label{table:all_results}
+\end{table*}
+
+
+%..................................................................................................
+% The following is from our ACL 2023 Tracing Linguistic Markers of
+% Influence paper RQ3: How does linguistic behaviour of participants
+% change as they gain influence?
+
+\pb{Changes in Use of Language with Changes in Role:}
+Finally, we look at how linguistic behaviour of participants changes as
+they gain influence in the IETF.
+We consider at participants who went from low to high influence over time:
+individuals who had a \emph{centrality-based} influence below the 50th
+percentile when they joined the IETF, and reached the top 10th percentile
+at some point.
+
+For each participant, we generate two different representations based on
+two periods---the year of joining, and year of reaching the top 10th
+percentile for the first time---and assign these to two different classes.
+We then train a logistic regression model to predict these classes, and
+examine the coefficients of the LIWC categories
+
+From Table \ref{table:all_results}, we observe that when participants
+become influential, according to the centrality-based metric, they are
+likely to be more descriptive and engaged in immediate state of issues
+and situations as seen from the correlation of auxiliary verbs
+(\liwc{auxverb}), adverb, risk, and present focus (\liwc{focuspresent}).
+They are also more involved in cognitive processes (\liwc{cogproc}) as
+compared to their previous self when they were new to IETF and had little
+influence. 
+
+%..................................................................................................
+\pb{Discussion:}
+To better understand these LIWC categories and what kind of words play a
+role in the behaviour of individual categories, we calculate the frequency
+of words in each LIWC category as they appear in the emails. 
+Next, we consider the top 30 most frequent words in each LIWC category and
+perform regression analysis on centrality-based influence for participants,
+but using only these 30 words as features to generate the participant
+representation. We conducted this experiment separately for each LIWC
+category that was significant in the first experiment.
+
+From the word based analysis we make multiple observations. Firstly, words
+like \word{we} imply a collective approach and is strongly correlated with
+the higher influence. 
+Similarly, the use of word \word{well} is standard, such as politely
+resuming the conversation (e.g., `\textit{well, I agree}') or providing an
+approval over something (e.g., `\textit{this works as well}'). These words
+are well associated with the influential participants.  Otherwise,
+influential participants are generally not observed to be informal and
+other frequent words (other than \word{well}) within \liwc{informal}
+category do not demonstrate a strong correlation with the growing
+influence. Also, \word{well} is the most frequent word in the
+\liwc{informal} category.
+
+More influential people, according to both centrality- and role-based
+metrics, are also observed to engage more with the community.
+Conversations can often reflect situations where, as a part of review and
+feedback process, more influential people highlight limitations in protocol
+standards, stress on specifics, and compare with existing protocols or
+previous versions.
+Several words across different LIWC categories (\liwc{risk}, \liwc{negemo},
+and \liwc{adj}) highlight such behaviour, e.g., \word{problems}, \word{before},
+\word{particular}, \word{specific}, \word{different}, \word{most}, and \word{than}.
+
+However, there are many words with dual sense, like \word{trust} which has
+a very technology specific usage related to network security instead of
+conversations involving trust issues between individuals or trust in any
+given situation. Similarly, the word \word{live} is related with an
+application or network being live, instead of its conventional meaning. We
+also observed that some of the LIWC categories, such as \liwc{bio}, did not
+have specific terms that could clearly establish its significance in favour
+of influential participants (e.g., word \word{problems} and \word{trust}
+reflecting the significance for the category \liwc{risk}), instead such
+categories had several words with quite weak correlation with influential
+participants. Such words collectively drifted the weight of the category
+towards influential participants.
+
+%..................................................................................................
+\pb{Summary:}
+Using two aspects of influence, based on centrality in the email social
+graph and based on organisation role, we were able to unfold several traits
+that differentiate influential participants from others. Many of our
+findings seem corroborated by studies in organisational theory. 
+We observed that influential people exhibit more collaborative and
+community-oriented traits, and also stronger signs of engagement in
+discussions. We also observed that as people go on to become influential
+participants, they evolve in their communication and are seen to be more
+engaging and descriptive in their linguistic style. 
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 % Frontiers in Psychology paper
 % - Use of Language, discussing how it shifts as people become more senior
@@ -2637,6 +2870,7 @@ hierarchy levels.
 \section{Success Factors}
 \label{sec:success-factors}
 
+%--------------------------------------------------------------------------------------------------
 \subsection{What Makes a Successful Author?}
 % ICWSM 2022 paper Section 4
 
@@ -2657,6 +2891,7 @@ a prominent organisation positively impacts the chances of a draft in
 getting adopted by a WG, thereby directly driving the innovation process
 (Table \ref{tbl:res} \& \ref{tbl:resstat}).
 
+%--------------------------------------------------------------------------------------------------
 \subsection{What Makes a Successful Document?}
 
 % IMC 2021 paper Section 4
