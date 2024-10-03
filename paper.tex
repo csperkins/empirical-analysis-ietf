@@ -2924,26 +2924,224 @@ descriptive in their linguistic style.
 \section{Success Factors}
 \label{sec:success-factors}
 
+\todo{introductory remarks}
+
 %--------------------------------------------------------------------------------------------------
 \subsection{What Makes a Successful Author?}
 % ICWSM 2022 paper Section 4
 
+We have identified that influential authors write more drafts
+(\S\ref{subsec:impact_influence}), but are these drafts more likely to
+see success?  That is, does the presence of a well-connected, influential,
+author make it more likely that an Internet-draft is adopted by a working
+group for review and development\footnote{There are occasional document,
+known as Area Director sponsored drafts, that are published as standards
+track RFCs without going through the working group process, but these too
+rare ($\sim$3\% of RFCs) to significantly affect our analysis.} and
+eventually published as a standards track RFC.  Using information from the
+IETF Datatracker we compile a dataset for the \emph{adoption} of a draft by
+a working group, comprising 11632 drafts, and employ logistic regression to
+analyse factors that affect working group adoption of draft.
 
+%..................................................................................................
+\pb{Methodology:}
+We compute a set of features that may impact adoption or publication for
+each draft, most of them motivated by the characteristics of influential
+participants, including the following feature groups: 
+ (1) \emph{text}, we derive a term frequency--inverse document
+     frequency (TF-IDF) \cite{salton1983introduction} weighted bag of words vector
+     representation of all email text of messages that either explicitly
+     mention a draft or are part of a thread where the subject line
+     explicitly mentions a draft; 
+ (2) \emph{communication patterns}, i.e., volumes of incoming/outgoing communication
+     between draft authors and IETF participants of varying experience levels;
+ (3) Betweenness \emph{centrality} for authors;
+ (4) \emph{number of emails} sent by authors;
+ (5) \emph{number of drafts} submitted by authors;
+ (6) \emph{length of participation} duration of authors;
+ (7) \emph{number of authors};
+ (8) \emph{number of IETF areas} in which the author is active;
+ (9) \emph{proportion of top authors} in the top 10 and top 20 percent of
+     influential participants;
+(10) \emph{topic entropy ($\eta$)} scores for authors;
+(11) \emph{author affiliations} for each of the 20 most influential
+     organizations (20 boolean features);
+(12) \emph{number of mailing lists} that each author participates in,
+(13) \emph{number of years active}.
+
+For numerical features that relate to each author individually instead of
+the draft as a whole (e.g., \emph{number of emails sent}, \emph{centrality},
+or \emph{number of years active}, the feature defined for each author
+separately) in three variants: (i) for the least influential author, (ii)
+for the most influential author, and (iii) as the average value across all
+authors of the draft. We compute individual author features using
+information from the 5-year period prior to draft submission.
+
+Regarding the text based features, we found that the models tend to assign
+high weights to words such as surnames of active contributors, names of
+prolific working groups, and common technical terms. While this does make
+the models perform slightly better, such terms should not be relevant for
+solving the task as they do not model the relevant part of the conversation.
+To explore how models would behave in a scenario wherein such words were
+not available, we construct a domain-specific stop word list, consisting
+of: (i) one all last names from the Datatracker, (ii) all working group
+names from the Datatracker, and (iii) technological jargon terms obtained
+from the web\footnote{\url{https://www.computerhope.com/jargon.htm}, we
+used a union of the \emph{Internet terms}, \emph{network terms}, and
+\emph{security terms} categories.}. We remove from this list any terms
+appearing in top 5,000 English terms (e.g., sometimes people's names can have
+identical surface forms as some of the terms relevant to organisational
+activities). We will refer to this variant as \emph{text (S)}. 
+
+
+To gain empirical insights into which features provide better prediction
+results, models are run using a feature group alone variant and a variant
+combining each feature group with the \emph{text} features. This approach
+was motivated by the finding that \emph{text}, even though conceptually
+quite different from the rest of the feature set and not our main focus,
+does provide surprisingly strong results on its own. Thus, we wanted to
+empirically investigate in more detail how well it complements the rest of
+the graph-based features. Moreover, we compare all models to a baseline
+which simply assigns all examples to the majority class.
+
+We split the data into \emph{training} (70\%), \emph{development} (10\%),
+and \emph{test} (20\%) subsets. As a scoring function, we use the F1 score
+macro averaged across the positive and negative classes (but we also report
+area under the curve (AUC), precision, and recall). We train the models on
+the training set, optimise hyper-parameters on the development set, and
+report final scores on the test set. The final scores are those obtained by
+the model variant that fared best on the development set. We use logistic
+regression implemented in \texttt{scikit-learn} \cite{scikit-learn}, given
+that it is widely used and well interpretable. While we do not perform
+explicit feature selection, we do have implicit feature selection through
+L1 regularisation. We consider the regularisation strength a hyper-parameter
+and consider values from $[2^{-7}, 2^{-6}, ..., 2^6]$ on the development
+set. As our data set is quite imbalanced (in a roughly 4:1 ratio, 17\% is
+\emph{adopted}), we use different class weights during optimization to
+counteract this. We employ a non-parametric random shuffling test
+\cite{yeh-2000-accurate} to check statistical significance of score
+differences against the baseline. Table~\ref{tbl:res} summarises prediction
+results, which will be discussed in the next section. 
+
+\renewcommand{\tabcolsep}{0.5cm}
+\begin{table*}
+\centering
+\begin{tabular}{lcccccccc}
+\toprule
+                        & \multicolumn{4}{c}{$\neg \mathit{TXT}$}
+                        & \multicolumn{4}{c} {$\mathit{TXT}$} \\
+\midrule
+                       & AUC & F1 & P & R & AUC & F1 & P & R \\
+\midrule
+Baseline               &  .500 & .445 & .401 & .500  &  .500 & .445 & .401 & .500 \\
+\midrule
+Comm. patterns         &  .644 & .583 & .566 & .601 &  .723 & .626 & .609 & .644 \\
+Centrality             &  .655 & .577 & .573 & .581 &  .717 & .639 & .625 & .653 \\
+Email count            &  .632 & .566 & .555 & .577 &  .718 & .650 & .639 & .662 \\
+N. years active        &  .608 & .569 & .555 & .584 &  .702 & .610 & .594 & .626 \\
+Number of authors      &  .578 & .536 & .529 & .544 &  .697 & .631 & .621 & .641 \\
+Proportion in top      &  .663 & .594 & .580 & .609 &  .728 & .634 & .614 & .655 \\
+Draft count            &  .500 & .445 & .401 & .500 &  .696 & .630 & .624 & .636 \\
+N. Areas               &  .634 & .572 & .557 & .588 &  .721 & .639 & .622 & .657 \\
+N. Mailing lists       &  .634 & .570 & .557 & .584 &  .718 & .641 & .630 & .653 \\
+Affiliations           &  .605 & .584 & .576 & .592 &  .708 & .626 & .609 & .643 \\
+Topic entropy ($\eta$) &  .622 & .563 & .550 & .577 &  .715 & .642 & .628 & .657 \\
+Text                   & - & - & -  & -  &  .681 & .624 & .622 & .627 \\
+Text (S)               & - & - & -  & -  &  .667 & .598 & .593 & .614 \\
+\midrule
+All feats              &  .692 & .624 & .600 & .651 &  .744 & .645 & .625 & .666 \\
+All feats (S)          &  .692 & .624 & .600 & .651 &  .726 &  .636 &  .627 &  .664 \\
+\bottomrule
+\end{tabular}
+\caption{
+  Results for predicting adoption. Each row presents the scores of a model
+  using the corresponding feature group either alone ($\neg \mathit{TXT}$)
+  or combined with the Text features ($\mathit{TXT}$). \emph{All feats}
+  denotes all features except the text. Rows labeled with (S)  use the
+  \emph{Text (S)} variant of the text features.
+}
+\label{tbl:res}
+\end{table*}
+
+Next, we wanted to confirm these results at the level of individual
+features. To this end, we inspect the statistically significant
+coefficients learned by the model corresponding to each individual feature.
+For this experiment, we use a slightly different setup. We do not consider
+the \emph{text} features\footnote{There are thousands of text features
+(terms), making it prohibitively complex to include them. Moreover, they
+are not central to our research questions about the IETF community.}. We
+begin by first applying the Variance Inflation Factor (VIF) to exclude all
+features with $\mathit{VIF} > 5$. This, to an extent, mitigates the
+collinearity that we know exists as some features are by construction
+highly correlated. We then standardise each remaining feature and then fit
+a Logistic Regression model from the \texttt{statsmodels} package
+\cite{seabold2010statsmodels} on the entire data set.
+Table~\ref{tbl:resstat} presents the results of this experiment.
+
+\renewcommand{\tabcolsep}{0.3cm}
+\begin{table}
+  \centering
+  \begin{tabular}{lccc}
+    \toprule
+      Feature       & Weight  & P-value \\
+    \midrule
+      Centrality of most influential  & 0.1691 &   0.000 \\
+      Centrality of least influential & -0.0698 &  0.048 \\
+      Proportion of authors in top 10  & 0.1520 &  0.000 \\
+    \midrule
+      Has a Cisco author  & 0.1301 &  0.000 \\
+      Has an AT\&T author  & 0.1003 &  0.000 \\
+      Has a Juniper author  & 0.0738 &  0.000 \\
+      Has a China Mobile author & -0.0697  & 0.000 \\
+      Has an Alcatel-Lucent author  & 0.0474 &  0.022 \\
+    \midrule
+      Topic entropy max & 0.1728 & 0.000 \\
+      Topic entropy min & -0.1135 &  0.002 \\
+    \bottomrule
+  \end{tabular}
+  \caption{
+    Weights of the model that are statistically significant at $p \leq 0.05$
+    grouped by similarity of features -- author influence measures vs.\
+    affiliation features vs.\ topic entropy ($\eta$).
+  }
+  \label{tbl:resstat}
+\end{table}
+
+%..................................................................................................
+\pb{Predicting Adoption:}
+To confirm empirical implications from Section \ref{subsec:impact_influence},
+and provide a more in-depth look at the features, we perform statistical
+analysis summarised in Table~\ref{tbl:resstat}. The most interesting
+insight is that the coefficients corresponding to the \emph{Centrality of
+the most influential author} and \emph{Proportion of authors in the top 10
+percentile in influence}, are, indeed, positive and among the largest in
+absolute value. This highlights that among the people who are influential
+in the email networks, there is a substantial number of individuals who are
+proficient in contributing to successful drafts.
+
+Another interesting observation is that author affiliations (which are
+also indirectly connected to influential participants, as demonstrated in 
+\S\ref{subsec:impact_influence}, Figure \ref{fig:coauthor_affiliation_network2019_otheryears})
+are an important feature group, particularly affiliations such as \textit{Cisco}
+and \textit{AT\&T}. Moreover, topic entropy is also an important feature
+group, which was also shown to be related to influential participants in
+our analysis from \S\ref{subsec:impact_influence}, Figure \ref{fig:topic_diversity}. 
+
+%..................................................................................................
 % ICWSM 2022 paper section 4.3
+\pb{Summary:}
 The statistical analysis shows that influence of draft authors in the email
-networks does impact the possibility of a draft getting adopted
-(\S\ref{subsec:results}, Table \ref{tbl:res} \& \ref{tbl:resstat}). This
-might hint at the ability of participants who hold a domain expertise to be
-able to engage better with the community. Several WG chairs are already in
-the top percentile influential category in both the email and co-authorship
-networks before taking up these leadership roles, which further elevates
-after taking up such leadership roles (Figure
-\ref{fig:wg_chair_before_after}).
-
-Most importantly the statistical analysis shows that being affiliated with
-a prominent organisation positively impacts the chances of a draft in
-getting adopted by a WG, thereby directly driving the innovation process
-(Table \ref{tbl:res} \& \ref{tbl:resstat}).
+networks does impact the possibility of a draft getting adopted (Tables
+\ref{tbl:res} \& \ref{tbl:resstat}). This might hint at the ability of
+participants who hold a domain expertise to be able to engage better with
+the community. Several WG chairs are already in the top percentile
+influential category in both the email and co-authorship networks before
+taking up these leadership roles, which further elevates after taking up
+such leadership roles (Figure \ref{fig:wg_chair_before_after}).  Our
+analysis also shows that being affiliated with a prominent organisation
+positively impacts the chances of a draft in getting adopted by a working
+group, thereby directly driving the innovation process (Table \ref{tbl:res}
+\& \ref{tbl:resstat}).
 
 %--------------------------------------------------------------------------------------------------
 \subsection{What Makes a Successful Document?}
