@@ -51,7 +51,7 @@ data/ietf: | data
 	mkdir $@
 
 data/ietf/rfc-index.xml: scripts/fetch.sh | data/ietf
-	@sh scripts/fetch.sh https://www.rfc-editor.org/rfc-index.xml $@
+	@curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
 
 
 # -------------------------------------------------------------------------------------------------
