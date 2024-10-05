@@ -29,9 +29,18 @@
 PAPER_PDF := paper.pdf
 PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
-DOWNLOADS := data/ietf/rfc-index.xml \
+IETF_DT_DOWNLOADS := data/ietf-dt/api_v1_doc_document.json \
+                     data/ietf-dt/api_v1_doc_state.json \
+                     data/ietf-dt/api_v1_doc_state.json \
+                     data/ietf-dt/api_v1_name_doctypename.json \
+                     data/ietf-dt/api_v1_person_email.json \
+                     data/ietf-dt/api_v1_person_person.json \
+                     data/ietf-dt/api_v1_submit_submission.json
+
+DOWNLOADS := $(IETF_DT_DOWNLOADS) \
+             data/ietf/rfc-index.xml \
 						 data/ietf/drafts.json \
-						 data/ietf/history-for-drafts.json
+						 data/ietf/history-for-drafts.json \
 
 RESULTS   := results/rfcs-by-year-stream.csv \
 						 results/drafts-by-date.csv
@@ -61,6 +70,34 @@ data/ietf/drafts.json: scripts/fetch-ietf-drafts.py | data/ietf
 
 data/ietf/history-for-drafts.json: scripts/fetch-ietf-history-for-drafts.py | data/ietf
 	python3 $^ $@
+
+
+# -------------------------------------------------------------------------------------------------
+# Rules to fetch data from the IETF Datatracker:
+
+fetch-ietf-dt: $(IETF_DT_DOWNLOADS)
+
+data/ietf-dt: | data
+	mkdir $@
+
+data/ietf-dt/api_v1_doc_document.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/doc/document/ id $@
+
+data/ietf-dt/api_v1_doc_state.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/doc/state/ id $@
+
+data/ietf-dt/api_v1_name_doctypename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/doctypename/ $@
+
+data/ietf-dt/api_v1_person_email.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/person/email/ address $@
+
+data/ietf-dt/api_v1_person_person.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/person/person/ id $@
+
+data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/submit/submission/ id $@
+
 
 # -------------------------------------------------------------------------------------------------
 # Rules to generate results:
@@ -139,7 +176,7 @@ MAKEFLAGS += --output-sync --warn-undefined-variables --no-builtin-rules --no-bu
 .NOTINTERMEDIATE:
 
 # List of targets that don't represent files:
-.PHONY: all clean clean-data fetch 
+.PHONY: all clean clean-data fetch fetch-ietf-dt
 
 # =================================================================================================
 # vim: set ts=2 sw=2 tw=0 ai:
