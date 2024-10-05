@@ -29,9 +29,12 @@
 PAPER_PDF := paper.pdf
 PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
-DOWNLOADS := data/ietf/rfc-index.xml
+DOWNLOADS := data/ietf/rfc-index.xml \
+						 data/ietf/drafts.json \
+						 data/ietf/history-for-drafts.json
 
-RESULTS   := results/rfcs-by-year-stream.csv
+RESULTS   := results/rfcs-by-year-stream.csv \
+						 results/drafts-by-date.csv
 
 FIGURES   := figures/rfcs-by-year-stream.pdf
 
@@ -53,6 +56,11 @@ data/ietf: | data
 data/ietf/rfc-index.xml: | data/ietf
 	curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
 
+data/ietf/drafts.json: scripts/fetch-ietf-drafts.py | data/ietf
+	python3 $^ $@
+
+data/ietf/history-for-drafts.json: scripts/fetch-ietf-history-for-drafts.py | data/ietf
+	python3 $^ $@
 
 # -------------------------------------------------------------------------------------------------
 # Rules to generate results:
@@ -63,6 +71,8 @@ results:
 results/rfcs-by-year-stream.csv: scripts/rfcs-by-year-stream.py data/ietf/rfc-index.xml | results
 	python3 $^ $@
 
+results/drafts-by-date.csv: scripts/drafts-by-date.py data/ietf/history-for-drafts.json | results
+	python3 $^ $@
 
 # -------------------------------------------------------------------------------------------------
 # Rules to build figures:

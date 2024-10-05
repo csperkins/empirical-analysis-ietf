@@ -13,7 +13,7 @@ coverage = "*"
 types-requests = "*"
 
 [packages]
-ietfdata = "=0.8.0"
+ietfdata = "=0.8.1"
 requests = "*"
 seaborn = "*"
 numpy = "*"
