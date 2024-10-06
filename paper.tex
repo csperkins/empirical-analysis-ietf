@@ -3493,177 +3493,148 @@ adoption.
 \section{Related Work}
 \label{sec:related}
 
-% This should come near the end, and focussing on discussing how your work
-% relates to that of others. Any relevant related work should have been
-% cited already, so this is not a list of related work, it's a discussion
-% of how that work relates.
-%
-% Why not put related work after the introduction? 1) because describing
-% alternative approaches gets between the reader and your idea; and 2)
-% because the reader knows nothing about the problem yet, so your
-% (carefully trimmed) description of various technical trade-offs is
-% absolutely incomprehensible.
-%
-% When writing the related work:
-%  - Give credit to others where it's due; this doesn't diminish the
-%    credit you get from your paper.
-%  - Acknowledge weaknesses in your approach.
-%  - Ensure related work is accurate and up-to-date
-
 %..................................................................................................
 % IMC 2021 paper:
 
+\pb{Documents, Demographics, Communication Patterns:}
 To the best of our knowledge, were the first to perform a comprehensive
 statistical analysis of IETF activities considering trends in document
 publication (\S\ref{sec:trends-documents}), author demographics
 (\S\ref{sec:trends-demographics}), and communication patterns.
 \S\ref{sec:org-dyn:participants}. That said, there have been several
 prior efforts that have focused on specific aspects of the IETF:
+Jari Arkko, a former Chair of the IETF, maintains a website
+(\url{https://www.arkko.com/tools/stats.html}) that provides various
+statistics about the IETF, including about its documents, authors and their
+affiliations. The Datatracker also provides some statistics on documents
+and authors (\url{https://datatracker.ietf.org/stats/}).  Attendance
+statistics are reported in the IETF plenaries (available in the proceedings
+at \url{https://www.ietf.org/meeting/past/}).
 
-\begin{itemize}
-  \item Jari Arkko, a former Chair of the IETF, maintains a website
-    (\url{https://www.arkko.com/tools/stats.html}) that provides various
-    statistics about the IETF, including about its documents, authors and
-    their affiliations. The Datatracker also provides some statistics on
-    documents and authors (\url{https://datatracker.ietf.org/stats/}).
-    Attendance statistics are reported in the IETF plenaries (available
-    in the proceedings at \url{https://www.ietf.org/meeting/past/}).
+BigBang~\cite{benthall2015testing} is a Python toolkit for analysing online
+collaborative communities through mailing list data.  Niedermayer et
+al.~\cite{niedermayer2017information} discuss the challenges of working
+with large mailing list datasets, including conducting  entity resolution
+where contributors have changeable pseudonyms. Our work addresses a number
+of these challenges by augmenting the mailing list data with metadata from
+the IETF Datatracker.
 
-  \item BigBang~\cite{benthall2015testing} is a Python toolkit for
-    analysing online collaborative communities through mailing list data.
-    Niedermayer et al.~\cite{niedermayer2017information} discuss the
-    challenges of working with large mailing list datasets, including
-    conducting  entity resolution where contributors have changeable
-    pseudonyms. Our work addresses a number of these challenges by
-    augmenting the mailing list data with metadata from the IETF
-    Datatracker.
-
-  \item Huitema~\cite{RFC8963} carried out an evaluation of a small subset
-    of RFCs, to understand the various sources of delay in their
-    publication. The author observed that the main source of delay was the
-    working group process, highlighting the need to better understand the
-    dynamics of that process. In addition, the author found that citation
-    counts did not correlate well with the adoption or deployment of
-    specific RFCs.
-\end{itemize}
+Huitema~\cite{RFC8963} carried out an evaluation of a small subset of RFCs,
+to understand the various sources of delay in their publication. The author
+observed that the main source of delay was the working group process,
+highlighting the need to better understand the dynamics of that process. In
+addition, the author found that citation counts did not correlate well with
+the adoption or deployment of specific RFCs.
 
 %..................................................................................................
 % ICWSM 2022 paper:
 
+\pb{Influence and Impact:}
 Our work to characterise participant influence and impact (\S\ref{sec:org-dyn:influence})
 builds on a rich literature regarding influence in online social networks
-and other communities:
-\begin{itemize}
-  \item 
-    Studies of Twitter~\cite{cha2010measuring,weitzel2012measuring,anger2011measuring},
-    Instagram~\cite{zarei2020characterising} and decentralised social networks
-    \cite{harissigmetrics, hassanpleroma}. For example, \cite{ye2010measuring}
-    measured the impact of follower influence on message propagation. Others
-    have focused on devising metrics to capture influence: similarly
-    to~\cite{kourtellis2013identifying,weitzel2012measuring,sole2014centrality},
-    we use betweenness centrality as a metric of influence. 
+and other communities.
+Studies of Twitter~\cite{cha2010measuring,weitzel2012measuring,anger2011measuring},
+Instagram~\cite{zarei2020characterising} and decentralised social networks
+\cite{harissigmetrics, hassanpleroma}. For example, \cite{ye2010measuring}
+measured the impact of follower influence on message propagation. Others
+have focused on devising metrics to capture influence: similarly
+to~\cite{kourtellis2013identifying,weitzel2012measuring,sole2014centrality},
+we use betweenness centrality as a metric of influence. 
 
-  \item Online collaborative communities such as Wikimedia and Open Stack
-    have also been studied for understanding communities, collaboration,
-    strategy making, and organisational structures, through mailing lists
-    and platform interactions \cite{dobusch2018open, bosu2014social,
-    zhang2020companies}. Bosou and Carver \cite{bosu2014impact} highlight
-    that contributors with much higher reputation are successful in seeking
-    reviews from the community in a much shorter time span and are more
-    likely to get their suggestions accepted. This is well aligned with
-    most of our findings related to the impact of influential people on the
-    Internet-Draft adoption process. Zhang et al.\ observe
-    \cite{zhang2020companies} that in the open source software (OSS)
-    ecosystem, several participating organisations (firms or companies) may
-    engage in intentional or passive collaborations, or they may contribute
-    in an isolated way. They find that an organisation's influence in the
-    collaboration network is positively correlated with its scale of
-    contribution within the ecosystem. In some ways, this is similar to our
-    observation related to prominent affiliated organisations in the
-    co-authorship network and their ability to collaborate and produce
-    drafts.
+Online collaborative communities such as Wikimedia and Open Stack have also
+been studied for understanding communities, collaboration, strategy making,
+and organisational structures, through mailing lists and platform
+interactions \cite{dobusch2018open, bosu2014social, zhang2020companies}.
+Bosou and Carver \cite{bosu2014impact} highlight that contributors with
+much higher reputation are successful in seeking reviews from the community
+in a much shorter time span and are more likely to get their suggestions
+accepted. This is well aligned with most of our findings related to the
+impact of influential people on the Internet-Draft adoption process. Zhang
+et al.\ observe \cite{zhang2020companies} that in the open source software
+(OSS) ecosystem, several participating organisations (firms or companies)
+may engage in intentional or passive collaborations, or they may contribute
+in an isolated way. They find that an organisation's influence in the
+collaboration network is positively correlated with its scale of
+contribution within the ecosystem. In some ways, this is similar to our
+observation related to prominent affiliated organisations in the
+co-authorship network and their ability to collaborate and produce drafts.
 
-  % This bullet adapted from our ICWSM 2024 paper
-  \item Building social interaction networks out of email communication
-    data is a well trodden field~\cite{belanger1999communication,
-    mcpherson2001birds}, and the introduction of time evolution into the
-    analysis~\cite{panzarasa2009patterns,viswanath2009evolution} is recent
-    but has quickly gained interest. However, the analysis of email based
-    communication is less prevalent with the notable exception of the
-    well-known, and oft analysed, Enron emails~\cite{klimt2004enron}. The
-    communication dataset we examine is interesting for several reasons: it
-    is a long duration email dataset, it is annotated with meta data
-    representing participant roles, and it represents discussion in a
-    decentralised consensus driven organisation~\cite{RFC7282,RFC3935}
-    rather than a business with a traditional management hierarchy.
-    While the Enron data set is often used for classification of emails
-    into categories \cite{madjarov2012extensive}, there are also several
-    studies of organisation interaction patterns on it.  Namely,
-    \cite{tang2008community,kossinets2008structure} are concerned with
-    developing methodologies for studying how communication evolves over
-    time.  In contrast, \cite{diesner2005communication} focus on providing
-    insights more than on developing a methodology, revealing that
-    organisational structure is reflected in  email communication patterns.
-    Other studies focusing on mailing list data include OSS mailing lists
-    \cite{bird2006mining,rigby2007can}.
+% This bullet adapted from our ICWSM 2024 paper
 
-\end{itemize}
+Building social interaction networks out of email communication data is a
+well trodden field~\cite{belanger1999communication, mcpherson2001birds},
+and the introduction of time evolution into the
+analysis~\cite{panzarasa2009patterns,viswanath2009evolution} is recent but
+has quickly gained interest. However, the analysis of email based
+communication is less prevalent with the notable exception of the
+well-known, and oft analysed, Enron emails~\cite{klimt2004enron}. The
+communication dataset we examine is interesting for several reasons: it is
+a long duration email dataset, it is annotated with meta data representing
+participant roles, and it represents discussion in a decentralised
+consensus driven organisation~\cite{RFC7282,RFC3935} rather than a business
+with a traditional management hierarchy.  While the Enron data set is often
+used for classification of emails into categories
+\cite{madjarov2012extensive}, there are also several studies of
+organisation interaction patterns on it.  Namely,
+\cite{tang2008community,kossinets2008structure} are concerned with
+developing methodologies for studying how communication evolves over time.
+In contrast, \cite{diesner2005communication} focus on providing insights
+more than on developing a methodology, revealing that organisational
+structure is reflected in  email communication patterns.  Other studies
+focusing on mailing list data include OSS mailing lists
+\cite{bird2006mining,rigby2007can}.
 
 %..................................................................................................
 % ICWSM 2024 paper
 
+\pb{Temporal Patterns in Communication:}
 Analysing the temporal patterns in communication, as we do for the IETF
 organisational hierarchy in \S\ref{sec:org-dyn:hierarchy}, is an emerging
 field of research~\cite{masuda2016guide}:
 
-\begin{itemize}
-  \item Some have analysed the time evolution of important nodes in a
-    network~\cite{fire2020rise}, whether their neighbours are similarly
-    important~\cite{pedreschi2022temporal} and some others the correlations
-    of the trajectory of snapshots of networks over
-    time~\cite{lacasa2022correlations}. In this paper we bring new analysis
-    techniques, that expand on the idea of tracking the evolution of node
-    importance, to an email list corpus.
+Some have analysed the time evolution of important nodes in a
+network~\cite{fire2020rise}, whether their neighbours are similarly
+important~\cite{pedreschi2022temporal} and some others the correlations of
+the trajectory of snapshots of networks over
+time~\cite{lacasa2022correlations}. In this paper we bring new analysis
+techniques, that expand on the idea of tracking the evolution of node
+importance, to an email list corpus.
 
-  \item A form of temporal network analysis that is key to understanding
-    communication in social networks is computing temporal
-    motifs~\cite{paranjape2017motifs,kovanen2011temporal} between nodes.
-    This technique involves look at the sequence in which edges attach to
-    nodes over time which lets us see how conversation happens with fine
-    resolution.  Applications include understanding the diffusion of
-    information through a social network using undirected
-    motifs~\cite{sarkar2019using}, and analysing the collaboration and
-    scientific mobility of co-authorship
-    networks~\cite{boekhout2021investigating}. To the best of our
-    knowledge, temporal motifs have not yet been used for analysis of
-    communication in social networks which means knowledge of high
-    time-resolution direct communication between individuals is ripe for
-    the picking.
+A form of temporal network analysis that is key to understanding
+communication in social networks is computing temporal
+motifs~\cite{paranjape2017motifs,kovanen2011temporal} between nodes.  This
+technique involves look at the sequence in which edges attach to nodes over
+time which lets us see how conversation happens with fine resolution.
+Applications include understanding the diffusion of information through a
+social network using undirected motifs~\cite{sarkar2019using}, and
+analysing the collaboration and scientific mobility of co-authorship
+networks~\cite{boekhout2021investigating}. To the best of our knowledge,
+temporal motifs have not yet been used for analysis of communication in
+social networks which means knowledge of high time-resolution direct
+communication between individuals is ripe for the picking.
 
-  \item The effects of hierarchy on the ``voice" of individuals within an
-    organisation is a key aspect~\cite{pfrombeck2023hierarchy} of
-    Organisational Behaviour (OB) research. A steep~\cite{hussain2019voice}
-    hierarchy can have a negative effect on voice by reducing the variety
-    of perspectives~\cite{anderson2010functions} in higher levels, or
-    positive effect where decisions can be made quickly. However, a
-    diffused hierarchy may also have negative
-    effects~\cite{hussain2019voice} on voice by contributing to lower level
-    ``bystanders" who let the higher levels do the talking, or a positive
-    effect with a variety of approaches to management. Similarly, a large
-    ``power distance" can cause problems to lower level voice if the higher
-    levels are ``authoritarian"~\cite{duan2018authoritarian}, however if
-    they are ``benevolent"~\cite{li2021does,guo2020inclusive} then power
-    distance is less of a problem. We aim to test these ideas in regard to
-    the voluntary and collaborative nature of the IETF organisation,
-    whereas the literature mostly focuses on traditional organisations.
-
-\end{itemize}
+The effects of hierarchy on the ``voice" of individuals within an
+organisation is a key aspect~\cite{pfrombeck2023hierarchy} of
+Organisational Behaviour (OB) research. A steep~\cite{hussain2019voice}
+hierarchy can have a negative effect on voice by reducing the variety of
+perspectives~\cite{anderson2010functions} in higher levels, or positive
+effect where decisions can be made quickly. However, a diffused hierarchy
+may also have negative effects~\cite{hussain2019voice} on voice by
+contributing to lower level ``bystanders" who let the higher levels do the
+talking, or a positive effect with a variety of approaches to management.
+Similarly, a large ``power distance" can cause problems to lower level
+voice if the higher levels are
+``authoritarian"~\cite{duan2018authoritarian}, however if they are
+``benevolent"~\cite{li2021does,guo2020inclusive} then power distance is
+less of a problem. We aim to test these ideas in regard to the voluntary
+and collaborative nature of the IETF organisation, whereas the literature
+mostly focuses on traditional organisations.
 
 %..................................................................................................
-
 % The following is adapted from our ACL 2023 Tracing Linguistic Markers of
 % Influence paper:
 
+\pb{Use of Language:}
 Considering use of language (\S\ref{sec:language}), most studies of
 influence either focus on community structure rather than language, or use
 language indirectly.  Urena et al.\ \cite{urena2019review} give a survey of
@@ -3682,6 +3653,7 @@ range of linguistic markers.
 
 
 %..................................................................................................
+\pb{Success Factors:}
 The work in \S\ref{sec:success-factors} builds, in part, on Nikkhah et
 al.~\cite{nikkhah2017statistical} by statistically exploring RFC adoption.
 We build on this work with improved modelling, and by incorporating
