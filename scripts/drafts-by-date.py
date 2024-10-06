@@ -63,7 +63,7 @@ curr = date.fromisoformat("1969-01-01")
 prev_year = curr.isoformat()[0:4]
 year_total = 0
 year_count = 0
-while curr < date.today():
+while curr < date.fromisoformat("2020-12-31"):
     year = curr.isoformat()[0:4]
     if year not in output:
         output[year] = {"year": year, "min": 99999, "max": 0, "avg": -1}

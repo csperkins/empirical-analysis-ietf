@@ -52,7 +52,7 @@ mins = [data[date][0] for date in dates]
 avgs = [data[date][1] for date in dates]
 maxs = [data[date][2] for date in dates]
 
-plt.rc('font',**{'family':'serif','serif':['Times'], 'size': 8})
+plt.rc('font',**{'family':'serif','serif':['Times'], 'size': 10})
 plt.rc('text', usetex=True)
 plt.rc('axes', axisbelow=True)
 plt.rcParams['pdf.fonttype'] = 42
@@ -63,7 +63,7 @@ plt.plot(dates, avgs, color="#2678b2", label="Mean")
 plt.fill_between(dates, mins, maxs, color="#2678b2", alpha=0.3, lw=0, label="Range")
 plt.gca().set_ylim(bottom=0)
 
-plt.xticks(tics, rotation='vertical')
+plt.xticks(tics)
 plt.xlabel("Year")
 plt.ylabel("Number of Active Internet-Drafts")
 
@@ -71,7 +71,7 @@ plt.legend(loc='upper left')
 
 # Annotate with date IETF created
 plt.plot([1986, 1986], [0, 1000], ':', color='black')
-plt.text(1982, 1100, 'IETF Created', color='black')
+plt.text(1981, 1100, 'IETF Created', color='black')
 
 plt.plot()
 plt.savefig(pdf_path, format="pdf", bbox_inches="tight")
