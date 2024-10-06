@@ -59,44 +59,44 @@ for draft in drafts:
 
 output = {}
 
-curr = oldest
-prev_month = curr.isoformat()[0:7]
-month_total = 0
-month_count = 0
+curr = date.fromisoformat("1969-01-01")
+prev_year = curr.isoformat()[0:4]
+year_total = 0
+year_count = 0
 while curr < date.today():
-    month = curr.isoformat()[0:7]
-    if month not in output:
-        output[month] = {"month": month, "min": 99999, "max": 0, "avg": -1}
+    year = curr.isoformat()[0:4]
+    if year not in output:
+        output[year] = {"year": year, "min": 99999, "max": 0, "avg": -1}
 
-    if month != prev_month:
-        output[prev_month]["avg"] = int(month_total / month_count)
-        month_total = 0
-        month_count = 0
-    prev_month = month
+    if year != prev_year:
+        output[prev_year]["avg"] = int(year_total / year_count)
+        year_total = 0
+        year_count = 0
+    prev_year = year
 
     count = 0
     for index in results:
         if curr >= results[index]["start"] and curr <= results[index]["until"]:
             count += 1
 
-    month_total += count
-    month_count += 1
+    year_total += count
+    year_count += 1
 
-    if count < output[month]["min"]:
-        output[month]["min"] = count
-    if count > output[month]["max"]:
-        output[month]["max"] = count
+    if count < output[year]["min"]:
+        output[year]["min"] = count
+    if count > output[year]["max"]:
+        output[year]["max"] = count
 
     curr += timedelta(days = 1)
 
-output[prev_month]["avg"] = int(month_total / month_count)
+output[prev_year]["avg"] = int(year_total / year_count)
 
 
 with open(sys.argv[2], "w") as outf:
     for index in output.keys():
-        month_date = output[index]["month"]
-        month_min  = output[index]["min"]
-        month_avg  = output[index]["avg"]
-        month_max  = output[index]["max"]
-        print(f"{month_date},{month_min},{month_avg},{month_max}", file=outf)
+        year_date = output[index]["year"]
+        year_min  = output[index]["min"]
+        year_avg  = output[index]["avg"]
+        year_max  = output[index]["max"]
+        print(f"{year_date},{year_min},{year_avg},{year_max}", file=outf)
 

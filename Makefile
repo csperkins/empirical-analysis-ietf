@@ -42,10 +42,11 @@ DOWNLOADS := $(IETF_DT_DOWNLOADS) \
 						 data/ietf/drafts.json \
 						 data/ietf/history-for-drafts.json \
 
-RESULTS   := results/rfcs-by-year-stream.csv \
-						 results/drafts-by-date.csv
+RESULTS   := results/drafts-by-date.csv \
+             results/rfcs-by-year-stream.csv
 
-FIGURES   := figures/rfcs-by-year-stream.pdf
+FIGURES   := figures/drafts-by-date.pdf \
+             figures/rfcs-by-year-stream.pdf
 
 all: $(PAPER_PDF)
 
@@ -117,8 +118,12 @@ results/drafts-by-date.csv: scripts/drafts-by-date.py data/ietf/history-for-draf
 figures:
 	mkdir $@
 
+figures/drafts-by-date.pdf: scripts/plot-drafts-by-date.py results/drafts-by-date.csv | figures
+	python3 $^ $@
+
 figures/rfcs-by-year-stream.pdf: scripts/plot-rfcs-by-year-stream.py results/rfcs-by-year-stream.csv | figures
 	python3 $^ $@
+
 
 # -------------------------------------------------------------------------------------------------
 # Rules to build the final PDF:
