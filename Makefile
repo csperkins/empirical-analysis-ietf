@@ -38,7 +38,7 @@ IETF_DT_DOWNLOADS := data/ietf-dt/api_v1_doc_document.json \
                      data/ietf-dt/api_v1_submit_submission.json
 
 DOWNLOADS := $(IETF_DT_DOWNLOADS) \
-             data/ietf/rfc-index.xml \
+             data/rfc-index.xml \
 						 data/ietf/drafts.json \
 						 data/ietf/history-for-drafts.json \
 
@@ -62,7 +62,7 @@ data:
 data/ietf: | data
 	mkdir $@
 
-data/ietf/rfc-index.xml: | data/ietf
+data/rfc-index.xml: | data/ietf
 	curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
 
 data/ietf/drafts.json: scripts/fetch-ietf-drafts.py | data/ietf
@@ -105,7 +105,7 @@ data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf
 results:
 	mkdir $@
 
-results/rfcs-by-year-stream.csv: scripts/rfcs-by-year-stream.py data/ietf/rfc-index.xml | results
+results/rfcs-by-year-stream.csv: scripts/rfcs-by-year-stream.py data/rfc-index.xml | results
 	python3 $^ $@
 
 results/drafts-by-date.csv: scripts/drafts-by-date.py data/ietf/history-for-drafts.json | results
