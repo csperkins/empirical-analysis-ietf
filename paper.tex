@@ -2226,20 +2226,23 @@ roles. This may suggest that the individuals who take on higher hierarchy
 level roles are already contributing at a higher level.
 
 \begin{table}[!tbp]
-\centering
-    \begin{tabular}{c||c|c}
-        Status & Sent & Received \\
-         \hline \hline 
-        Before WGC & $67.26\pm99.80$ & $70.11\pm103.37$ \\
-        \hline
-        After WGC & $77.20\pm102.85$ & $85.90\pm107.38$ \\
-        \hline
-        Before AD & $218.84\pm226.92$ & $230.50\pm214.75$ \\
-        \hline
-        After AD & $209.21\pm186.46$ & $219.16\pm189.85$ \\
-    \end{tabular}
-        \caption{Mean number of emails received for one year before/after becoming a WGC (AD) for the first time. The error is one standard deviation.}
-    \label{tab:WGC_email}
+  \centering
+  \begin{tabular}{c||c|c}
+      Status & Sent & Received \\
+       \hline \hline 
+      Before WGC & $67.26\pm99.80$ & $70.11\pm103.37$ \\
+      \hline
+      After WGC & $77.20\pm102.85$ & $85.90\pm107.38$ \\
+      \hline
+      Before AD & $218.84\pm226.92$ & $230.50\pm214.75$ \\
+      \hline
+      After AD & $209.21\pm186.46$ & $219.16\pm189.85$ \\
+  \end{tabular}
+  \caption{
+    Mean number of emails received for one year before/after becoming a WGC
+    (AD) for the first time. The error is one standard deviation.
+  }
+  \label{tab:WGC_email}
 \end{table}
 
 %..................................................................................................
@@ -2795,9 +2798,9 @@ and
 \textit{``Question is do we need to carry around an outer IP-in-IP header
 for that \underline{or} not?''}.
 
-\begin{table*}[]
+\begin{table*}
+  \centering
   \small
-  \begin{center}
   \begin{tabular}{l|l|l}
   \toprule
     \multirow{2}{*}{Language and influence} 
@@ -2822,7 +2825,6 @@ for that \underline{or} not?''}.
       & \liwc{function, ppron, shehe, ipron, number, certain, sexual, informal} \\
   \hline
   \end{tabular}
-  \end{center}
   \caption{LIWC categories where $p<0.05$.}
   \label{table:all_results}
 \end{table*}
@@ -3381,33 +3383,6 @@ significance level $p \leq 0.1$).
 
 \input{tables-prev/imc-2021/lr_fsnone-trim.tex}
 \input{tables-prev/imc-2021/lr_fsauc-trim.tex}
-
-\begin{table}
-  \centering
-  \begin{tabular}{lrrr}
-    \toprule
-      Model & $F_1$ & $\mathit{AUC}$ & $F1_{macro}$ \\
-    \midrule
-      Most frequent class                & .757   & .500   & .379 \\
-      Baseline                           & .758   & .616   & .597 \\
-      Baseline + FS                      & .762   & .650   & .610 \\
-    \midrule
-      Most frequent class                & .724   & .500   & .379 \\
-      Baseline                           & .670   & .559   & .547 \\
-      Baseline + FS                      & .690   & .620   & .563 \\
-      Logistic regression all feats      & .728   & .724   & .666 \\
-      Logistic regression all feats + FS & .820   & .822   & .789 \\
-      Decision tree all feats + FS       & .822   & .838   & .788 \\
-    \bottomrule
-  \end{tabular}
-  \caption{
-    Classifier scores on the entire dataset (251 RFCs, above) and those
-    with our features available (155 RFCs), with or without feature
-    selection (FS).
-  }
-  \label{tbl:mlres}
-\end{table}
-
 
 %..................................................................................................
 % IMC 2021 paper Section 4.4
