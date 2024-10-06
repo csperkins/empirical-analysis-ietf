@@ -513,6 +513,17 @@ time for the work of a new group to reach maturity).
   \label{fig:pub_wgs_yearly}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures/drafts-by-date.pdf}
+  \caption{
+    Number of active drafts over time. Internet-Drafts, working documents
+    of the IETF for work that was intended for eventual publication as an
+    RFC, were introduction at the 13th IETF meeting in 1989.
+  }
+  \label{fig:drafts-by-date}
+\end{figure}
+
 %..................................................................................................
 \pb{Internet-Drafts:}
 Figure \ref{fig:drafts-by-date} shows the number of working documents,
@@ -531,17 +542,6 @@ proceed, and hence not all drafts become RFCs. As we discuss in
 \S\ref{sec:success-factors:documents}, draft adoption is a significant
 milestone.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures/drafts-by-date.pdf}
-  \caption{
-    Number of active drafts over time. Internet-Drafts, working documents
-    of the IETF for work that was intended for eventual publication as an
-    RFC, were introduction at the 13th IETF meeting in 1989.
-  }
-  \label{fig:drafts-by-date}
-\end{figure}
-
 %..................................................................................................
 \pb{Factors Affecting Publication Rate:} 
 The standards development process is taking longer.
@@ -551,7 +551,7 @@ an RFC. This shows a clear trend: RFCs are taking longer to make their way
 through the standardisation and publication process. The median number of
 days to publication was 469 in 2001, rising to 1,170 in 2020. 
 
-\begin{figure}
+\begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/day_counts_yearly.pdf}
   \caption{
@@ -567,7 +567,7 @@ that the time is spent making changes to the document. This may go some way
 towards explaining the decline in output of the IETF: each RFC is taking
 longer to produce, with more revisions before publication. 
 
-\begin{figure}
+\begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/draft_counts_yearly.pdf}
   \caption{
@@ -576,7 +576,6 @@ longer to produce, with more revisions before publication.
   \label{fig:drafts_year}
 \end{figure}
 
-
 What factors affect the publication rate?  One may conjecture that this
 slowdown is driven by longer RFCs that contain more material. Yet from the
 median page count of RFCs, shown in Figure~\ref{fig:pages_year}, no clear
@@ -584,7 +583,7 @@ trend being visible. The increase in the duration of the standardisation
 process for RFCs cannot be attributed to RFCs becoming longer: page counts
 have remained stable. 
 
-\begin{figure}
+\begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/page_counts_yearly_dt.pdf}
   \caption{
@@ -606,7 +605,7 @@ Figure~\ref{fig:citations_year} expands on this, showing the median number
 of citations from each RFC to other Internet-Drafts and RFCs. This
 similarly shows that RFCs are increasingly referring to prior work.
 
-\begin{figure}
+\begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/update_obsolete_yearly_pct.pdf}
   \caption{
@@ -615,7 +614,7 @@ similarly shows that RFCs are increasingly referring to prior work.
   \label{fig:updates_year}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/cite_counts_yearly.pdf}
   \caption{
@@ -636,7 +635,7 @@ shown, the median number of keywords per page grew from 2001 through to
 2010, indicating a growing number of requirements being expressed in RFCs,
 before plateauing in recent years.
 
-\begin{figure}
+\begin{figure}[t]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/documents/keyword_usage_rate.pdf}
   \caption{
@@ -706,7 +705,17 @@ count.
 \end{figure}
 
 \input{tables-prev/tma-2023/top-rfcs-errata.tex}
-\input{tables-prev/tma-2023/errata-stats-area.tex}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-submission-dates-area.pdf}
+  \caption{
+    Cumulative distribution of the number of days from RFC publication to
+    errata filing by IETF area.
+    The areas are as described in Figure~\ref{fig:rfcs_by_area}.
+  }
+  \label{fig:errata_submission_days}
+\end{figure}
 
 %..................................................................................................
 \pb{Errata Delay:}
@@ -726,18 +735,6 @@ with a median of 987 days, compared to a median of 1,138 days for technical
 errata. 
 
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-submission-dates-area.pdf}
-  \caption{
-    Cumulative distribution of the number of days from RFC publication to
-    errata filing by IETF area.
-    The areas are as described in Figure~\ref{fig:rfcs_by_area}.
-  }
-  \label{fig:errata_submission_days}
-\end{figure}
-
-
 %..................................................................................................
 \pb{Errata Status:}
 Figure~\ref{fig:errata_status} categorises the errata by verification
@@ -745,7 +742,6 @@ status and publication year of the RFC to which they relate.
 The largest share (42.5\%) of errata are \emph{verified}: errata that have
 been has been confirmed as necessary and accurate. This suggests that many
 errata identify real problems with RFCs and are useful to the community.
-
 
 \begin{figure}
   \centering
@@ -780,6 +776,15 @@ Finally, 14.2\% of errata are \emph{reported} but unverified.  Again, we
 are surprised to see unverified errata from over a decade ago, suggesting
 the process should be expedited. 
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-by-rfc-by-area.pdf}
+  \caption{
+    Cumulative distribution of errata filed per RFC by grouped by IETF
+    area.  The areas are as described in Figure~\ref{fig:rfcs_by_area}.
+  }
+  \label{fig:errata_per_rfc}
+\end{figure}
 
 %..................................................................................................
 \pb{Errata per RFC Area, Status, and Stream:}
@@ -789,6 +794,9 @@ RFCs, and legacy IETF RFCs, are labelled as ``None''.  We confirm errata in
 standards are common: of the 4,373 standards-track RFCs in our dataset,
 32.7\% have attracted at least one erratum filing.  However, there are
 three notable outliers:
+
+\input{tables-prev/tma-2023/errata-stats-area.tex}
+
 \begin{enumerate}
   \item RFCs published by the Sub-IP (subip) Area have very few errata,
     with only 5\% of subip RFCs attracting errata filings. This temporary
@@ -819,15 +827,6 @@ three notable outliers:
 
 \end{enumerate}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/errata-by-rfc-by-area.pdf}
-  \caption{
-    Cumulative distribution of errata filed per RFC by grouped by IETF
-    area.  The areas are as described in Figure~\ref{fig:rfcs_by_area}.
-  }
-  \label{fig:errata_per_rfc}
-\end{figure}
 
 Tables~\ref{tab:errata-stats-stream} and \ref{tab:errata-stats-status}
 further categorise errata by the stream and status, at the time of
@@ -842,10 +841,29 @@ may be due to the additional readership and attention that standards-track
 documents receive, and because they are more likely to be the basis for
 future work and protocol extensions.
 
+% \todo{Should we include ``Impact of Citations'' from TMA 2023?}
+
 \input{tables-prev/tma-2023/errata-stats-stream.tex}
 \input{tables-prev/tma-2023/errata-stats-status.tex}
 
-% \todo{Should we include ``Impact of Citations'' from TMA 2023?}
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/location-percent.pdf}
+  \caption{
+    Errata counts by percentile location in document (0 is the beginning;
+    100 is the end).
+  }
+  \label{fig:errata_location_percent_count}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/section-title-counts.pdf}
+  \caption{
+    Errata counts by section title for the more frequent section titles.
+  }
+  \label{fig:errata_section_wise_counts}
+\end{figure}
 
 %..................................................................................................
 \pb{Errata Location:}
@@ -870,25 +888,6 @@ content, they are widely used to provide pseudocode and test vectors, or to
 describe algorithms. This suggests that it may be useful to target review
 efforts on appendices and other dense technical content where errata are
 more likely.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/location-percent.pdf}
-  \caption{
-    Errata counts by percentile location in document (0 is the beginning;
-    100 is the end).
-  }
-  \label{fig:errata_location_percent_count}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/tma-2023/section-title-counts.pdf}
-  \caption{
-    Errata counts by section title for the more frequent section titles.
-  }
-  \label{fig:errata_section_wise_counts}
-\end{figure}
 
 %--------------------------------------------------------------------------------------------------
 \subsection{Summary}
@@ -926,9 +925,9 @@ proportion of authors from the US decreasing and a corresponding rise in
 authors from Europe and China (\S\ref{sec:trends-demographics:geographic}).
 We similarly explore shifts in affiliation, showing increasing influence of
 Huawei and ongoing shifts in the fortunes of many prominent US and European
-technology companies (\S\ref{sec:trends-demographics:affiliation}). The
-ongoing influence of Cisco and strong input from academic institutions is
-also noted.
+technology companies (\S\ref{sec:trends-demographics:affiliation}). 
+% The ongoing influence of Cisco and strong input from academic institutions
+% is also noted.
 
 % The following is from our IMC 2021 paper, Section 3.2.
 
@@ -958,7 +957,7 @@ only $\approx$0.5\% of authors coming from either continent in 2020.  This
 suggests that, if the IETF is to become more geographically representative,
 further efforts are needed.
 
-\begin{figure}
+\begin{figure}[t!]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/top5_countries_normalised.pdf}
   \caption{
@@ -967,7 +966,7 @@ further efforts are needed.
   \label{fig:author_countries_normalised}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[t!]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/continents_normalised.pdf}
   \caption{
@@ -1023,6 +1022,15 @@ affiliations in the dataset in 2020, compared with 25.6\% in 2001.
   \label{fig:author_affiliations_normalised}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/top5_affiliations_normalised_acad.pdf}
+  \caption{
+    Academic affiliations (normalised)
+  }
+  \label{fig:author_affiliations_normalised_acad}
+\end{figure}
+
 %..................................................................................................
 \pb{Academia and consultants:}
 Academic affiliations are those where the affiliation name contains
@@ -1056,15 +1064,6 @@ Understanding whether this indicates academics pushing for standardisation
 of the results of government funded research to increase its impact, the
 outcomes of industry sponsored research, or academics acting as consultants
 for industry, is for further study.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/authors/top5_affiliations_normalised_acad.pdf}
-  \caption{
-    Academic affiliations (normalised)
-  }
-  \label{fig:author_affiliations_normalised_acad}
-\end{figure}
 
 %..................................................................................................
 % IMC 2021 paper Section 3.2 (last part)
@@ -1151,16 +1150,6 @@ with the rate of RFC publication (Figure \ref{fig:rfcs_by_area}), likely
 indicating that many participants disengage once the document they were
 working on is published.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/pid_count_emailing_yearly.pdf}
-  \caption{
-    Number of email messages per year and number of unique participants
-    exchanging emails per year.
-  }
-  \label{fig:pid_count_emailing_yearly}
-\end{figure}
-
 Figure~\ref{fig:emailvol_by_year_catg} breaks down the messages sent into
 four categories based on the sending address:
 \begin{enumerate}
@@ -1202,6 +1191,16 @@ four categories based on the sending address:
     issue trackers on GitHub and similar services.
 
 \end{enumerate}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/pid_count_emailing_yearly.pdf}
+  \caption{
+    Number of email messages per year and number of unique participants
+    exchanging emails per year.
+  }
+  \label{fig:pid_count_emailing_yearly}
+\end{figure}
 
 The increasing use of GitHub suggests that the data in
 Figure~\ref{fig:pid_count_emailing_yearly} likely understates the volume of
@@ -1325,16 +1324,6 @@ seniority levels.
 \label{fig:age_dist_rfc_authors}
 \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/rfc_authors_degree.pdf}
-  \caption{
-    CDF showing drift in annual degree (interaction with their network)
-    of RFC authors over the period 2000-2020.
-  }
-  \label{fig:degree_dist_rfc_authors}
-\end{figure}
-
 %..................................................................................................
 \pb{Evolution of interactions:}
 The analysis in Section \ref{sec:trends-documents:production} showed that
@@ -1353,6 +1342,16 @@ on average, more recent RFCs generate greater discussion. This helps to
 explain increasing publication times: as documents become more complex,
 authors spend more time interacting with other participants to resolve
 the complexity, and these discussions are likely to lead to more drafts.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/imc-2021/emails/rfc_authors_degree.pdf}
+  \caption{
+    CDF showing drift in annual degree (interaction with their network)
+    of RFC authors over the period 2000-2020.
+  }
+  \label{fig:degree_dist_rfc_authors}
+\end{figure}
 
 \begin{figure}
   \centering
@@ -1425,8 +1424,8 @@ In this section we consider the following research questions:
 
 To measure influence of participants in the IETF we extend the analysis in
 Section \ref{sec:org-dyn:participants} and, for each year, build a social
-graph based on the \emph{active community} of participants (nodes) who have
-email interactions (edges) with any other participant in the previous five
+graph based on the \emph{active community} of participants who have
+email interactions with any other participant in the previous five
 years. 
 
 We previously demonstrated that there are three categories of participants
@@ -1567,17 +1566,6 @@ with the results from \S\ref{subsec:measuring_influence}, this shows a
 worrying, if slowly improving, dependence of the IETF on a small number of
 highly influential participants.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_proportion_emailscount_top_percentile.pdf}
-  \caption{
-    Proportion of emails sent (\%) by participants in each period (with
-    95\% confidence interval) according to their betweenness-centrality
-    percentile (x-axis).  Y2-axis (purple) shows yearly count of emails.
-  }
-  \label{fig:emailcount_top_percentile}
-\end{figure}
-
 %..................................................................................................
 \pb{Cross-area review:} 
 In addition to sending more emails, we test if influential participants
@@ -1601,7 +1589,18 @@ broadly than it used to, perhaps further indication of the increasing
 complexity of the standards development and widespread concern about
 feature interactions.
 
-\begin{figure}
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_proportion_emailscount_top_percentile.pdf}
+  \caption{
+    Proportion of emails sent (\%) by participants in each period (with
+    95\% confidence interval) according to their betweenness-centrality
+    percentile (x-axis).  Y2-axis (purple) shows yearly count of emails.
+  }
+  \label{fig:emailcount_top_percentile}
+\end{figure}
+
+\begin{figure}[t!]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_avg_areas_top_percentile.pdf}
   \caption{
@@ -1610,6 +1609,17 @@ feature interactions.
     ranked from top (0-10) to bottom percentile (91-100).
   }
   \label{fig:areas_participation_top_percentile}
+\end{figure}
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_age_top_percentile.pdf}
+  \caption{
+    Mean participation duration (with 95\% confidence interval) according
+    to their betweenness-centrality percentile in the x-axis, ranked from
+    top (0-10) to bottom percentile (91-100).
+  }
+  \label{fig:age_top_percentile}
 \end{figure}
 
 %..................................................................................................
@@ -1628,17 +1638,6 @@ The short participation duration of the less influential participants
 matches the participant churn discussed in Figure \ref{fig:author_new}
 in \S\ref{sec:trends-demographics:affiliation}.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/lineplot_age_top_percentile.pdf}
-  \caption{
-    Mean participation duration (with 95\% confidence interval) according
-    to their betweenness-centrality percentile in the x-axis, ranked from
-    top (0-10) to bottom percentile (91-100).
-  }
-  \label{fig:age_top_percentile}
-\end{figure}
-
 We further consider whether participants who become influential, remain
 influential. Figure \ref{fig:heatmap_top10_overlap} shows what proportion
 of the top 10\% influential participants in any given year (\emph{y-axis})
@@ -1646,6 +1645,13 @@ was also among the top 10\% influential participants in any other year
 (\emph{x-axis}). This shows that a significant majority of participants
 that become influential, continue to be influential for a number of years:
 the top 10\% are influential for at least 6-7 years on average.
+
+Finally, Figure \ref{fig:rate_new_influential_participants} shows that
+breaking into the top 10\% of influencers requires an increasing number of
+years of participation. This may be beneficial, showing that the IETF is
+maturing and is capable of retaining influential and experienced
+participants, but it may also point to an increasingly ossified structure
+that is not welcoming to newcomers.
 
 \begin{figure}
   \centering
@@ -1656,14 +1662,7 @@ the top 10\% are influential for at least 6-7 years on average.
   \label{fig:heatmap_top10_overlap}
 \end{figure}
 
-Finally, Figure \ref{fig:rate_new_influential_participants} shows that
-breaking into the top 10\% of influencers requires an increasing number of
-years of participation. This may be beneficial, showing that the IETF is
-maturing and is capable of retaining influential and experienced
-participants, but it may also point to an increasingly ossified structure
-that is not welcoming to newcomers.
-
-\begin{figure}
+\begin{figure}[t!]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/new_influencers_top10_age_longevityInTop10.pdf}
   \caption{
@@ -1691,8 +1690,8 @@ vector for any input text as a sparse distribution over all topics, e.g.,
 finding that a text is comprised of 30\% security and 70\% video streaming
 topics. With this, we generate a vector for each participant in a given
 time period by concatenating all messages sent by that participant in the
-period and feeding it into the LDA model. The result can be loosely
-interpreted as a distribution of topics on which each participant works.
+period and feeding it into the LDA model. The result can be 
+interpreted as a distribution of topics for each participant.
 
 Manual inspection of the induced topics reveals some interesting trends. We
 find that topics related to \emph{routing} and \emph{email} protocols are
@@ -1704,15 +1703,26 @@ leaks \cite{RFC7258,RFC9446}. We also find that as videoconferencing became
 increasingly popular, so did the WebRTC protocol that frequently underpins
 them.
 
-We next measure the topical diversity of a participant by observing the
-entropy of their topic vector, their \emph{topic entropy}, defined as
-follows:
+We next measure diversity of a participant via the entropy of their topic
+vector, their \emph{topic entropy}, defined as follows:
 \begin{equation}
   \eta = - \sum_{i=1}^{|T|} p_i \log p_i \nonumber
 \end{equation}
 where $T = [p_1, ..., p_N]$ is a topic vector, which defines a probability
 distribution over $N$ topics, each $p_i$ is a probability of the $i$-th
 topic and $\sum_i p_i = 1$.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/topic-div.png}
+  \caption{
+    Mean topic entropy (with 95\% confidence interval) according to their
+    betweenness-centrality percentile in the x-axis, ranked from top (0-10)
+    to bottom percentile (91-100).
+  }
+  \label{fig:topic_diversity}
+\end{figure}
+
 
 Figure \ref{fig:topic_diversity} shows topic entropy distributions of
 participants in different time periods and influence percentiles. While we
@@ -1729,18 +1739,6 @@ time, implying that increased topic entropy (i.e.,~more evenly participating
 in different topics) is an increasingly salient property of influencers.
 This is aligned with our earlier findings on cross-area review, showing the
 growing number of areas in which influencers participate.
-
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/topic-div.png}
-  \caption{
-    Mean topic entropy (with 95\% confidence interval) according to their
-    betweenness-centrality percentile in the x-axis, ranked from top (0-10)
-    to bottom percentile (91-100).
-  }
-  \label{fig:topic_diversity}
-\end{figure}
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1838,17 +1836,6 @@ between 20th to 40th percentile of influence in the email network. These
 non-overlapping authors are typically more junior with respect to their
 participation duration.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/lineplot_non_overlapping_authors_emailnetwork_percentile.pdf}
-  \caption{
-    Percentage of Top 20\% authors that are not 20\% influencers according
-    to their betweenness-centrality (email graph) percentile in the x-axis,
-    ranked from  top (0-10) to bottom percentile (91-100).
-  }
-  \label{fig:non_overlapping_coauthornetwork_authors_emailnetwork}
-\end{figure}
-
 %..................................................................................................
 \pb{Influencers and leadership roles:} 
 Working group chairs are selected from the community, so we might expect
@@ -1860,17 +1847,6 @@ before they became chairs. This also shows the impact of taking up a
 leadership role: influence in both the mailing list and authorship
 communities grows in the year after participants become a working group
 chair for the first time. 
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/WG_chair_percentile_CDF_before_after.pdf}
-  \caption{
-    CDF of the percentile of betweenness-centrality of WG chairs in the
-    email and co-authorship graph, one year before and after becoming
-    chairs.
-  }
-  \label{fig:wg_chair_before_after}
-\end{figure}
 
 %..................................................................................................
 \pb{Influence of organisations:}
@@ -1895,14 +1871,26 @@ the top 20\% of most influential authors, 342 belong to the ten most
 frequently affiliated organisations, and nearly 253 are from Cisco, Huawei,
 Ericsson, or Juniper alone.
 
-\begin{figure}
+\begin{figure}[t!]
   \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/2019_affiliations_in_otheryears_coauthor_network.pdf}
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/lineplot_non_overlapping_authors_emailnetwork_percentile.pdf}
   \caption{
-    Authors in the most common affiliations of top 20\% authors
-    (co-authorship graph) in 2015-2019.
+    Percentage of Top 20\% authors that are not 20\% influencers according
+    to their betweenness-centrality (email graph) percentile in the x-axis,
+    ranked from  top (0-10) to bottom percentile (91-100).
   }
-  \label{fig:coauthor_affiliation_network2019_otheryears}
+  \label{fig:non_overlapping_coauthornetwork_authors_emailnetwork}
+\end{figure}
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/WG_chair_percentile_CDF_before_after.pdf}
+  \caption{
+    CDF of the percentile of betweenness-centrality of WG chairs in the
+    email and co-authorship graph, one year before and after becoming
+    chairs.
+  }
+  \label{fig:wg_chair_before_after}
 \end{figure}
 
 While authors from the same organisation often co-author drafts together,
@@ -1916,7 +1904,17 @@ years, joint collaboration (authors from multiple affiliations) has
 increased: 772 co-authored drafts in the period 2000-2004 vs. 3083
 co-authored drafts in the period 2015-2019.
 
-\begin{figure}
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/2019_affiliations_in_otheryears_coauthor_network.pdf}
+  \caption{
+    Authors in the most common affiliations of top 20\% authors
+    (co-authorship graph) in 2015-2019.
+  }
+  \label{fig:coauthor_affiliation_network2019_otheryears}
+\end{figure}
+
+\begin{figure}[t!]
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2022/coauthor_affiliation_network/heatmap_2019_top10_affiliation_collaboration.pdf}
   \caption{
@@ -2263,8 +2261,8 @@ running of the organisation \cite{li2021does,duan2018authoritarian}.
 For instance, if those in leadership positions send lots of email while
 receiving little, this suggests a lack of receptiveness of the leadership
 to the suggestions from regular participants, and low confidence of those
-regular participants to voice their opinions. In contrast, we hypothesise
-that if the IETF operates as outlined in its mission statement, in a more
+regular participants to voice their opinions. In contrast, 
+if the IETF operates as outlined in its mission statement, in a more
 cooperative manner, then communication between those in different roles
 will be more symmetric.
 
@@ -2322,13 +2320,23 @@ shown in figure~\ref{fig:motif_types} by the colour of the squares.
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.2:
 
+\begin{figure*}[t!]
+  \centering
+  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/icwsm-2024/motif_strata_comparison.png}
+  \caption{
+    Communication patterns analysed by three edge temporal motifs for RPs,
+  }
+  \label{fig:motif_proportions}
+\end{figure*}
+
+
 \pb{Impact of Role on Communication Patterns:}
-To quantify the effect of being in a leadership position has on network
+To quantify the effect being in a leadership position has on network
 wide communication, we calculate the proportion of three node temporal
 motifs, lasting at most a month, in which each node participates over a
-year period. These temporal motifs are counted, categorised into the three
+year period. These temporal motifs are counted, categorised into
 hierarchy levels (regular participant, working group chair, area director)
-and then proportions are taken of each temporal motif type. 
+and then proportions are taken of each temporal motif.
 
 Figure~\ref{fig:motif_proportions} shows the proportions of each level for
 three node ``Inward Star", ``Outward Star", ``Mixed Star", and
@@ -2348,18 +2356,8 @@ and area directors have a larger proportion of one-on-one conversations.
 We therefore interpret the general communication patterns within the IETF
 as a discussion amongst participants interspersed with questions sent to,
 and announcements from, the working group chairs and area directors.  This
-indicates some collaboration between layers and confidence of some regular
+indicates collaboration between layers and confidence of regular
 participants' to voice their opinions upwards.
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/icwsm-2024/motif_strata_comparison.png}
-  \caption{
-    Communication patterns analysed by three edge temporal motifs for RPs,
-  }
-  \label{fig:motif_proportions}
-\end{figure*}
-
 
 Figure~\ref{fig:origin_emails} seems to corroborate this. We calculate the
 proportion of mailing list threads which nodes in each hierarchy level
@@ -2450,17 +2448,6 @@ periodicity, with the working group chairs $\rightarrow$AD line dropping as
 far below $0.5$ as above showing a large shift in inter-level communication
 patterns higher up the hierarchy.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/up_hierarchy_communication_ratios.png}
-  \caption{
-    Proportion of communications that are ``up'' the hierarchy for different
-    groups. A proportion above 0.5 indicates that the majority of
-    communications are ``upward''.
-  }
-  \label{fig:inter_strata}
-\end{figure}
-
 The direct measurement of message flow between the hierarchy levels seems
 to bolster our interpretation that the cooperative design of the IETF is
 working. This analysis shows that regular participants are communicating
@@ -2483,6 +2470,17 @@ chairs and area directors were more likely to receive communication with
 individuals than send communication to individuals whereas both were more
 likely than regular participants to send out messages to the list in
 general. 
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figureWidthOneColumn]{figures-prev/icwsm-2024/up_hierarchy_communication_ratios.png}
+  \caption{
+    Proportion of communications that are ``up'' the hierarchy for different
+    groups. A proportion above 0.5 indicates that the majority of
+    communications are ``upward''.
+  }
+  \label{fig:inter_strata}
+\end{figure}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \subsubsection{Mobility Within the Hierarchy}
@@ -2552,6 +2550,17 @@ neighbours in the first window and measure their degree in the second for
 consistency of comparison. 
 
 
+\begin{figure*}[t!]
+  \centering
+  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/icwsm-2024/hierarchy_status_comparison.png}
+  \caption{
+    Connection between roles and activity for regular participants and
+    working group chairs viewed in terms of a) Mobility b) Neighbour
+    Mobility c) Philanthropy and d) Community over time.
+  }
+  \label{fig:mob_tax}
+\end{figure*}
+
 
 %..................................................................................................
 % From our ICWSM 2024 paper, Section 5.4:
@@ -2566,17 +2575,6 @@ one month and the process is repeated. The mid point of the year time
 window is plotted. Working group chairs and regular participants are
 plotted but the small number of area directors mean that the correlations
 are too noisy to show meaningful effects. 
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/icwsm-2024/hierarchy_status_comparison.png}
-  \caption{
-    Connection between roles and activity for regular participants and
-    working group chairs viewed in terms of a) Mobility b) Neighbour
-    Mobility c) Philanthropy and d) Community over time.
-  }
-  \label{fig:mob_tax}
-\end{figure*}
 
 The \textit{Mobility} of regular participants and working group chairs is
 plotted in Figure~\ref{fig:mob_tax}(a). The high amount of correlation
@@ -2921,6 +2919,17 @@ on each of the three language categories using the LIWC software and the
 resulting scores are averaged for each individual sender for statistical
 analysis.
 
+\begin{figure*}[t!]
+  \centering
+  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/frontiers/sensitive.pdf}
+  \caption{
+    Patterns of language use by organizational role. Estimated marginal
+    means for the LIWC categories: (A) Politics, (B) Ethnicity, and (C)
+    Religion. Error bars show 95% confidence intervals.
+  }
+  \label{fig:sensitive}
+\end{figure*}
+
 Results are shown in Figure \ref{fig:sensitive}. The consistent pattern
 is that people with organizational responsibilities (working group chair,
 other chair) are less likely to use words potentially connected with
@@ -2936,17 +2945,6 @@ It is worth noting, however, that in absolute terms potentially sensitive
 language use is rare in this dataset, as might be expected for primarily
 work-related communication. The modal LIWC score in both raw data and the
 averages scores is zero
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\figureWidthTwoColumn]{figures-prev/frontiers/sensitive.pdf}
-  \caption{
-    Patterns of language use by organizational role. Estimated marginal
-    means for the LIWC categories: (A) Politics, (B) Ethnicity, and (C)
-    Religion. Error bars show 95% confidence intervals.
-  }
-  \label{fig:sensitive}
-\end{figure*}
 
 %..................................................................................................
 % The following is from our ACL 2023 Tracing Linguistic Markers of
@@ -3034,6 +3032,46 @@ for the most influential author, and (iii) as the average value across all
 authors of the draft. We compute individual author features using
 information from the 5-year period prior to draft submission.
 
+\renewcommand{\tabcolsep}{0.5cm}
+\begin{table*}[t!]
+\centering
+\begin{tabular}{lcccccccc}
+\toprule
+                        & \multicolumn{4}{c}{$\neg \mathit{TXT}$}
+                        & \multicolumn{4}{c} {$\mathit{TXT}$} \\
+\midrule
+                       & AUC & F1 & P & R & AUC & F1 & P & R \\
+\midrule
+Baseline               &  .500 & .445 & .401 & .500  &  .500 & .445 & .401 & .500 \\
+\midrule
+Comm. patterns         &  .644 & .583 & .566 & .601 &  .723 & .626 & .609 & .644 \\
+Centrality             &  .655 & .577 & .573 & .581 &  .717 & .639 & .625 & .653 \\
+Email count            &  .632 & .566 & .555 & .577 &  .718 & .650 & .639 & .662 \\
+N. years active        &  .608 & .569 & .555 & .584 &  .702 & .610 & .594 & .626 \\
+Number of authors      &  .578 & .536 & .529 & .544 &  .697 & .631 & .621 & .641 \\
+Proportion in top      &  .663 & .594 & .580 & .609 &  .728 & .634 & .614 & .655 \\
+Draft count            &  .500 & .445 & .401 & .500 &  .696 & .630 & .624 & .636 \\
+N. Areas               &  .634 & .572 & .557 & .588 &  .721 & .639 & .622 & .657 \\
+N. Mailing lists       &  .634 & .570 & .557 & .584 &  .718 & .641 & .630 & .653 \\
+Affiliations           &  .605 & .584 & .576 & .592 &  .708 & .626 & .609 & .643 \\
+Topic entropy ($\eta$) &  .622 & .563 & .550 & .577 &  .715 & .642 & .628 & .657 \\
+Text                   & - & - & -  & -  &  .681 & .624 & .622 & .627 \\
+Text (S)               & - & - & -  & -  &  .667 & .598 & .593 & .614 \\
+\midrule
+All feats              &  .692 & .624 & .600 & .651 &  .744 & .645 & .625 & .666 \\
+All feats (S)          &  .692 & .624 & .600 & .651 &  .726 &  .636 &  .627 &  .664 \\
+\bottomrule
+\end{tabular}
+\caption{
+  Results for predicting adoption. Each row presents the scores of a model
+  using the corresponding feature group either alone ($\neg \mathit{TXT}$)
+  or combined with the Text features ($\mathit{TXT}$). \emph{All feats}
+  denotes all features except the text. Rows labeled with (S)  use the
+  \emph{Text (S)} variant of the text features.
+}
+\label{tbl:res}
+\end{table*}
+
 Regarding the text based features, we found that the models tend to assign
 high weights to words such as surnames of active contributors, names of
 prolific working groups, and common technical terms. While this does make
@@ -3079,46 +3117,6 @@ counteract this. We employ a non-parametric random shuffling test
 \cite{yeh-2000-accurate} to check statistical significance of score
 differences against the baseline. Table~\ref{tbl:res} summarises prediction
 results, which will be discussed in the next section. 
-
-\renewcommand{\tabcolsep}{0.5cm}
-\begin{table*}
-\centering
-\begin{tabular}{lcccccccc}
-\toprule
-                        & \multicolumn{4}{c}{$\neg \mathit{TXT}$}
-                        & \multicolumn{4}{c} {$\mathit{TXT}$} \\
-\midrule
-                       & AUC & F1 & P & R & AUC & F1 & P & R \\
-\midrule
-Baseline               &  .500 & .445 & .401 & .500  &  .500 & .445 & .401 & .500 \\
-\midrule
-Comm. patterns         &  .644 & .583 & .566 & .601 &  .723 & .626 & .609 & .644 \\
-Centrality             &  .655 & .577 & .573 & .581 &  .717 & .639 & .625 & .653 \\
-Email count            &  .632 & .566 & .555 & .577 &  .718 & .650 & .639 & .662 \\
-N. years active        &  .608 & .569 & .555 & .584 &  .702 & .610 & .594 & .626 \\
-Number of authors      &  .578 & .536 & .529 & .544 &  .697 & .631 & .621 & .641 \\
-Proportion in top      &  .663 & .594 & .580 & .609 &  .728 & .634 & .614 & .655 \\
-Draft count            &  .500 & .445 & .401 & .500 &  .696 & .630 & .624 & .636 \\
-N. Areas               &  .634 & .572 & .557 & .588 &  .721 & .639 & .622 & .657 \\
-N. Mailing lists       &  .634 & .570 & .557 & .584 &  .718 & .641 & .630 & .653 \\
-Affiliations           &  .605 & .584 & .576 & .592 &  .708 & .626 & .609 & .643 \\
-Topic entropy ($\eta$) &  .622 & .563 & .550 & .577 &  .715 & .642 & .628 & .657 \\
-Text                   & - & - & -  & -  &  .681 & .624 & .622 & .627 \\
-Text (S)               & - & - & -  & -  &  .667 & .598 & .593 & .614 \\
-\midrule
-All feats              &  .692 & .624 & .600 & .651 &  .744 & .645 & .625 & .666 \\
-All feats (S)          &  .692 & .624 & .600 & .651 &  .726 &  .636 &  .627 &  .664 \\
-\bottomrule
-\end{tabular}
-\caption{
-  Results for predicting adoption. Each row presents the scores of a model
-  using the corresponding feature group either alone ($\neg \mathit{TXT}$)
-  or combined with the Text features ($\mathit{TXT}$). \emph{All feats}
-  denotes all features except the text. Rows labeled with (S)  use the
-  \emph{Text (S)} variant of the text features.
-}
-\label{tbl:res}
-\end{table*}
 
 Next, we wanted to confirm these results at the level of individual
 features. To this end, we inspect the statistically significant
@@ -3363,6 +3361,7 @@ the final statistical analysis we fit a logistic regression model on the
 entire dataset and report the statistically significant coefficients (at
 significance level $p \leq 0.1$).
 
+\renewcommand{\tabcolsep}{0.2cm}
 \input{tables-prev/imc-2021/lr_fsnone-trim.tex}
 \input{tables-prev/imc-2021/lr_fsauc-trim.tex}
 
