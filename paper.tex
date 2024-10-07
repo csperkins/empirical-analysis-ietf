@@ -331,9 +331,9 @@ These two stages -- matching with the Datatracker, and merging previously
 seen names and addresses -- accounts for the majority (60\%) of messages.
 If an email's sender is not in the Datatracker, and the name and address
 has not been previously seen, a new person identifier is generated. This
-accounts for a small portion (~10\%) of messages. This is reasonable, given
-that Datatracker profiles have become necessary for many of the IETF's
-day-to-day activities.
+accounts for a small portion (10\%) of messages. This is reasonable, since
+Datatracker profiles are necessary for many of the IETF's day-to-day
+activities.
 
 As a final processing step, we label each identifier as either representing
 a \emph{contributor}, a \emph{role-based} address, or an \emph{automated}
@@ -370,7 +370,7 @@ Index, communicates with the IETF Datatracker API, and retrieves messages
 from the IETF IMAP mail archives. This library appropriately regulates
 access, caches data to minimise the impact on the infrastructure, and
 performs necessary post-processing. This library is available as open
-source and Ongoing development is coordinated on GitHub.%
+source and ongoing development is coordinated on GitHub.%
 \footnote{\url{https://github.com/glasgow-ipl/ietfdata}}
 
 
@@ -386,7 +386,7 @@ to these services does not cause operational problems for the IETF, we are
 in regular contact with the IETF Tools Team and Secretariat, as well as the
 operators of the Datatracker and mailing list archive.  We have
 discussed our work with IETF leadership (IETF and IAB Chairs, the IETF
-Executive Director, and the IRTF Chair, who is a co-author on this paper)
+Executive Director)
 and the RFC Editor to ensure that our access falls within their acceptable
 use policies.
 
@@ -534,9 +534,8 @@ time for the work of a new group to reach maturity).
   \centering
   \includegraphics[width=\figureWidthOneColumn]{figures/drafts-by-date.pdf}
   \caption{
-    Number of active drafts over time. Internet-Drafts, working documents
-    of the IETF for work that was intended for eventual publication as an
-    RFC, were introduction at the 13th IETF meeting in 1989.
+    Number of active drafts over time. Internet-Drafts, the working draft
+    series of the IETF, were introduced at the 13th IETF meeting in 1989.
   }
   \label{fig:drafts-by-date}
 \end{figure}
@@ -556,7 +555,7 @@ proposed for adoption by, and discussion in, an IETF working group prior to
 eventual publication as an RFC.  Competing proposals are often submitted as
 drafts, to allow a working group to review them and make a decision how to
 proceed, and hence not all drafts become RFCs. As we discuss in
-\S\ref{sec:success-factors:documents}, draft adoption is a significant
+\S\ref{sec:success-factors:documents}, adoption is a significant
 milestone.
 
 %..................................................................................................
@@ -642,14 +641,14 @@ similarly shows that RFCs are increasingly referring to prior work.
 \end{figure}
 
 Figure~\ref{fig:keyword_usage_rates} further confirms the growing complexity
-of RFCs, showing how the use of normative language keywords has evolved
-over time.  Keywords are used in RFCs to indicate the normative requirements
-an RFC imposes on implementations. Figure~\ref{fig:keyword_usage_rates}
-shows the total number of occurrences of each of the RFC 2119~\cite{RFC2119}
+of RFCs, showing how the use of normative language has evolved.
+Keywords are used in RFCs to indicate the normative requirements
+an RFC imposes on implementations \cite{RFC2119}. Figure~\ref{fig:keyword_usage_rates}
+shows the total number of occurrences of each of the 
 keywords (i.e., MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD
 NOT, RECOMMENDED, MAY, OPTIONAL), divided by the page count of the RFC. As
 shown, the median number of keywords per page grew from 2001 through to
-2010, indicating a growing number of requirements being expressed in RFCs,
+2010, indicating a growing number of requirements being,
 before plateauing in recent years.
 
 \begin{figure}[t]
@@ -1025,7 +1024,7 @@ standards, with new companies choosing to send participants: while we do
 not demonstrate any causal link, it is encouraging that commercially
 successful companies opt to enable their employees to actively participate
 in the IETF. Care is needed to ensure that this relevance is maintained,
-however: we observe that the author pool has grown less diverse in terms of
+however: the author pool has grown less diverse in terms of
 companies that are represented. 35.4\% of authors came from the top 10
 affiliations in the dataset in 2020, compared with 25.6\% in 2001. 
 
@@ -1422,7 +1421,7 @@ of critical societal importance: the IETF has a major impact on global
 Internet technologies, and understanding the social processes involved
 would give us insight into not only the driving forces behind
 standardisation, but also its resilience to the loss of major participants.
-In this section we consider the following research questions: 
+In this section we consider the following:
 \begin{enumerate}
   \item How centralised is the active IETF community, and to what extent
     is it reliant on a small core of participants? 
@@ -3012,7 +3011,7 @@ track RFCs without going through the working group process, but these too
 rare ($\sim$3\% of RFCs) to significantly affect our analysis.} and
 eventually published as a standards track RFC.  Using information from the
 IETF Datatracker we compile a dataset for the \emph{adoption} of a draft by
-a working group, comprising 11632 drafts, and employ logistic regression to
+a working group, comprising 11,632 drafts, and employ logistic regression to
 analyse factors that affect working group adoption of draft.
 
 %..................................................................................................
@@ -3358,7 +3357,7 @@ of steps to reduce the feature space, while maintaining interpretability:
     to leave only the top 5 features in each group. 
 
   \item We remove collinearity by using the Variance Inflation Criterion
-    (VIF), removing all features with a VIF value above 5. 
+    (VIF), removing all features with VIF $>5$. 
 
   \item We apply forward Feature Selection (FS) to identify features of
     high predictive value, following~\cite{nikkhah2017statistical}.
@@ -3437,7 +3436,7 @@ correlation with this topic, but this is likely because there is a
 significant number of RFCs that propose modifications or additional
 features for the protocol, some of which do not see deployment. Overall,
 most of the results are in line with expectations, but more annotated data
-is required for further insights.   
+is needed for further insights.   
 
 %..................................................................................................
 % IMC 2021 paper Section 4.5
@@ -3518,8 +3517,8 @@ statistical analysis of IETF activities considering trends in document
 publication (\S\ref{sec:trends-documents}), author demographics
 (\S\ref{sec:trends-demographics}), and communication patterns.
 \S\ref{sec:org-dyn:participants}. That said, there have been several
-prior efforts that have focused on specific aspects of the IETF:
-Jari Arkko, a former Chair of the IETF, maintains a website
+prior efforts that have focused on specific aspects of the IETF.
+Arkko, a former Chair of the IETF, maintains a website
 (\url{https://www.arkko.com/tools/stats.html}) that provides various
 statistics about the IETF, including about its documents, authors and their
 affiliations. The Datatracker also provides some statistics on documents
@@ -3548,8 +3547,8 @@ the adoption or deployment of specific RFCs.
 \pb{Influence and Impact:}
 Our work to characterise participant influence and impact (\S\ref{sec:org-dyn:influence})
 builds on a rich literature regarding influence in online social networks
-and other communities.
-Studies of Twitter~\cite{cha2010measuring,weitzel2012measuring,anger2011measuring},
+and other communities including
+studies of Twitter~\cite{cha2010measuring,weitzel2012measuring,anger2011measuring},
 Instagram~\cite{zarei2020characterising} and decentralised social networks
 \cite{harissigmetrics, hassanpleroma}. For example, \cite{ye2010measuring}
 measured the impact of follower influence on message propagation. Others
@@ -3606,15 +3605,14 @@ focusing on mailing list data include OSS mailing lists
 \pb{Temporal Patterns in Communication:}
 Analysing the temporal patterns in communication, as we do for the IETF
 organisational hierarchy in \S\ref{sec:org-dyn:hierarchy}, is an emerging
-field of research~\cite{masuda2016guide}:
-
-Some have analysed the time evolution of important nodes in a
+field of research~\cite{masuda2016guide}.
+Prior work has analysed the time evolution of important nodes in a
 network~\cite{fire2020rise}, whether their neighbours are similarly
 important~\cite{pedreschi2022temporal} and some others the correlations of
 the trajectory of snapshots of networks over
-time~\cite{lacasa2022correlations}. In this paper we bring new analysis
-techniques, that expand on the idea of tracking the evolution of node
-importance, to an email list corpus.
+time~\cite{lacasa2022correlations}. Compared to this, we brought new
+analysis techniques, that expand on the idea of tracking the evolution of
+node importance, to an email list corpus.
 
 A form of temporal network analysis that is key to understanding
 communication in social networks is computing temporal
@@ -3642,7 +3640,7 @@ Similarly, a large ``power distance" can cause problems to lower level
 voice if the higher levels are
 ``authoritarian"~\cite{duan2018authoritarian}, however if they are
 ``benevolent"~\cite{li2021does,guo2020inclusive} then power distance is
-less of a problem. We aim to test these ideas in regard to the voluntary
+less of a problem. We tested these ideas in regard to the voluntary
 and collaborative nature of the IETF organisation, whereas the literature
 mostly focuses on traditional organisations.
 
@@ -3672,7 +3670,7 @@ range of linguistic markers.
 \pb{Success Factors:}
 The work in \S\ref{sec:success-factors} builds, in part, on Nikkhah et
 al.~\cite{nikkhah2017statistical} by statistically exploring RFC adoption.
-We build on this work with improved modelling, and by incorporating
+We extended this work with improved modelling, and by incorporating
 additional features that characterise not only the RFCs themselves but also
 the standardisation process that produced them.
 
@@ -3682,8 +3680,9 @@ the standardisation process that produced them.
 \section{Conclusions}
 \label{sec:conclusions}
 
-We explored the key standardisation activities within the IETF, considering
-trends in document production, complexity, and correctness
+We explored the key standardisation activities within the IETF, one of the
+primary technical standards developing organisations for the Internet,
+considering trends in document production, complexity, and correctness
 (\S\ref{sec:trends-documents}); the people involved in Internet standards
 development and how the demographics of the community have shifted over
 time (\S\ref{sec:trends-demographics}); interaction between participants,
@@ -3707,7 +3706,7 @@ number of key challenges:
   \item While authorship is becoming more diverse as the IETF grows, there
     are still significant issues with representation from certain regions,
     including Africa and South America. If the IETF is to become more
-    representative, then further effort is required to build more diverse
+    representative, then further effort is clearly required to build more diverse
     engagement, both in terms of geography, organisational affiliation, and
     gender diversity \cite{kaeo:2023:women}.
 
