@@ -23,6 +23,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import datetime
 import json
 import os
 import requests
@@ -31,7 +32,16 @@ import sys
 from typing import Any, Dict, Iterator
 
 
-def fetch_multi(session, dt_url, uri) -> Iterator[Dict[Any, Any]]:
+def fetch_schema(session, dt_url, uri) -> Dict[str, Any]:
+    r = session.get(f"{dt_url}{uri}/schema/")
+    if r.status_code == 200:
+        return r.json()
+    else:
+        print(f"Cannot fetch schema: {r.status_code} {uri}")
+        sys.exit(1)
+
+
+def fetch_multi(session, dt_url, uri) -> Iterator[Dict[str, Any]]:
     while uri is not None:
         r = session.get(f"{dt_url}{uri}")
         if r.status_code == 200:
@@ -41,7 +51,7 @@ def fetch_multi(session, dt_url, uri) -> Iterator[Dict[Any, Any]]:
                 yield obj
             uri = meta["next"]
         else:
-            print(f"Cannot fetch: {r.status_code}")
+            print(f"Cannot fetch multi: {r.status_code} {uri}")
             sys.exit(1)
 
 
@@ -61,12 +71,16 @@ else:
 
 dt_url    = os.environ.get("IETFDATA_DT_URL", "https://datatracker.ietf.org/")
 session   = requests.Session()
+results   = {"fetched": datetime.datetime.now().isoformat(),
+             "schema": None, 
+             "data": []
+            }
 
-results   = []
+results["schema"] = fetch_schema(session, dt_url, prefix)
 
 for item in fetch_multi(session, dt_url, query_uri):
     print(f"   {item['resource_uri']}")
-    results.append(item)
+    results["data"].append(item)
 
 print(f"   Write {out_file}")
 with open(out_file, "w") as outf:
