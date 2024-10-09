@@ -71,7 +71,8 @@ else:
 
 dt_url    = os.environ.get("IETFDATA_DT_URL", "https://datatracker.ietf.org/")
 session   = requests.Session()
-results   = {"fetched": datetime.datetime.now().isoformat(),
+results   = {"prefix": prefix,
+             "fetched": datetime.datetime.now().isoformat(),
              "schema": None, 
              "data": []
             }
