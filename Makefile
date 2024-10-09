@@ -23,24 +23,21 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# =================================================================================================
-# Project specific build rules:
-
 PAPER_PDF := paper.pdf
 PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
-IETF_DT_DOWNLOADS := data/ietf-dt/api_v1_doc_document.json \
-                     data/ietf-dt/api_v1_doc_state.json \
-                     data/ietf-dt/api_v1_doc_state.json \
-                     data/ietf-dt/api_v1_name_doctypename.json \
-                     data/ietf-dt/api_v1_person_email.json \
-                     data/ietf-dt/api_v1_person_person.json \
-                     data/ietf-dt/api_v1_submit_submission.json
-
-DOWNLOADS := $(IETF_DT_DOWNLOADS) \
+DOWNLOADS := data/ietf-dt/api_v1_doc_document.json \
+             data/ietf-dt/api_v1_doc_state.json \
+             data/ietf-dt/api_v1_doc_state.json \
+             data/ietf-dt/api_v1_name_doctypename.json \
+             data/ietf-dt/api_v1_person_email.json \
+             data/ietf-dt/api_v1_person_person.json \
+             data/ietf-dt/api_v1_submit_submission.json \
              data/rfc-index.xml \
 						 data/ietf/drafts.json \
-						 data/ietf/history-for-drafts.json \
+						 data/ietf/history-for-drafts.json
+
+DATA      := $(DOWNLOADS)
 
 RESULTS   := results/drafts-by-date.csv \
              results/rfcs-by-year-stream.csv
@@ -52,52 +49,49 @@ all: $(PAPER_PDF)
 
 $(PAPER_PDF): $(FIGURES)
 
+
 # -------------------------------------------------------------------------------------------------
 # Rules to fetch data:
 
-fetch: $(DOWNLOADS)
+download: $(DOWNLOADS)
 
 data:
 	mkdir $@
 
-data/ietf: | data
+data/ietf-dt: | data
 	mkdir $@
 
-data/rfc-index.xml: | data/ietf
+data/ietf-dt/api_v1_doc_document.json:      scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/doc/document/ id $@
+
+data/ietf-dt/api_v1_doc_state.json:         scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/doc/state/ id $@
+
+data/ietf-dt/api_v1_name_doctypename.json:  scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/doctypename/ $@
+
+data/ietf-dt/api_v1_person_email.json:      scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/person/email/ address $@
+
+data/ietf-dt/api_v1_person_person.json:     scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/person/person/ id $@
+
+data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/submit/submission/ id $@
+
+data/rfc-index.xml: | data
 	curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
+
+# The following will likely go away
+
+data/ietf: | data
+	mkdir $@
 
 data/ietf/drafts.json: scripts/fetch-ietf-drafts.py | data/ietf
 	python3 $^ $@
 
 data/ietf/history-for-drafts.json: scripts/fetch-ietf-history-for-drafts.py | data/ietf
 	python3 $^ $@
-
-
-# -------------------------------------------------------------------------------------------------
-# Rules to fetch data from the IETF Datatracker:
-
-fetch-ietf-dt: $(IETF_DT_DOWNLOADS)
-
-data/ietf-dt: | data
-	mkdir $@
-
-data/ietf-dt/api_v1_doc_document.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/doc/document/ id $@
-
-data/ietf-dt/api_v1_doc_state.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/doc/state/ id $@
-
-data/ietf-dt/api_v1_name_doctypename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/doctypename/ $@
-
-data/ietf-dt/api_v1_person_email.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/person/email/ address $@
-
-data/ietf-dt/api_v1_person_person.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/person/person/ id $@
-
-data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/submit/submission/ id $@
 
 
 # -------------------------------------------------------------------------------------------------
@@ -112,16 +106,14 @@ results/rfcs-by-year-stream.csv: scripts/rfcs-by-year-stream.py data/rfc-index.x
 results/drafts-by-date.csv: scripts/drafts-by-date.py data/ietf/history-for-drafts.json | results
 	python3 $^ $@
 
+
 # -------------------------------------------------------------------------------------------------
 # Rules to build figures:
 
 figures:
 	mkdir $@
 
-figures/drafts-by-date.pdf: scripts/plot-drafts-by-date.py results/drafts-by-date.csv | figures
-	python3 $^ $@
-
-figures/rfcs-by-year-stream.pdf: scripts/plot-rfcs-by-year-stream.py results/rfcs-by-year-stream.csv | figures
+figures/%.pdf: scripts/plot-%.py results/%.csv | figures
 	python3 $^ $@
 
 
@@ -157,9 +149,10 @@ $(call xargs,scripts/latex-build.sh --clean,$(1))
 endef
 
 clean-data: clean
-	rm -rf $(DOWNLOADS)
-	if [ -d data/ietf ]; then rmdir data/ietf; fi
-	if [ -d data      ]; then rmdir data;      fi
+	rm -rf $(DATA)
+	if [ -d data/ietf ]; then rmdir data/ietf-dt; fi
+	if [ -d data/ietf ]; then rmdir data/ietf;    fi
+	if [ -d data      ]; then rmdir data;         fi
 
 clean:
 	$(call remove,$(FIGURES))
@@ -181,7 +174,7 @@ MAKEFLAGS += --output-sync --warn-undefined-variables --no-builtin-rules --no-bu
 .NOTINTERMEDIATE:
 
 # List of targets that don't represent files:
-.PHONY: all clean clean-data fetch fetch-ietf-dt
+.PHONY: all clean clean-data download
 
 # =================================================================================================
 # vim: set ts=2 sw=2 tw=0 ai:
