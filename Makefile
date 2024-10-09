@@ -26,18 +26,21 @@
 PAPER_PDF := paper.pdf
 PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
-DOWNLOADS := data/ietf-dt/api_v1_doc_document.json \
-             data/ietf-dt/api_v1_doc_state.json \
-             data/ietf-dt/api_v1_doc_state.json \
-             data/ietf-dt/api_v1_name_doctypename.json \
-             data/ietf-dt/api_v1_person_email.json \
-             data/ietf-dt/api_v1_person_person.json \
-             data/ietf-dt/api_v1_submit_submission.json \
+DOWNOADS_IETF_DT := data/ietf-dt/api_v1_doc_document.json \
+                    data/ietf-dt/api_v1_doc_state.json \
+                    data/ietf-dt/api_v1_doc_state.json \
+                    data/ietf-dt/api_v1_name_doctypename.json \
+                    data/ietf-dt/api_v1_person_email.json \
+                    data/ietf-dt/api_v1_person_person.json \
+                    data/ietf-dt/api_v1_submit_submission.json
+
+DOWNLOADS := $(DOWNOADS_IETF_DT) \
              data/rfc-index.xml \
 						 data/ietf/drafts.json \
 						 data/ietf/history-for-drafts.json
 
-DATA      := $(DOWNLOADS)
+DATA      := $(DOWNLOADS) \
+						 data/ietf-dt.sqlite
 
 RESULTS   := results/drafts-by-date.csv \
              results/rfcs-by-year-stream.csv
@@ -51,7 +54,7 @@ $(PAPER_PDF): $(FIGURES)
 
 
 # -------------------------------------------------------------------------------------------------
-# Rules to fetch data:
+# Rules to dowbload and prepare data:
 
 download: $(DOWNLOADS)
 
@@ -78,6 +81,9 @@ data/ietf-dt/api_v1_person_person.json:     scripts/fetch-ietf-dt.py | data/ietf
 
 data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/submit/submission/ id $@
+
+data/ietf-dt.sqlite: scripts/build-database-ietf-dt.py $(DOWNOADS_IETF_DT) | data
+	python3 $^ $@
 
 data/rfc-index.xml: | data
 	curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
