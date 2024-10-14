@@ -36,8 +36,8 @@ DOWNOADS_IETF_DT := data/ietf-dt/api_v1_doc_document.json \
 
 DOWNLOADS := $(DOWNOADS_IETF_DT) \
              data/rfc-index.xml \
-						 data/ietf/drafts.json \
-						 data/ietf/history-for-drafts.json
+             data/ietf/drafts.json \
+             data/ietf/history-for-drafts.json
 
 DATA      := $(DOWNLOADS) \
 						 data/ietf-dt.sqlite
@@ -54,7 +54,7 @@ $(PAPER_PDF): $(FIGURES)
 
 
 # -------------------------------------------------------------------------------------------------
-# Rules to dowbload and prepare data:
+# Rules to download and prepare data:
 
 download: $(DOWNLOADS)
 
