@@ -82,7 +82,7 @@ data/ietf-dt/api_v1_person_person.json:     scripts/fetch-ietf-dt.py | data/ietf
 data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/submit/submission/ id $@
 
-data/ietf-dt.sqlite: scripts/build-database-ietf-dt.py $(DOWNOADS_IETF_DT) | data
+data/ietf-dt.sqlite: scripts/build-ietf-db.py $(DOWNOADS_IETF_DT) | data
 	python3 $^ $@
 
 data/rfc-index.xml: | data
