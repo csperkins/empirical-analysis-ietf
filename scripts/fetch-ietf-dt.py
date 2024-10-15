@@ -74,7 +74,7 @@ session   = requests.Session()
 results   = {"prefix": prefix,
              "fetched": datetime.datetime.now().isoformat(),
              "schema": None, 
-             "data": []
+             "objects": []
             }
 
 results["schema"] = fetch_schema(session, dt_url, prefix)
