@@ -34,32 +34,26 @@ from typing      import Any, Dict, List, Optional
 
 # =============================================================================
 
-Schema = Dict[str,Any]
-Object = Dict[str,Any]
+DTSchema = Dict[str,Any]
+DTObject = Dict[str,Any]
 
 class DTData:
     def __init__(self) -> None:
         self.prefixes : List[str] = []
-        self.schemas  : Dict[str,Schema] = {}
-        self.objects  : Dict[str,List[Object]] = {}
+        self.schemas  : Dict[str,DTSchema] = {}
+        self.objects  : Dict[str,List[DTObject]] = {}
 
 
     def load(self, json_path: str) -> None:
         with open(json_path, "r") as inf:
             data = json.load(inf)
-
-        prefix  = data['prefix'] 
-        schema  = data['schema']
-        objects = data['objects']
-
-        if prefix in self.prefixes:
-            print(f"ERROR: duplicate prefix {prefix}")
+        if data['prefix'] in self.prefixes:
+            print(f"ERROR: duplicate prefix {data['prefix']}")
             sys.exit(1)
-
-        self.prefixes.append(prefix)
-        self.schemas[prefix] = schema
-        self.objects[prefix] = objects
-        print(f"{len(self.prefixes):3} {len(objects):8} {prefix}")
+        self.prefixes.append(data['prefix'])
+        self.schemas[data['prefix']] = data['schema']
+        self.objects[data['prefix']] = data['objects']
+        print(f"{len(self.prefixes):3} {len(data['objects']):8} {data['prefix']}")
 
 
     def has_prefix(self, prefix: str) -> bool:
