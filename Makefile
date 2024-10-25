@@ -28,11 +28,19 @@ PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
 DOWNOADS_IETF_DT := data/ietf-dt/api_v1_doc_document.json \
                     data/ietf-dt/api_v1_doc_state.json \
-                    data/ietf-dt/api_v1_doc_state.json \
+                    data/ietf-dt/api_v1_doc_statetype.json \
+                    data/ietf-dt/api_v1_group_group.json \
+                    data/ietf-dt/api_v1_name_doctagname.json \
                     data/ietf-dt/api_v1_name_doctypename.json \
+                    data/ietf-dt/api_v1_name_groupstatename.json \
+                    data/ietf-dt/api_v1_name_grouptypename.json \
+                    data/ietf-dt/api_v1_name_intendedstdlevelname.json \
+                    data/ietf-dt/api_v1_name_stdlevelname.json \
+                    data/ietf-dt/api_v1_name_streamname.json \
                     data/ietf-dt/api_v1_person_email.json \
                     data/ietf-dt/api_v1_person_person.json \
-                    data/ietf-dt/api_v1_submit_submission.json
+                    data/ietf-dt/api_v1_submit_submission.json \
+                    data/ietf-dt/api_v1_submit_submissioncheck.json
 
 DOWNLOADS := $(DOWNOADS_IETF_DT) \
              data/rfc-index.xml \
@@ -64,23 +72,50 @@ data:
 data/ietf-dt: | data
 	mkdir $@
 
-data/ietf-dt/api_v1_doc_document.json:      scripts/fetch-ietf-dt.py | data/ietf-dt
+data/ietf-dt/api_v1_doc_document.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/doc/document/ id $@
 
-data/ietf-dt/api_v1_doc_state.json:         scripts/fetch-ietf-dt.py | data/ietf-dt
+data/ietf-dt/api_v1_doc_state.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/doc/state/ id $@
 
-data/ietf-dt/api_v1_name_doctypename.json:  scripts/fetch-ietf-dt.py | data/ietf-dt
+data/ietf-dt/api_v1_doc_statetype.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/doc/statetype/ $@
+
+data/ietf-dt/api_v1_group_group.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/group/group/ id $@
+
+data/ietf-dt/api_v1_name_doctagname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/doctagname/ $@
+
+data/ietf-dt/api_v1_name_doctypename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/name/doctypename/ $@
 
-data/ietf-dt/api_v1_person_email.json:      scripts/fetch-ietf-dt.py | data/ietf-dt
+data/ietf-dt/api_v1_name_groupstatename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/groupstatename/ $@
+
+data/ietf-dt/api_v1_name_grouptypename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/grouptypename/ $@
+
+data/ietf-dt/api_v1_name_intendedstdlevelname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/intendedstdlevelname/ $@
+
+data/ietf-dt/api_v1_name_stdlevelname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/stdlevelname/ $@
+
+data/ietf-dt/api_v1_name_streamname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/streamname/ $@
+
+data/ietf-dt/api_v1_person_email.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/person/email/ address $@
 
-data/ietf-dt/api_v1_person_person.json:     scripts/fetch-ietf-dt.py | data/ietf-dt
+data/ietf-dt/api_v1_person_person.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/person/person/ id $@
 
 data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/submit/submission/ id $@
+
+data/ietf-dt/api_v1_submit_submissioncheck.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/submit/submissioncheck/ id $@
 
 data/ietf-dt.sqlite: scripts/build-ietf-db.py $(DOWNOADS_IETF_DT) | data
 	python3 $^ $@
