@@ -81,7 +81,7 @@ results["schema"] = fetch_schema(session, dt_url, prefix)
 
 for item in fetch_multi(session, dt_url, query_uri):
     print(f"   {item['resource_uri']}")
-    results["data"].append(item)
+    results["objects"].append(item)
 
 print(f"   Write {out_file}")
 with open(out_file, "w") as outf:
