@@ -32,6 +32,7 @@ DOWNOADS_IETF_DT := data/ietf-dt/api_v1_doc_document.json \
                     data/ietf-dt/api_v1_group_group.json \
                     data/ietf-dt/api_v1_name_doctagname.json \
                     data/ietf-dt/api_v1_name_doctypename.json \
+                    data/ietf-dt/api_v1_name_draftsubmissionstatename.json \
                     data/ietf-dt/api_v1_name_groupstatename.json \
                     data/ietf-dt/api_v1_name_grouptypename.json \
                     data/ietf-dt/api_v1_name_intendedstdlevelname.json \
@@ -89,6 +90,9 @@ data/ietf-dt/api_v1_name_doctagname.json: scripts/fetch-ietf-dt.py | data/ietf-d
 
 data/ietf-dt/api_v1_name_doctypename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/name/doctypename/ $@
+
+data/ietf-dt/api_v1_name_draftsubmissionstatename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
+	python3 $< /api/v1/name/draftsubmissionstatename/ $@
 
 data/ietf-dt/api_v1_name_groupstatename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
 	python3 $< /api/v1/name/groupstatename/ $@
