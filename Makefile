@@ -122,7 +122,8 @@ data/ietf-dt/api_v1_submit_submissioncheck.json: scripts/fetch-ietf-dt.py | data
 	python3 $< /api/v1/submit/submissioncheck/ id $@
 
 data/ietf-dt.sqlite: scripts/build-ietf-db.py $(DOWNOADS_IETF_DT) | data
-	python3 $^ $@
+	python3 $^ $@.tmp
+	mv -f $@.tmp $@
 
 data/rfc-index.xml: | data
 	curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
