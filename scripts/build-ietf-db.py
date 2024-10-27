@@ -207,7 +207,7 @@ class DTData:
             sql += ",\n"
             sql += ",\n".join(foreign)
         sql += "\n);"
-        print(sql)
+        # print(sql)
         db_cursor.execute(sql)
         uri_col = self.uri_col(prefix)
         sql = f"CREATE UNIQUE INDEX index_{schema['table']}_{uri_col} ON {schema['table']}(\"{uri_col}\")"
