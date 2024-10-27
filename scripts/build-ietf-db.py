@@ -127,10 +127,10 @@ class DTData:
 
     def uri_col(self, prefix) -> str:
         schema = self.schema(prefix)
-        if "slug" in schema["columns"]:
-            return "slug"
         if "id" in schema["columns"]:
             return "id"
+        if "slug" in schema["columns"]:
+            return "slug"
         if prefix == "/api/v1/person/email/":
             return "address"
         if "historical" in prefix:
@@ -151,8 +151,9 @@ class DTData:
             raise RunetimeError(f"Cannot derive sql type for {endpoint} {column}")
 
 
-    def create_db_table(self, db_cursor, prefix):
+    def create_db_table(self, db_connection, prefix):
         print(f"Create table {prefix}")
+        db_cursor = db_connection.cursor()
         schema = self.schema(prefix)
         columns = []
         foreign = []
@@ -210,22 +211,88 @@ class DTData:
         db_cursor.execute(sql)
         uri_col = self.uri_col(prefix)
         sql = f"CREATE UNIQUE INDEX index_{schema['table']}_{uri_col} ON {schema['table']}(\"{uri_col}\")"
-        print(sql)
+        # print(sql)
         db_cursor.execute(sql)
 
 
-    def create_db_tables(self, db_cursor):
+    def create_db_tables(self, db_connection):
         for prefix in self._prefixes:
-            self.create_db_table(db_cursor, prefix)
+            self.create_db_table(db_connection, prefix)
 
 
-    def import_db_table(self, db_cursor, prefix):
-        pass
+    def import_db_table(self, db_connection, prefix):
+        print(f"Import table {prefix}")
+        db_cursor = db_connection.cursor()
+        schema = self.schema(prefix)
+
+        vcount  = 0
+        ordered = False
+        for column in schema["columns"].values():
+            if column['name'] == schema['sort_by']:
+                ordered = True
+            elif column['name'] == "resource_uri":
+                continue
+            if column['type'] in ["string", "date", "datetime", "timedelta", "integer", "boolean", "to_one"]: 
+                vcount += 1
+            elif column['type'] == "to_many": 
+                continue
+            elif column['type'] == None:
+                continue
+            else:
+                print(f"unknown column type {column['type']} (import_db_table #1)")
+                sys.exit(1)
+
+        sql = f"INSERT INTO {schema['table']} VALUES(" + ",".join("?" * vcount) + ")"
+        val = []
+        if ordered:
+            uri = f"{prefix}?limit=500&order_by={schema['sort_by']}"
+        else:
+            uri = f"{prefix}?limit=500"
+
+        for item in self._objects[prefix]:
+            #print(f"  {item['resource_uri']}")
+            values = []
+            for column in schema["columns"].values():
+                if column["name"] == "resource_uri":
+                    continue
+                if column['type'] in ["string", "integer", "boolean", "date", "timedelta"]:
+                    values.append(item[column["name"]])
+                elif column['type'] == "datetime": 
+                    if item[column["name"]] is None:
+                        values.append(None)
+                    else:
+                        # FIXME: check this correctly converts to UTC
+                        dt_val = datetime.datetime.fromisoformat(item[column["name"]])
+                        dt_fmt = dt_val.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                        values.append(dt_fmt)
+                elif column['type'] == "to_one": 
+                        if item[column["name"]] is None:
+                            values.append(None)
+                        else:
+                            values.append(item[column["name"]].split("/")[-2])
+                elif column['type'] == "to_many": 
+                    column_current = schema['table'].split('_')[-1]
+                    column_foreign = column['name']
+                    subtable_sql = f"INSERT INTO {schema['table']}_{column['name']} (\"{column_current}\", \"{column_foreign}\") VALUES(?, ?)"
+                    subtable_val = []
+                    for subtable_item in item[column['name']]:
+                        subtable_val.append((item[self.uri_col(prefix)], subtable_item.split("/")[-2]))
+                    db_cursor.executemany(subtable_sql, subtable_val)
+                    continue
+                elif column['type'] == None:
+                    continue
+                else:
+                    print(f"unknown column type {column['type']} (import_db_table #2)")
+                    sys.exit(1)
+            val.append(tuple(values))
+        db_cursor.executemany(sql, val)
+        db_connection.commit()
 
 
-    def import_db_tables(self, db_cursor):
+
+    def import_db_tables(self, db_connection):
         for prefix in self._prefixes:
-            self.import_db_table(db_cursor, prefix)
+            self.import_db_table(db_connection, prefix)
 
 
 # =============================================================================
