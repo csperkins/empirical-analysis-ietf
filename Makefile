@@ -26,6 +26,10 @@
 PAPER_PDF := paper.pdf
 PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
+MAKEFILES := Makefile.ietf-ma
+
+-include $(MAKEFILES)
+
 DOWNLOADS_IETF_DT  := downloads/ietf-dt/api_v1_doc_document.json \
                       downloads/ietf-dt/api_v1_doc_state.json \
                       downloads/ietf-dt/api_v1_doc_statetype.json \
@@ -43,7 +47,8 @@ DOWNLOADS_IETF_DT  := downloads/ietf-dt/api_v1_doc_document.json \
                       downloads/ietf-dt/api_v1_submit_submission.json \
                       downloads/ietf-dt/api_v1_submit_submissioncheck.json
 
-DOWNLOADS_IETF_MA  := downloads/ietf-ma/lists.json
+DOWNLOADS_IETF_MA  := downloads/ietf-ma/lists.json \
+											$(DOWNLOADS_IETF_MA_LISTS)
 
 DOWNLOADS_IETF_RFC := downloads/rfc-index.xml
 
@@ -63,13 +68,18 @@ FIGURES   := figures/drafts-by-date.pdf \
 
 all: $(PAPER_PDF)
 
-$(PAPER_PDF): $(FIGURES)
+# -------------------------------------------------------------------------------------------------
+# Rules to make makefiles:
+
+Makefile.ietf-ma: scripts/build-makefile-ietf-ma.py downloads/ietf-ma/lists.json
+	python3 $^ $@
 
 
 # -------------------------------------------------------------------------------------------------
 # Rules to download data:
 
 download: $(DOWNLOADS)
+	echo $(DOWNLOADS)
 
 downloads:
 	mkdir $@
@@ -80,61 +90,69 @@ downloads/ietf-dt: | downloads
 	mkdir $@
 
 downloads/ietf-dt/api_v1_doc_document.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/doc/document/ id $@
+	python3 $^ /api/v1/doc/document/ id $@
 
 downloads/ietf-dt/api_v1_doc_state.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/doc/state/ id $@
+	python3 $^ /api/v1/doc/state/ id $@
 
 downloads/ietf-dt/api_v1_doc_statetype.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/doc/statetype/ $@
+	python3 $^ /api/v1/doc/statetype/ $@
 
 downloads/ietf-dt/api_v1_group_group.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/group/group/ id $@
+	python3 $^ /api/v1/group/group/ id $@
 
 downloads/ietf-dt/api_v1_name_doctagname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/doctagname/ $@
+	python3 $^ /api/v1/name/doctagname/ $@
 
 downloads/ietf-dt/api_v1_name_doctypename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/doctypename/ $@
+	python3 $^ /api/v1/name/doctypename/ $@
 
 downloads/ietf-dt/api_v1_name_draftsubmissionstatename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/draftsubmissionstatename/ $@
+	python3 $^ /api/v1/name/draftsubmissionstatename/ $@
 
 downloads/ietf-dt/api_v1_name_groupstatename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/groupstatename/ $@
+	python3 $^ /api/v1/name/groupstatename/ $@
 
 downloads/ietf-dt/api_v1_name_grouptypename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/grouptypename/ $@
+	python3 $^ /api/v1/name/grouptypename/ $@
 
 downloads/ietf-dt/api_v1_name_intendedstdlevelname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/intendedstdlevelname/ $@
+	python3 $^ /api/v1/name/intendedstdlevelname/ $@
 
 downloads/ietf-dt/api_v1_name_stdlevelname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/stdlevelname/ $@
+	python3 $^ /api/v1/name/stdlevelname/ $@
 
 downloads/ietf-dt/api_v1_name_streamname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/name/streamname/ $@
+	python3 $^ /api/v1/name/streamname/ $@
 
 downloads/ietf-dt/api_v1_person_email.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/person/email/ address $@
+	python3 $^ /api/v1/person/email/ address $@
 
 downloads/ietf-dt/api_v1_person_person.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/person/person/ id $@
+	python3 $^ /api/v1/person/person/ id $@
 
 downloads/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/submit/submission/ id $@
+	python3 $^ /api/v1/submit/submission/ id $@
 
 downloads/ietf-dt/api_v1_submit_submissioncheck.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
-	python3 $< /api/v1/submit/submissioncheck/ id $@
+	python3 $^ /api/v1/submit/submissioncheck/ id $@
 
 
-# Downloads from the IETF mail archive::
+# Downloads from the IETF mail archive:
 
 downloads/ietf-ma: | downloads
 	mkdir $@
 
+downloads/ietf-ma/lists: | downloads/ietf-ma
+	mkdir $@
+
+downloads/ietf-ma/lists/%.json: scripts/fetch-ietf-ma-list.py | downloads/ietf-ma/lists
+	rm -f $@.tmp $@
+	python3 $^ $@.tmp
+	mv -f $@.tmp $@
+
 downloads/ietf-ma/lists.json: scripts/fetch-ietf-ma-lists.py | downloads/ietf-ma
-	python3 $< $@
+	python3 $^ $@
 
 # Downloads from the RFC Editor:
 
@@ -191,6 +209,8 @@ figures/%.pdf: scripts/plot-%.py results/%.csv | figures
 # -------------------------------------------------------------------------------------------------
 # Rules to build the final PDF:
 
+$(PAPER_PDF): $(FIGURES)
+
 %.pdf: %.tex scripts/latex-build.sh
 	@sh scripts/latex-build.sh $<
 	@perl scripts/check-for-duplicate-words.perl $<
@@ -225,6 +245,7 @@ clean-downloads: clean
 	if [ -d downloads         ]; then rmdir downloads;         fi
 
 clean:
+	$(call remove,$(MAKEFILES))
 	$(call remove,$(DATA))
 	$(call remove,$(FIGURES))
 	$(call remove,$(RESULTS))
