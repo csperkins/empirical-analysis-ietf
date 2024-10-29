@@ -26,30 +26,31 @@
 PAPER_PDF := paper.pdf
 PAPER_TEX := $(PAPER_PDF:.pdf=.tex)
 
-DOWNOADS_IETF_DT := data/ietf-dt/api_v1_doc_document.json \
-                    data/ietf-dt/api_v1_doc_state.json \
-                    data/ietf-dt/api_v1_doc_statetype.json \
-                    data/ietf-dt/api_v1_group_group.json \
-                    data/ietf-dt/api_v1_name_doctagname.json \
-                    data/ietf-dt/api_v1_name_doctypename.json \
-                    data/ietf-dt/api_v1_name_draftsubmissionstatename.json \
-                    data/ietf-dt/api_v1_name_groupstatename.json \
-                    data/ietf-dt/api_v1_name_grouptypename.json \
-                    data/ietf-dt/api_v1_name_intendedstdlevelname.json \
-                    data/ietf-dt/api_v1_name_stdlevelname.json \
-                    data/ietf-dt/api_v1_name_streamname.json \
-                    data/ietf-dt/api_v1_person_email.json \
-                    data/ietf-dt/api_v1_person_person.json \
-                    data/ietf-dt/api_v1_submit_submission.json \
-                    data/ietf-dt/api_v1_submit_submissioncheck.json
+DOWNLOADS_IETF_DT  := downloads/ietf-dt/api_v1_doc_document.json \
+                      downloads/ietf-dt/api_v1_doc_state.json \
+                      downloads/ietf-dt/api_v1_doc_statetype.json \
+                      downloads/ietf-dt/api_v1_group_group.json \
+                      downloads/ietf-dt/api_v1_name_doctagname.json \
+                      downloads/ietf-dt/api_v1_name_doctypename.json \
+                      downloads/ietf-dt/api_v1_name_draftsubmissionstatename.json \
+                      downloads/ietf-dt/api_v1_name_groupstatename.json \
+                      downloads/ietf-dt/api_v1_name_grouptypename.json \
+                      downloads/ietf-dt/api_v1_name_intendedstdlevelname.json \
+                      downloads/ietf-dt/api_v1_name_stdlevelname.json \
+                      downloads/ietf-dt/api_v1_name_streamname.json \
+                      downloads/ietf-dt/api_v1_person_email.json \
+                      downloads/ietf-dt/api_v1_person_person.json \
+                      downloads/ietf-dt/api_v1_submit_submission.json \
+                      downloads/ietf-dt/api_v1_submit_submissioncheck.json
 
-DOWNLOADS := $(DOWNOADS_IETF_DT) \
-             data/rfc-index.xml \
+DOWNLOADS_IETF_RFC := downloads/rfc-index.xml
+
+DOWNLOADS := $(DOWNLOADS_IETF_DT) \
+             $(DOWNLOADS_IETF_RFC)
+
+DATA      := data/ietf-dt.sqlite \
              data/ietf/drafts.json \
              data/ietf/history-for-drafts.json
-
-DATA      := $(DOWNLOADS) \
-						 data/ietf-dt.sqlite
 
 RESULTS   := results/drafts-by-date.csv \
              results/rfcs-by-year-stream.csv
@@ -63,71 +64,86 @@ $(PAPER_PDF): $(FIGURES)
 
 
 # -------------------------------------------------------------------------------------------------
-# Rules to download and prepare data:
+# Rules to download data:
 
 download: $(DOWNLOADS)
+
+downloads:
+	mkdir $@
+
+# Downloads from the IETF datatracker:
+
+downloads/ietf-dt: | downloads
+	mkdir $@
+
+downloads/ietf-dt/api_v1_doc_document.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/doc/document/ id $@
+
+downloads/ietf-dt/api_v1_doc_state.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/doc/state/ id $@
+
+downloads/ietf-dt/api_v1_doc_statetype.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/doc/statetype/ $@
+
+downloads/ietf-dt/api_v1_group_group.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/group/group/ id $@
+
+downloads/ietf-dt/api_v1_name_doctagname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/doctagname/ $@
+
+downloads/ietf-dt/api_v1_name_doctypename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/doctypename/ $@
+
+downloads/ietf-dt/api_v1_name_draftsubmissionstatename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/draftsubmissionstatename/ $@
+
+downloads/ietf-dt/api_v1_name_groupstatename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/groupstatename/ $@
+
+downloads/ietf-dt/api_v1_name_grouptypename.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/grouptypename/ $@
+
+downloads/ietf-dt/api_v1_name_intendedstdlevelname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/intendedstdlevelname/ $@
+
+downloads/ietf-dt/api_v1_name_stdlevelname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/stdlevelname/ $@
+
+downloads/ietf-dt/api_v1_name_streamname.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/name/streamname/ $@
+
+downloads/ietf-dt/api_v1_person_email.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/person/email/ address $@
+
+downloads/ietf-dt/api_v1_person_person.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/person/person/ id $@
+
+downloads/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/submit/submission/ id $@
+
+downloads/ietf-dt/api_v1_submit_submissioncheck.json: scripts/fetch-ietf-dt.py | downloads/ietf-dt
+	python3 $< /api/v1/submit/submissioncheck/ id $@
+
+
+# Downloads from the IETF mail archive::
+
+
+# Downloads from the RFC Editor:
+
+downloads/rfc-index.xml: | downloads
+	curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
+
+
+# -------------------------------------------------------------------------------------------------
+# Rules to generate data from the downloads:
 
 data:
 	mkdir $@
 
-data/ietf-dt: | data
-	mkdir $@
-
-data/ietf-dt/api_v1_doc_document.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/doc/document/ id $@
-
-data/ietf-dt/api_v1_doc_state.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/doc/state/ id $@
-
-data/ietf-dt/api_v1_doc_statetype.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/doc/statetype/ $@
-
-data/ietf-dt/api_v1_group_group.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/group/group/ id $@
-
-data/ietf-dt/api_v1_name_doctagname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/doctagname/ $@
-
-data/ietf-dt/api_v1_name_doctypename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/doctypename/ $@
-
-data/ietf-dt/api_v1_name_draftsubmissionstatename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/draftsubmissionstatename/ $@
-
-data/ietf-dt/api_v1_name_groupstatename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/groupstatename/ $@
-
-data/ietf-dt/api_v1_name_grouptypename.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/grouptypename/ $@
-
-data/ietf-dt/api_v1_name_intendedstdlevelname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/intendedstdlevelname/ $@
-
-data/ietf-dt/api_v1_name_stdlevelname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/stdlevelname/ $@
-
-data/ietf-dt/api_v1_name_streamname.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/name/streamname/ $@
-
-data/ietf-dt/api_v1_person_email.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/person/email/ address $@
-
-data/ietf-dt/api_v1_person_person.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/person/person/ id $@
-
-data/ietf-dt/api_v1_submit_submission.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/submit/submission/ id $@
-
-data/ietf-dt/api_v1_submit_submissioncheck.json: scripts/fetch-ietf-dt.py | data/ietf-dt
-	python3 $< /api/v1/submit/submissioncheck/ id $@
-
-data/ietf-dt.sqlite: scripts/build-ietf-db.py $(DOWNOADS_IETF_DT) | data
+data/ietf-dt.sqlite: scripts/build-ietf-db.py $(DOWNLOADS_IETF_DT) | data
 	rm -f $@.tmp $@
 	python3 $^ $@.tmp
 	mv -f $@.tmp $@
-
-data/rfc-index.xml: | data
-	curl --remove-on-error -fsL -o $@ https://www.rfc-editor.org/rfc-index.xml 
 
 # The following will likely go away
 
@@ -195,13 +211,13 @@ define remove-latex
 $(call xargs,scripts/latex-build.sh --clean,$(1))
 endef
 
-clean-data: clean
-	rm -rf $(DATA)
-	if [ -d data/ietf ]; then rmdir data/ietf-dt; fi
-	if [ -d data/ietf ]; then rmdir data/ietf;    fi
-	if [ -d data      ]; then rmdir data;         fi
+clean-downloads: clean
+	$(call remove,$(DOWNLOADS))
+	if [ -d downloads/ietf-dt ]; then rmdir downloads/ietf-dt; fi
+	if [ -d downloads         ]; then rmdir downloads;         fi
 
 clean:
+	$(call remove,$(DATA))
 	$(call remove,$(FIGURES))
 	$(call remove,$(RESULTS))
 	if [ -d figures ]; then rmdir figures; fi
@@ -221,7 +237,7 @@ MAKEFLAGS += --output-sync --warn-undefined-variables --no-builtin-rules --no-bu
 .NOTINTERMEDIATE:
 
 # List of targets that don't represent files:
-.PHONY: all clean clean-data download
+.PHONY: all clean clean-downloads download
 
 # =================================================================================================
 # vim: set ts=2 sw=2 tw=0 ai:
