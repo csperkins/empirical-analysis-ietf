@@ -147,9 +147,7 @@ downloads/ietf-ma/lists: | downloads/ietf-ma
 	mkdir $@
 
 downloads/ietf-ma/lists/%.json: scripts/fetch-ietf-ma-list.py | downloads/ietf-ma/lists
-	rm -f $@.tmp $@
-	python3 $^ $@.tmp
-	mv -f $@.tmp $@
+	python3 $^ $@
 
 downloads/ietf-ma/lists.json: scripts/fetch-ietf-ma-lists.py | downloads/ietf-ma
 	python3 $^ $@

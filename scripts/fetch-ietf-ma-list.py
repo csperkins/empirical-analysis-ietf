@@ -32,6 +32,7 @@ import sys
 
 from typing     import Any, Dict, Iterator
 from imapclient import IMAPClient
+from pathlib    import Path
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <list.json>")
@@ -44,7 +45,7 @@ _, _, imap_ns_shared = imap.namespace()
 imap_prefix    = imap_ns_shared[0][0]
 imap_separator = imap_ns_shared[0][1]
 
-folder_name = sys.argv[1][24:-9]
+folder_name = sys.argv[1][24:-5]
 folder_path = f"{imap_prefix}{folder_name}"
 folder_info = imap.select_folder(folder_path, readonly=True)
 
@@ -62,8 +63,13 @@ for msg_id in imap.search(['NOT', 'DELETED']):
                 "msg" : base64.b64encode(msg[msg_id][b"RFC822"]).decode("utf-8")
                }
         results["msgs"].append(data)
-        print(f"   {folder_name}/{msg_id}")
+        #print(f"   {folder_name}/{msg_id}")
 
-with open(sys.argv[1], "w") as outf:
+p = Path(sys.argv[1])
+t = p.with_suffix(".tmp")
+
+t.unlink(missing_ok=True)
+with open(t, "w") as outf:
     json.dump(results, outf, indent=3)
+t.rename(p)
 
