@@ -43,9 +43,12 @@ DOWNLOADS_IETF_DT  := downloads/ietf-dt/api_v1_doc_document.json \
                       downloads/ietf-dt/api_v1_submit_submission.json \
                       downloads/ietf-dt/api_v1_submit_submissioncheck.json
 
+DOWNLOADS_IETF_MA  := downloads/ietf-ma/lists.json
+
 DOWNLOADS_IETF_RFC := downloads/rfc-index.xml
 
 DOWNLOADS := $(DOWNLOADS_IETF_DT) \
+             $(DOWNLOADS_IETF_MA) \
              $(DOWNLOADS_IETF_RFC)
 
 DATA      := data/ietf-dt.sqlite \
@@ -127,6 +130,11 @@ downloads/ietf-dt/api_v1_submit_submissioncheck.json: scripts/fetch-ietf-dt.py |
 
 # Downloads from the IETF mail archive::
 
+downloads/ietf-ma: | downloads
+	mkdir $@
+
+downloads/ietf-ma/lists.json: scripts/fetch-ietf-ma-lists.py | downloads/ietf-ma
+	python3 $< $@
 
 # Downloads from the RFC Editor:
 
