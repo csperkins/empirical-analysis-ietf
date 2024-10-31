@@ -13,12 +13,12 @@ coverage = "*"
 types-requests = "*"
 
 [packages]
-ietfdata = "=0.8.1"
 requests = "*"
 seaborn = "*"
 numpy = "*"
 pandas = "*"
 matplotlib = "*"
+progress = "*"
 
 [requires]
 python_version = "3.11"
