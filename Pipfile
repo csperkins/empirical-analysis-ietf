@@ -18,7 +18,6 @@ seaborn = "*"
 numpy = "*"
 pandas = "*"
 matplotlib = "*"
-progress = "*"
 
 [requires]
 python_version = "3.11"

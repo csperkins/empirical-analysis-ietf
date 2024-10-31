@@ -267,5 +267,8 @@ MAKEFLAGS += --output-sync --warn-undefined-variables --no-builtin-rules --no-bu
 # List of targets that don't represent files:
 .PHONY: all clean clean-downloads download
 
+# List of target that should not be built in parallel:
+.NOTPARALLEL: download data/ietf-dt.sqlite data/ietf-ma.sqlite
+
 # =================================================================================================
 # vim: set ts=2 sw=2 tw=0 ai:

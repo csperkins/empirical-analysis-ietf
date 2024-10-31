@@ -30,8 +30,6 @@ import requests
 import sys
 
 from typing import Any, Dict, Iterator, Tuple
-from progress.bar import Bar
-
 
 def fetch_schema(session, dt_url, uri) -> Dict[str, Any]:
     r = session.get(f"{dt_url}{uri}/schema/")
@@ -42,17 +40,14 @@ def fetch_schema(session, dt_url, uri) -> Dict[str, Any]:
         sys.exit(1)
 
 
-def fetch_multi(session, dt_url, uri) -> Iterator[Tuple[int,int,Dict[str, Any]]]:
+def fetch_multi(session, dt_url, uri) -> Iterator[Dict[str, Any]]:
     while uri is not None:
         r = session.get(f"{dt_url}{uri}")
         if r.status_code == 200:
             meta = r.json()['meta']
             objs = r.json()['objects']
-            offset = meta["offset"]
-            total  = meta["total_count"]
             for obj in objs:
-                yield (offset, total, obj)
-                offset += 1
+                yield obj
             uri = meta["next"]
         else:
             print(f"Cannot fetch multi: {r.status_code} {uri}")
@@ -83,14 +78,8 @@ results   = {"prefix": prefix,
 
 results["schema"] = fetch_schema(session, dt_url, prefix)
 
-bar = None
-for offset, total, item in fetch_multi(session, dt_url, query_uri):
-	if bar == None:
-		bar = Bar("Fetching", max = total)
-	bar.next()
+for item in fetch_multi(session, dt_url, query_uri):
 	results["objects"].append(item)
-
-bar.finish()
 
 with open(out_file, "w") as outf:
     json.dump(results, outf, indent=3)
