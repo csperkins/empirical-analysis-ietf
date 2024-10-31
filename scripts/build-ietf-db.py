@@ -33,6 +33,7 @@ import sys
 
 from dataclasses import dataclass
 from typing      import Any, Dict, List, Optional
+from pathlib     import Path
 
 # =============================================================================
 
@@ -52,7 +53,6 @@ class DTData:
         self._prefixes.append(data['prefix'])
         self._schemas[data['prefix']] = data['schema']
         self._objects[data['prefix']] = data['objects']
-        print(f"{len(self._prefixes):3} {len(data['objects']):8} {data['prefix']}")
 
 
     def schema(self, prefix:str) -> Dict[str,Any]:
@@ -152,7 +152,6 @@ class DTData:
 
 
     def create_db_table(self, db_connection, prefix):
-        print(f"Create table {prefix}")
         db_cursor = db_connection.cursor()
         schema = self.schema(prefix)
         columns = []
@@ -221,7 +220,6 @@ class DTData:
 
 
     def import_db_table(self, db_connection, prefix):
-        print(f"Import table {prefix}")
         db_cursor = db_connection.cursor()
         schema = self.schema(prefix)
 
@@ -261,7 +259,6 @@ class DTData:
                     if item[column["name"]] is None:
                         values.append(None)
                     else:
-                        # FIXME: check this correctly converts to UTC
                         dt_val = datetime.datetime.fromisoformat(item[column["name"]])
                         dt_fmt = dt_val.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
                         values.append(dt_fmt)
@@ -302,18 +299,23 @@ if len(sys.argv) < 3:
     print(f"Usage: {sys.argv[0]} [dt_json_files...] <output_file>")
     sys.exit(1)
 
-out_path = sys.argv[-1]
+p = Path(sys.argv[-1])
+t = p.with_suffix(".tmp")
+
+t.unlink(missing_ok=True)
 
 # Load data files:
 dt = DTData()
 for infile in sys.argv[1:-1]:
     dt.load(infile)
 
-db_connection = sqlite3.connect(out_path)
+db_connection = sqlite3.connect(t)
 
 dt.create_db_tables(db_connection)
 dt.import_db_tables(db_connection)
 
 db_connection.execute('VACUUM;')
+
+t.rename(p)
 
 # vim: set ts=4 sw=4 tw=0 ai:

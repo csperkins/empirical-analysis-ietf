@@ -166,9 +166,7 @@ data:
 	mkdir $@
 
 data/ietf-dt.sqlite: scripts/build-ietf-db.py $(DOWNLOADS_IETF_DT) | data
-	rm -f $@.tmp $@
-	python3 $^ $@.tmp
-	mv -f $@.tmp $@
+	python3 $^ $@
 
 # The following will likely go away
 
