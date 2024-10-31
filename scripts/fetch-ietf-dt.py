@@ -88,13 +88,11 @@ for offset, total, item in fetch_multi(session, dt_url, query_uri):
 	if bar == None:
 		bar = Bar("Fetching", max = total)
 	bar.next()
-	#print(f"  {offset} {total}  {item['resource_uri']}")
 	results["objects"].append(item)
+
 bar.finish()
 
-print(f"   Write {out_file}")
 with open(out_file, "w") as outf:
     json.dump(results, outf, indent=3)
-print(f"   Done.")
 
 # vim: set ts=4 sw=4 tw=0 ai:
