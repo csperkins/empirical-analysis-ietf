@@ -55,15 +55,17 @@ results = {"fetched"     : datetime.datetime.now().isoformat(),
            "msgs"        : []
           }
 
-for msg_id in imap.search(['NOT', 'DELETED']):
-    msg = imap.fetch(msg_id, ["RFC822"])
-    if msg != {}:
-        assert b'RFC822' in msg[msg_id]
-        data = {"uid" : msg_id,
-                "msg" : base64.b64encode(msg[msg_id][b"RFC822"]).decode("utf-8")
-               }
-        results["msgs"].append(data)
-        #print(f"   {folder_name}/{msg_id}")
+msgs_to_fetch = imap.search(['NOT', 'DELETED'])
+
+for i in range(0, len(msgs_to_fetch), 16):
+    uid_slice = msgs_to_fetch[slice(i, i+16, 1)]
+    for uid, msg in imap.fetch(uid_slice, "RFC822").items():
+        if msg != {}:
+            data = {"uid" : uid,
+                    "msg" : base64.b64encode(msg[b"RFC822"]).decode("utf-8")
+                   }
+            results["msgs"].append(data)
+            #print(f"   {folder_name}/{uid}")
 
 p = Path(sys.argv[1])
 t = p.with_suffix(".tmp")
