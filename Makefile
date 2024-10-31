@@ -47,6 +47,7 @@ DOWNLOADS_IETF_DT  := downloads/ietf-dt/api_v1_doc_document.json \
                       downloads/ietf-dt/api_v1_submit_submission.json \
                       downloads/ietf-dt/api_v1_submit_submissioncheck.json
 
+# The $(DOWNLOADS_IETF_MA_LISTS) variable is defined in Makefile.ietf-ma
 DOWNLOADS_IETF_MA  := downloads/ietf-ma/lists.json \
 											$(DOWNLOADS_IETF_MA_LISTS)
 
@@ -69,7 +70,7 @@ FIGURES   := figures/drafts-by-date.pdf \
 all: $(PAPER_PDF)
 
 # -------------------------------------------------------------------------------------------------
-# Rules to make makefiles:
+# Rules to build makefiles:
 
 Makefile.ietf-ma: scripts/build-makefile-ietf-ma.py downloads/ietf-ma/lists.json
 	python3 $^ $@
@@ -79,7 +80,6 @@ Makefile.ietf-ma: scripts/build-makefile-ietf-ma.py downloads/ietf-ma/lists.json
 # Rules to download data:
 
 download: $(DOWNLOADS)
-	echo $(DOWNLOADS)
 
 downloads:
 	mkdir $@
@@ -152,6 +152,7 @@ downloads/ietf-ma/lists/%.json: scripts/fetch-ietf-ma-list.py | downloads/ietf-m
 downloads/ietf-ma/lists.json: scripts/fetch-ietf-ma-lists.py | downloads/ietf-ma
 	python3 $^ $@
 
+
 # Downloads from the RFC Editor:
 
 downloads/rfc-index.xml: | downloads
@@ -159,7 +160,7 @@ downloads/rfc-index.xml: | downloads
 
 
 # -------------------------------------------------------------------------------------------------
-# Rules to generate data from the downloads:
+# Rules to process the downloads into usable data:
 
 data:
 	mkdir $@
