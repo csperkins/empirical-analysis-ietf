@@ -62,13 +62,18 @@ def create_tables(db_connection):
     sql += ");\n"
     db_cursor.execute(sql)
 
-    sql = f"CREATE INDEX index_ietf_ma_messages_from_addr   ON ietf_ma_messages(from_addr);\n"
+    sql = f"CREATE INDEX index_ietf_ma_messages_mailing_list ON ietf_ma_messages(mailing_list);\n"
     db_cursor.execute(sql)
-    sql = f"CREATE INDEX index_ietf_ma_messages_message_id  ON ietf_ma_messages(message_id);\n"
+    sql = f"CREATE INDEX index_ietf_ma_messages_from_addr    ON ietf_ma_messages(from_addr);\n"
     db_cursor.execute(sql)
-    sql = f"CREATE INDEX index_ietf_ma_messages_in_reply_to ON ietf_ma_messages(in_reply_to);\n"
+    sql = f"CREATE INDEX index_ietf_ma_messages_date         ON ietf_ma_messages(date);\n"
     db_cursor.execute(sql)
-
+    sql = f"CREATE INDEX index_ietf_ma_messages_subject      ON ietf_ma_messages(subject);\n"
+    db_cursor.execute(sql)
+    sql = f"CREATE INDEX index_ietf_ma_messages_message_id   ON ietf_ma_messages(message_id);\n"
+    db_cursor.execute(sql)
+    sql = f"CREATE INDEX index_ietf_ma_messages_in_reply_to  ON ietf_ma_messages(in_reply_to);\n"
+    db_cursor.execute(sql)
 
     sql =  f"CREATE TABLE ietf_ma_messages_to (\n"
     sql += f"  id          INTEGER PRIMARY KEY AUTOINCREMENT,\n"
@@ -79,6 +84,10 @@ def create_tables(db_connection):
     sql += ");\n"
     db_cursor.execute(sql)
 
+    sql = f"CREATE INDEX index_ietf_ma_messages_to_message_num ON ietf_ma_messages_to(message_num);\n"
+    db_cursor.execute(sql)
+    sql = f"CREATE INDEX index_ietf_ma_messages_to_to_addr     ON ietf_ma_messages_to(to_addr);\n"
+    db_cursor.execute(sql)
 
     sql =  f"CREATE TABLE ietf_ma_messages_cc (\n"
     sql += f"  id          INTEGER PRIMARY KEY AUTOINCREMENT,\n"
@@ -89,12 +98,20 @@ def create_tables(db_connection):
     sql += ");\n"
     db_cursor.execute(sql)
 
+    sql = f"CREATE INDEX index_ietf_ma_messages_cc_message_num ON ietf_ma_messages_cc(message_num);\n"
+    db_cursor.execute(sql)
+    sql = f"CREATE INDEX index_ietf_ma_messages_cc_cc_addr     ON ietf_ma_messages_cc(cc_addr);\n"
+    db_cursor.execute(sql)
+
     sql =  f"CREATE TABLE ietf_ma_lists (\n"
     sql += f"  name       TEXT NOT NULL PRIMARY KEY,\n"
     sql += f"  msg_count  INTEGER,\n"
     sql += f"  first_date TEXT,\n"
     sql += f"  last_date  TEXT\n"
     sql += ");\n"
+    db_cursor.execute(sql)
+
+    sql = f"CREATE INDEX index_ietf_ma_lists_name ON ietf_ma_lists(name);\n"
     db_cursor.execute(sql)
 
     db_connection.commit()
