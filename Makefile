@@ -165,7 +165,7 @@ downloads/rfc-index.xml: | downloads
 data:
 	mkdir $@
 
-data/ietf-dt.sqlite: scripts/build-ietf-db.py $(DOWNLOADS_IETF_DT) | data
+data/ietf-dt.sqlite: scripts/build-db-from-ietf-dt.py $(DOWNLOADS_IETF_DT) | data
 	python3 $^ $@
 
 # The following will likely go away
