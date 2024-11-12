@@ -58,6 +58,7 @@ DOWNLOADS := $(DOWNLOADS_IETF_DT) \
              $(DOWNLOADS_IETF_RFC)
 
 DATA      := data/ietf-dt.sqlite \
+             data/ietf-ma.sqlite \
              data/ietf/drafts.json \
              data/ietf/history-for-drafts.json
 
@@ -167,6 +168,9 @@ data:
 
 data/ietf-dt.sqlite: scripts/build-db-from-ietf-dt.py $(DOWNLOADS_IETF_DT) | data
 	python3 $^ $@
+
+data/ietf-ma.sqlite: scripts/build-db-from-ietf-ma.py $(DOWNLOADS_IETF_MA) | data
+	python3 $< downloads/ietf-ma/lists.json $@
 
 # The following will likely go away
 
