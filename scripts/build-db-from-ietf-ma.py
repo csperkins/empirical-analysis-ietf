@@ -121,11 +121,26 @@ def create_tables(db_connection):
 # =============================================================================
 # Helper function to populate database
 
-def fix_name(old_name: Optional[str]) -> str:
+def fix_to_cc(old_tocc) -> Optional[str]:
+    if old_tocc is None:
+        return None
+
+    tocc = old_tocc
+
+    # Handles: "Martin J. Dürst\" <duerst@it.aoyama.ac.jp>, art@ietf.org, iana@isna.org"
+    if tocc.startswith('"') and tocc.endswith('"'):
+        tocc = tocc[1:-1]
+
+    if tocc != old_tocc:
+        print(f"    rewrite {old_tocc} -> {tocc}")
+    return tocc
+
+
+def fix_name(old_name: Optional[str]) -> Optional[str]:
     if old_name is None:
         return None
 
-    name = old_name.strip()
+    name = old_name.strip("'\" ")
 
     if name.endswith(" via Datatracker"):
         name = name[:-16]
@@ -135,7 +150,7 @@ def fix_name(old_name: Optional[str]) -> str:
     return name
 
 
-def fix_addr(old_addr: Optional[str]) -> str:
+def fix_addr(old_addr: Optional[str]) -> Optional[str]:
     if old_addr is None:
         return None
 
@@ -241,16 +256,16 @@ def populate_data(db_connection, folder):
                hdr_date,
                hdr_message_id,
                hdr_in_reply_to,
-               None)   # raw
+               raw)
         sql = f"INSERT INTO ietf_ma_messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING message_num"
         num = db_cursor.execute(sql, val).fetchone()[0]
 
         try:
             if msg["to"] is not None:
                 try:
-                    for to_name, to_addr in getaddresses([msg["to"]]):
+                    for to_name, to_addr in getaddresses([fix_to_cc(msg["to"])]):
                         sql = f"INSERT INTO ietf_ma_messages_to VALUES (?, ?, ?, ?)"
-                        db_cursor.execute(sql, (None, num, to_name, fix_addr(to_addr)))
+                        db_cursor.execute(sql, (None, num, fix_name(to_name), fix_addr(to_addr)))
                 except:
                     print(f"    cannot parse \"To:\" header for {folder}/{uid}")
         except:
@@ -259,9 +274,9 @@ def populate_data(db_connection, folder):
         try:
             if msg["cc"] is not None:
                 try:
-                    for cc_name, cc_addr in getaddresses([msg["cc"]]):
+                    for cc_name, cc_addr in getaddresses([fix_to_cc(msg["cc"])]):
                         sql = f"INSERT INTO ietf_ma_messages_cc VALUES (?, ?, ?, ?)"
-                        db_cursor.execute(sql, (None, num, cc_name, fix_addr(cc_addr)))
+                        db_cursor.execute(sql, (None, num, fix_name(cc_name), fix_addr(cc_addr)))
                 except:
                     print(f"    cannot parse \"Cc:\" header for {folder}/{uid}")
         except:
@@ -303,7 +318,6 @@ create_tables(db_connection)
 
 db_connection.execute('VACUUM;') 
 
-#for folder in ["art"]:
 for folder in ma_json["folders"]:
     populate_data(db_connection, folder)
 
