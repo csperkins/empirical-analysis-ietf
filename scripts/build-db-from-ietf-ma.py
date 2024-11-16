@@ -28,6 +28,7 @@ import datetime
 import json
 import os
 import pprint
+import re
 import sqlite3
 import sys
 
@@ -36,7 +37,7 @@ from email         import policy, utils
 from email.parser  import BytesParser
 from email.message import Message
 from email.utils   import parseaddr, parsedate_to_datetime, getaddresses
-from typing        import Any, Dict, List, Optional
+from typing        import Any, Dict, List, Optional, Tuple
 from pathlib       import Path
 
 # =============================================================================
@@ -120,11 +121,25 @@ def create_tables(db_connection):
 # =============================================================================
 # Helper function to populate database
 
-def fixaddr(old_addr) -> str:
-    addr = old_addr
-
-    if addr is None:
+def fix_name(old_name: Optional[str]) -> str:
+    if old_name is None:
         return None
+
+    name = old_name.strip()
+
+    if name.endswith(" via Datatracker"):
+        name = name[:-16]
+
+    #if name != old_name:
+    #    print(f"    rewrite {old_name} -> {name}")
+    return name
+
+
+def fix_addr(old_addr: Optional[str]) -> str:
+    if old_addr is None:
+        return None
+
+    addr = old_addr.lower()
 
     # Rewrite, e.g., arnaud.taddei=40broadcom.com@dmarc.ietf.org to arnaud.taddei@broadcom.com
     if addr.endswith("@dmarc.ietf.org"):
@@ -150,16 +165,23 @@ def fixaddr(old_addr) -> str:
     if " at " in addr:
         addr = addr.replace(" at ", "@")
 
-    # Strip leading and trailing '
-    if addr.startswith("'") and addr.endswith("'"):
-        addr = addr[1:-1]
+    # Strip leading and trailing characters
+    addr = addr.lstrip("\"'<")
+    addr = addr.rstrip("\"'>")
 
-    # Strip leading and trailing "
-    if addr.startswith('"') and addr.endswith('"'):
-        addr = addr[1:-1]
+    # Strip trailing .RemoveThisWord
+    if addr.endswith(".RemoveThisWord"):
+        addr = addr[:-15]
+
+    # Remove, e.g., " on behalf of Behcet Sarikaya" from addresses
+    if " on behalf of " in addr:
+        addr = addr[:addr.find(" on behalf of ")]
+
+    # FIXME other possible malformed addresses:
+    #   aqm@ietf.org <aqm@ietf.org>
 
     #if addr != old_addr:
-    #    print(f"          {old_addr} -> {addr}")
+    #    print(f"    rewrite {old_addr} -> {addr}")
     return addr.strip()
 
 
@@ -212,14 +234,14 @@ def populate_data(db_connection, folder):
                folder,
                uidvalidity,
                uid,
-               hdr_from_name,
-               fixaddr(hdr_from_addr),
+               fix_name(hdr_from_name),
+               fix_addr(hdr_from_addr),
                hdr_subject,
                parsed_date,
                hdr_date,
                hdr_message_id,
                hdr_in_reply_to,
-               raw)
+               None)   # raw
         sql = f"INSERT INTO ietf_ma_messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING message_num"
         num = db_cursor.execute(sql, val).fetchone()[0]
 
@@ -228,7 +250,7 @@ def populate_data(db_connection, folder):
                 try:
                     for to_name, to_addr in getaddresses([msg["to"]]):
                         sql = f"INSERT INTO ietf_ma_messages_to VALUES (?, ?, ?, ?)"
-                        db_cursor.execute(sql, (None, num, to_name, fixaddr(to_addr)))
+                        db_cursor.execute(sql, (None, num, to_name, fix_addr(to_addr)))
                 except:
                     print(f"    cannot parse \"To:\" header for {folder}/{uid}")
         except:
@@ -239,7 +261,7 @@ def populate_data(db_connection, folder):
                 try:
                     for cc_name, cc_addr in getaddresses([msg["cc"]]):
                         sql = f"INSERT INTO ietf_ma_messages_cc VALUES (?, ?, ?, ?)"
-                        db_cursor.execute(sql, (None, num, cc_name, fixaddr(cc_addr)))
+                        db_cursor.execute(sql, (None, num, cc_name, fix_addr(cc_addr)))
                 except:
                     print(f"    cannot parse \"Cc:\" header for {folder}/{uid}")
         except:
@@ -281,6 +303,7 @@ create_tables(db_connection)
 
 db_connection.execute('VACUUM;') 
 
+#for folder in ["art"]:
 for folder in ma_json["folders"]:
     populate_data(db_connection, folder)
 
