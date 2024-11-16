@@ -28,7 +28,6 @@ import datetime
 import json
 import os
 import pprint
-import re
 import sqlite3
 import sys
 
@@ -36,7 +35,7 @@ from dataclasses   import dataclass
 from email         import policy, utils
 from email.parser  import BytesParser
 from email.message import Message
-from email.utils   import parseaddr, parsedate_to_datetime, getaddresses
+from email.utils   import parseaddr, parsedate_to_datetime, getaddresses, unquote
 from typing        import Any, Dict, List, Optional, Tuple
 from pathlib       import Path
 
@@ -121,19 +120,43 @@ def create_tables(db_connection):
 # =============================================================================
 # Helper function to populate database
 
-def fix_to_cc(old_tocc) -> Optional[str]:
+def fix_to_cc1(old_tocc) -> Optional[str]:
     if old_tocc is None:
         return None
 
     tocc = old_tocc
 
-    # Handles: "Martin J. Dürst\" <duerst@it.aoyama.ac.jp>, art@ietf.org, iana@isna.org"
-    if tocc.startswith('"') and tocc.endswith('"'):
+    if tocc.count('\\"') == 1:
+        tocc = tocc.replace('\\"', '')
+
+    if tocc.startswith('"') and tocc.endswith('"') and tocc.count('"') == 2:
         tocc = tocc[1:-1]
 
+    if tocc.count("@") == 0 and tocc.count(" at ") == 1:
+        tocc = tocc.replace(" at ", "@")
+
     if tocc != old_tocc:
-        print(f"    rewrite {old_tocc} -> {tocc}")
+        print(f"    rewrite(1) {old_tocc} -> {tocc}")
     return tocc
+
+
+def fix_to_cc2(old_name, old_addr):
+    new_name = old_name
+    new_addr = old_addr
+
+    if new_addr.count("@") == 0 and new_addr.count(" at ") == 1:
+        new_addr = new_addr.replace(" at ", "@")
+
+    name, addr = parseaddr(new_addr)
+    if name is not None and addr != new_addr:
+        new_name = name
+        new_addr = addr
+
+    if new_name != old_name or new_addr != old_addr:
+        print(f"    rewrite(2) [{old_name},{old_addr}] -> [{new_name},{new_addr}]")
+    return new_name, new_addr
+
+    
 
 
 def fix_name(old_name: Optional[str]) -> Optional[str]:
@@ -263,7 +286,8 @@ def populate_data(db_connection, folder):
         try:
             if msg["to"] is not None:
                 try:
-                    for to_name, to_addr in getaddresses([fix_to_cc(msg["to"])]):
+                    for to_name, to_addr in getaddresses([fix_to_cc1(msg["to"])]):
+                        to_name, to_addr = fix_to_cc2(to_name, to_addr)
                         sql = f"INSERT INTO ietf_ma_messages_to VALUES (?, ?, ?, ?)"
                         db_cursor.execute(sql, (None, num, fix_name(to_name), fix_addr(to_addr)))
                 except:
@@ -274,7 +298,8 @@ def populate_data(db_connection, folder):
         try:
             if msg["cc"] is not None:
                 try:
-                    for cc_name, cc_addr in getaddresses([fix_to_cc(msg["cc"])]):
+                    for cc_name, cc_addr in getaddresses([fix_to_cc1(msg["cc"])]):
+                        cc_name, cc_addr = fix_to_cc2(cc_name, cc_addr)
                         sql = f"INSERT INTO ietf_ma_messages_cc VALUES (?, ?, ?, ?)"
                         db_cursor.execute(sql, (None, num, fix_name(cc_name), fix_addr(cc_addr)))
                 except:
