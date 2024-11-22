@@ -18,6 +18,7 @@ seaborn = "*"
 numpy = "*"
 pandas = "*"
 matplotlib = "*"
+imapclient = "*"
 
 [requires]
 python_version = "3.11"
