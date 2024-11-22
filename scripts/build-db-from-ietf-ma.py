@@ -118,7 +118,7 @@ def create_tables(db_connection):
 
 
 # =============================================================================
-# Helper function to populate database
+# Helper function to parse To: and Cc: headers
 
 def fix_to_cc1(old_tocc) -> Optional[str]:
     if old_tocc is None:
@@ -157,7 +157,8 @@ def fix_to_cc2(old_name, old_addr):
     return new_name, new_addr
 
     
-
+# =============================================================================
+# Helper functions to parse From: header and addresses
 
 def fix_name(old_name: Optional[str]) -> Optional[str]:
     if old_name is None:
@@ -223,6 +224,21 @@ def fix_addr(old_addr: Optional[str]) -> Optional[str]:
     return addr.strip()
 
 
+def parse_addr(unparsed_addr: Optional[str]) -> Tuple[str, str]:
+    if unparsed_addr is None:
+        return None, None
+    try:
+        orig_name, orig_addr = parseaddr(unparsed_addr)
+        name = fix_name(orig_name)
+        addr = fix_addr(orig_addr)
+        return name, addr
+    except:
+        print(f"    cannot parse address: {unparsed_addr}")
+        sys.exit(1)
+
+
+# =============================================================================
+# Helper function to populate database
 
 def populate_data(db_connection, folder):
     print(f"  {folder}")
@@ -255,7 +271,7 @@ def populate_data(db_connection, folder):
 
         try:
             hdr_from        = msg["from"]
-            hdr_from_name, hdr_from_addr = parseaddr(hdr_from)
+            hdr_from_name, hdr_from_addr = parse_addr(hdr_from)
             hdr_subject     = msg["subject"]
             hdr_date        = msg["date"]
             hdr_message_id  = msg["message-id"]
@@ -265,21 +281,16 @@ def populate_data(db_connection, folder):
                 hdr_in_reply_to = in_reply_to
             elif references != "":
                 hdr_in_reply_to = references.strip().split(" ")[-1]
-            parsed_date = parsedate_to_datetime(hdr_date).astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
         except:
             print(f"    cannot parse headers for {folder}/{uid}")
-        val = (None,
-               folder,
-               uidvalidity,
-               uid,
-               fix_name(hdr_from_name),
-               fix_addr(hdr_from_addr),
-               hdr_subject,
-               parsed_date,
-               hdr_date,
-               hdr_message_id,
-               hdr_in_reply_to,
-               raw)
+
+        try:
+            parsed_date = parsedate_to_datetime(hdr_date).astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        except:
+            print(f"    cannot parse date header for {folder}/{uid}")
+
+        val = (None, folder, uidvalidity, uid, hdr_from_name, hdr_from_addr, hdr_subject,
+                     parsed_date, hdr_date, hdr_message_id, hdr_in_reply_to, raw)
         sql = f"INSERT INTO ietf_ma_messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING message_num"
         num = db_cursor.execute(sql, val).fetchone()[0]
 
