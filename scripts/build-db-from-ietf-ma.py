@@ -28,12 +28,13 @@ import datetime
 import json
 import os
 import pprint
+import re
 import sqlite3
 import sys
 
 from dataclasses   import dataclass
 from email         import policy, utils
-from email.parser  import BytesParser
+from email.parser  import BytesHeaderParser
 from email.message import Message
 from email.utils   import parseaddr, parsedate_to_datetime, getaddresses, unquote
 from typing        import Any, Dict, List, Optional, Tuple
@@ -282,9 +283,36 @@ def parse_headers_to_cc(folder, uid, msg, hdr, to_cc):
         print(f"    cannot parse message {folder}/{uid}: {to_cc} (2)")
 
 
+def header_reader(sourcelines):
+    name, value = sourcelines[0].split(':', 1)
+    old_value = ''.join((value, *sourcelines[1:])).lstrip(' \t\r\n').rstrip('\r\n')
+    new_value = old_value
+
+    # Rewrite "To": addresses of the form "IETF-Announce:;;;@grc.nasa.gov;":
+    if name == "To" and new_value.startswith("IETF-Announce:;"):
+        new_value = "ietf-announce@ietf.org"
+
+    # Rewrite "To:" addresses of the form "icn-interest at listserv.netlab.nec.de":
+    if name == "To" and "@" not in new_value and " at " in new_value:
+        new_value = new_value.replace(" at ", "@")
+
+    if name in ["From", "To", "Cc"]:
+        # Rewrite addresses of the form:
+        #   'Shihang\(Vincent\)' <shihang9=40huawei.com@dmarc.ietf.org>
+        # that are incorrectly quoted and break the Python header parser.
+        new_value = re.sub(r"'([A-Za-z ]+)\\\(([A-Za-z ]+)\\\)'", r'"\1(\2)"', new_value)
+        # Rewritw ""Shihang (Vincent)"" -> "Shihang (Vincent)"
+        new_value = re.sub(r'""([A-Za-z ]+)\(([A-Za-z ]+)\)""', r'"\1(\2)"', new_value)
+
+    # if new_value != old_value:
+    #     print(f"{name}: {old_value} ==> {new_value}")
+
+    return (name, new_value)
+
 
 def parse_message(folder, uid, uidvalidity, raw_message):
-    msg = BytesParser(policy=policy.default).parsebytes(raw_message)
+    parsing_policy = policy.default.clone(header_source_parse = header_reader)
+    msg = BytesHeaderParser(policy=parsing_policy).parsebytes(raw_message)
 
     hdr = {
         "uid"         : uid,
@@ -368,6 +396,43 @@ def populate_data(db_connection, folder):
 
 
 # =============================================================================
+# Test Cases:
+
+def load_test_message(folder, uid):
+    # print(f"  Loading test message {folder}/{uid}")
+    uidvalidity = 0 # Not needed for these tests
+    with open(f"downloads/ietf-ma/lists/{folder}.json", "r") as inf:
+        folder_data = json.load(inf)
+        for msg_data in folder_data["msgs"]:
+            if msg_data["uid"] == int(uid):
+                raw = base64.b64decode(msg_data["msg"])
+                hdr = parse_message(folder, uid, uidvalidity, raw)
+    return hdr
+
+
+def test_message_parsing():
+    hdr = load_test_message("cats", 343)
+    assert hdr["from_name"] == "weilin_wang@bjtu.edu.cn"
+    assert hdr["from_addr"] == "weilin_wang@bjtu.edu.cn"
+    assert hdr["to"][0] == ("Adrian Farrel", "adrian@olddog.co.uk")
+    assert hdr["to"][1] == ("Shihang(Vincent)", "shihang9@huawei.com")
+    assert hdr["to"][2] == ("Yao Kehan", "yaokehan@chinamobile.com")
+    assert hdr["to"][3] == ("draft-wang-cats-awareness-system-for-casfc@ietf.org", "draft-wang-cats-awareness-system-for-casfc@ietf.org")
+    assert hdr["to"][4] == ("draft-zhang-cats-computing-aware-sfc-usecase@ietf.org", "draft-zhang-cats-computing-aware-sfc-usecase@ietf.org")
+    assert hdr["cc"][0] == ("cats@ietf.org", "cats@ietf.org")
+
+    hdr = load_test_message("pilc", 1683)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "internet-drafts@ietf.org"
+    assert hdr["to"][0] == ("", "ietf-announce@ietf.org")
+    assert hdr["cc"][0] == ("", "pilc@grc.nasa.gov")
+
+    hdr = load_test_message("icnrg", 1591)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "icn-interest-bounces@listserv.netlab.nec.de"
+    assert hdr["to"][0] == ("", "icn-interest@listserv.netlab.nec.de")
+
+# =============================================================================
 # Main code follows:
 
 if len(sys.argv) != 3:
@@ -377,6 +442,8 @@ if len(sys.argv) != 3:
 ma_file = Path(sys.argv[1])
 db_file = Path(sys.argv[2])
 db_temp = db_file.with_suffix(".tmp")
+
+test_message_parsing()
 
 with open(ma_file, "r") as inf:
     ma_json = json.load(inf)
@@ -388,8 +455,7 @@ create_tables(db_connection)
 
 db_connection.execute('VACUUM;') 
 
-#for folder in ma_json["folders"]:
-for folder in ["cats"]:
+for folder in ma_json["folders"]:
     populate_data(db_connection, folder)
 
 db_temp.rename(db_file)
