@@ -245,7 +245,6 @@ def parse_headers_core(folder, uid, msg, hdr):
         hdr["from"]        = msg["from"]
         hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
         hdr["subject"]     = msg["subject"]
-        hdr["date"]        = msg["date"]
         hdr["message_id"]  = msg["message-id"]
     except:
         print(f"    cannot parse message {folder}/{uid}: core headers")
@@ -265,9 +264,29 @@ def parse_headers_reply(folder, uid, msg, hdr):
 
 def parse_headers_date(folder, uid, msg, hdr):
     try:
-        hdr["date"] = parsedate_to_datetime(msg["date"]).astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        date = parsedate_to_datetime(msg["date"])
+        hdr["date"] = date.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
     except:
-        print(f"    cannot parse message {folder}/{uid}: date")
+        try:
+            # Standard format, with invalid timezone: Mon, 27 Dec 1993 13:46:36 +22306256
+            # Parse assuming the timezone is UTC
+            split = msg["date"].split(" ")[:-1]
+            split.append("+0000")
+            joined = " ".join(split)
+            hdr["date"] = parsedate_to_datetime(joined).astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        except:
+            try:
+                # Non-standard date format: 04-Jan-93 13:22:13 (assume UTC timezone)
+                date = datetime.datetime.strptime(msg["date"], "%d-%b-%y %H:%M:%S")
+                hdr["date"] = date.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+            except:
+                try:
+                    # Non-standard date format: 30-Nov-93 17:23 (assume UTC timezone)
+                    date = datetime.datetime.strptime(msg["date"], "%d-%b-%y %H:%M")
+                    hdr["date"] = date.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                except:
+                    print(f"    cannot parse message {folder}/{uid}: date {msg['date']}")
+
 
 
 def parse_headers_to_cc(folder, uid, msg, hdr, to_cc):
