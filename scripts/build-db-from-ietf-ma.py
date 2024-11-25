@@ -242,8 +242,21 @@ def parse_addr(unparsed_addr: Optional[str]) -> Tuple[str, str]:
 
 def parse_headers_core(folder, uid, msg, hdr):
     try:
-        hdr["from"]        = msg["from"]
+        hdr["from"] = msg["from"]
         hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+
+        # There are some messages with multiple addresses in the "From:" header, e.g.:
+        #   From: Bob Miles <rsm@spyder.ssw.com>, Steve Thompson <sjt@gateway.ssw.com>, Marshall Rose <mrose@dbc.mtview.ca.us> 
+        # Rewrite them to use the "Sender:" header instead.
+        if hdr["from"].count("@") == 2 and not (hdr["from_name"].count("@") == 1 and hdr["from_addr"].count("@") == 1):
+            hdr["from"] = msg["sender"]
+            hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+            print(f"multiple @ signs in addr: rewrite {msg['from']} -> {hdr['from']}")
+        elif hdr["from"].count("@") > 2:
+            hdr["from"] = msg["sender"]
+            hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+            print(f"multiple @ signs in addr: rewrite {msg['from']} -> {hdr['from']}")
+
         hdr["subject"]     = msg["subject"]
         hdr["message_id"]  = msg["message-id"]
     except:
@@ -450,6 +463,10 @@ def test_message_parsing():
     assert hdr["from_name"] == ""
     assert hdr["from_addr"] == "icn-interest-bounces@listserv.netlab.nec.de"
     assert hdr["to"][0] == ("", "icn-interest@listserv.netlab.nec.de")
+
+    hdr = load_test_message("822ext", 280)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "mrose@dbc.mtview.ca.us"
 
 # =============================================================================
 # Main code follows:
