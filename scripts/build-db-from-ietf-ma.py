@@ -237,25 +237,97 @@ def parse_addr(unparsed_addr: Optional[str]) -> Tuple[str, str]:
         sys.exit(1)
 
 
+def is_list_owner_addr(addr, folder): 
+    if addr == "<noreply@ietf.org>":
+        return True
+    if addr == f"{folder}-bounces@ietf.org":
+        return True
+    if addr == f"{folder}-bounces@lists.ietf.org":
+        return True
+    if addr == "ietf-archive-request@IETF.NRI.Reston.VA.US":
+        return True
+    if addr == "ietf-archive-request@IETF.CNRI.Reston.VA.US":
+        return True
+    if addr.startswith(f"<owner-{folder}"):
+        return True
+    if addr.startswith(f"owner-{folder}@"):
+        return True
+    if addr.startswith(f"<owner-ietf-{folder}"):
+        return True
+    if addr.startswith(f"{folder}-admin@"):
+        return True
+    if addr.startswith(f"{folder}-approval@"):
+        return True
+    return False
+
+
+def parse_addr_multiple_at(folder, uid, msg, hdr):
+    hdr_name = None
+    hdr_addr = None
+
+    # FIXME: hackathon/422
+    # From: "tian.luo@igfcn.org tian.luo@igfcn.org" <tian.luo@igfcn.org>
+
+    if msg["x-sender"] is not None and not is_list_owner_addr(msg["x-sender"], folder):
+        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['x-sender']} (x-sender)")
+        hdr_name, hdr_addr = parse_addr(msg["x-sender"])
+    elif msg["x-orig-sender"] is not None and not is_list_owner_addr(msg["x-orig-sender"], folder):
+        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['x-orig-sender']} (x-orig-sender)")
+        hdr_name, hdr_addr = parse_addr(msg["x-orig-sender"])
+    elif msg["sender"] is not None and not is_list_owner_addr(msg["sender"], folder):
+        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['sender']} (sender)")
+        hdr_name, hdr_addr = parse_addr(msg["sender"])
+    elif msg["return-path"] is not None and not is_list_owner_addr(msg["return-path"], folder):
+        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['return-path']} (return-path)")
+        hdr_name, hdr_addr = parse_addr(msg["return-path"])
+    else:
+        hdr_from = re.sub(r"([^,]+), (.*)", r'"\1"', hdr["from"])
+        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {hdr_from} (fallback)")
+        hdr_name, hdr_addr = parse_addr(hdr_from)
+
+        if hdr_addr == "noreply@ietf.org" and "@" in hdr_name:
+            hdr_addr = hdr_name
+            hdr_name = ""
+    return hdr_name, hdr_addr
+
 # =============================================================================
 # Helpful function to parse an email message:
 
 def parse_headers_core(folder, uid, msg, hdr):
     try:
         hdr["from"] = msg["from"]
-        hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
 
-        # There are some messages with multiple addresses in the "From:" header, e.g.:
-        #   From: Bob Miles <rsm@spyder.ssw.com>, Steve Thompson <sjt@gateway.ssw.com>, Marshall Rose <mrose@dbc.mtview.ca.us> 
-        # Rewrite them to use the "Sender:" header instead.
-        if hdr["from"].count("@") == 2 and not (hdr["from_name"].count("@") == 1 and hdr["from_addr"].count("@") == 1):
-            hdr["from"] = msg["sender"]
+        if hdr["from"] is None:
+            # The "From:" header is missing
+            hdr["from_name"] = None
+            hdr["from_addr"] = None
+        elif hdr["from"].count("@") == 1:
+            # The "From:" header contains a single address
             hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
-            print(f"multiple @ signs in addr: rewrite {msg['from']} -> {hdr['from']}")
-        elif hdr["from"].count("@") > 2:
-            hdr["from"] = msg["sender"]
-            hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
-            print(f"multiple @ signs in addr: rewrite {msg['from']} -> {hdr['from']}")
+        else:
+            # The "From:" header potentially contains multiple addresses
+            from_addrs = getaddresses([hdr["from"]])
+            if len(from_addrs) == hdr["from"].count("@"):
+                # The header contains multiple well-formed From: addresses.
+                # Use the first one that appears to have a valid domain name.
+                for name, addr in from_addrs:
+                    hdr["from_name"] = fix_name(name)
+                    hdr["from_addr"] = fix_addr(addr)
+                    if hdr["from_addr"].split("@")[1].count(".") >= 1:
+                        break
+            else:
+                hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+                if hdr["from_name"] is not None and hdr["from_name"] != "" and hdr["from_name"].lower() == hdr["from_addr"]:
+                    # Email address duplicated into name field
+                    pass
+                elif " @ " in hdr["from_name"]:
+                    # See snmpv2/4143: From: "Hamilton, Ed @ OTT" <EHAMILT@mtl.unisysgsg.com>
+                    pass
+                elif "@@" in hdr["from_name"]:
+                    # See mmusic/3429
+                    pass
+                else:
+                    hdr["from_name"], hdr["from_addr"] = parse_addr_multiple_at(folder, uid, msg, hdr)
 
         hdr["subject"]     = msg["subject"]
         hdr["message_id"]  = msg["message-id"]
@@ -320,18 +392,20 @@ def header_reader(sourcelines):
     old_value = ''.join((value, *sourcelines[1:])).lstrip(' \t\r\n').rstrip('\r\n')
     new_value = old_value
 
+    # FIXME: how should we handle the following:
+    #   pem/800  From: Charles Kaufman dss <"kaufman@zk3.dec.com"@minsrv.enet.dec.com>
+
     # Rewrite "To": addresses of the form "IETF-Announce:;;;@grc.nasa.gov;":
     if name == "To" and new_value.startswith("IETF-Announce:;"):
         new_value = "ietf-announce@ietf.org"
 
-    # Rewrite "To:" addresses of the form "icn-interest at listserv.netlab.nec.de":
-    if name == "To" and "@" not in new_value and " at " in new_value:
+    # Rewrite addresses of the form: icn-interest at listserv.netlab.nec.de
+    if name in ["From", "To", "Cc"] and "@" not in new_value and " at " in new_value:
         new_value = new_value.replace(" at ", "@")
 
+    # Rewrite addresses of the form: 'Shihang\(Vincent\)' <shihang9=40huawei.com@dmarc.ietf.org>
+    # that are incorrectly quoted and break the Python header parser.
     if name in ["From", "To", "Cc"]:
-        # Rewrite addresses of the form:
-        #   'Shihang\(Vincent\)' <shihang9=40huawei.com@dmarc.ietf.org>
-        # that are incorrectly quoted and break the Python header parser.
         new_value = re.sub(r"'([A-Za-z ]+)\\\(([A-Za-z ]+)\\\)'", r'"\1(\2)"', new_value)
         # Rewritw ""Shihang (Vincent)"" -> "Shihang (Vincent)"
         new_value = re.sub(r'""([A-Za-z ]+)\(([A-Za-z ]+)\)""', r'"\1(\2)"', new_value)
@@ -465,8 +539,67 @@ def test_message_parsing():
     assert hdr["to"][0] == ("", "icn-interest@listserv.netlab.nec.de")
 
     hdr = load_test_message("822ext", 280)
+    assert hdr["from_name"] == "Bob Miles"
+    assert hdr["from_addr"] == "rsm@spyder.ssw.com"
+
+    hdr = load_test_message("appleip", 144)
+    assert hdr["from_name"] == "Mike Traynor"
+    assert hdr["from_addr"] == "mtraynor@hpindps.cup.hp.com"
+
+    hdr = load_test_message("atm", 34)
     assert hdr["from_name"] == ""
-    assert hdr["from_addr"] == "mrose@dbc.mtview.ca.us"
+    assert hdr["from_addr"] == "clapp@ameris.center.il.ameritech.com"
+
+    hdr = load_test_message("smtpext", 1366)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "robert.l.sargent@stc06.ctd.ornl.gov"
+
+    hdr = load_test_message("mmusic", 3429)
+    assert hdr["from_name"] == "L@@K dont throw away!"
+    assert hdr["from_addr"] == "jimbobuk@home.com"
+
+    hdr = load_test_message("imap", 1018)
+    assert hdr["from_name"] == "Olle Jarnefors"
+    assert hdr["from_addr"] == "ojarnef@admin.kth.se"
+
+    hdr = load_test_message("6lowpan", 20)
+    assert hdr["from_name"] == "Soohong Daniel Park@samsung.com"
+    assert hdr["from_addr"] == "soohong.park@samsung.com"
+
+    hdr = load_test_message("chassis", 51)
+    assert hdr["from_name"] == "David L. Arneson (arneson@ctron.com)"
+    assert hdr["from_addr"] == "arneson@yeti.ctron.com"
+
+    hdr = load_test_message("xcon", 26)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "markus.isomaki@nokia.com"
+
+    hdr = load_test_message("wgchairs", 16644)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "jbui@amsl.com"
+
+    hdr = load_test_message("ucp", 32)
+    assert hdr["from_name"] == "practic!brunner@uunet.uu.net"
+    assert hdr["from_addr"] == "brunner@practic.practic.com"
+
+    hdr = load_test_message("trill", 2050)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "radia.perlman@sun.com"
+
+    hdr = load_test_message("syslog", 1823)
+    assert hdr["from_name"] == "Pasi.Eronen@nokia.com"
+    assert hdr["from_addr"] == "pasi.eronen@nokia.com"
+
+    hdr = load_test_message("snmpv2", 4143)
+    assert hdr["from_name"] == "Hamilton, Ed @ OTT"
+    assert hdr["from_addr"] == "ehamilt@mtl.unisysgsg.com"
+
+    hdr = load_test_message("rfc-dist", 2106)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "rfc-editor@rfc-editor.org"
+
+    #print(hdr["from_name"])
+    #print(hdr["from_addr"])
 
 # =============================================================================
 # Main code follows:
