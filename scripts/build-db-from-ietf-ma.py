@@ -193,9 +193,9 @@ def fix_addr(old_addr: Optional[str]) -> Optional[str]:
         if lpart.startswith('"') and cpart.endswith('"'):
             lcomb = f"{lpart}@{cpart}"
             if lcomb.startswith("'") and lcomb.endswith("'"):
-                lcomb = addr[1:-1]
+                lcomb = lcomb[1:-1]
             if lcomb.startswith('"') and lcomb.endswith('"'):
-                lcomb = addr[1:-1]
+                lcomb = lcomb[1:-1]
             lname, laddr = parseaddr(lcomb)
             if laddr != '':
                 addr = laddr
@@ -216,9 +216,6 @@ def fix_addr(old_addr: Optional[str]) -> Optional[str]:
     if " on behalf of " in addr:
         addr = addr[:addr.find(" on behalf of ")]
 
-    # FIXME other possible malformed addresses:
-    #   aqm@ietf.org <aqm@ietf.org>
-
     #if addr != old_addr:
     #    print(f"    rewrite {old_addr} -> {addr}")
     return addr.strip()
@@ -238,7 +235,8 @@ def parse_addr(unparsed_addr: Optional[str]) -> Tuple[str, str]:
 
 
 def is_list_owner_addr(addr, folder): 
-    if addr == "<noreply@ietf.org>":
+    addr = addr.strip("<>")
+    if addr == "noreply@ietf.org":
         return True
     if addr == f"{folder}-bounces@ietf.org":
         return True
@@ -248,15 +246,15 @@ def is_list_owner_addr(addr, folder):
         return True
     if addr == "ietf-archive-request@IETF.CNRI.Reston.VA.US":
         return True
-    if addr.startswith(f"<owner-{folder}"):
+    if addr.startswith(f"owner-{folder}"):
         return True
-    if addr.startswith(f"owner-{folder}@"):
-        return True
-    if addr.startswith(f"<owner-ietf-{folder}"):
+    if addr.startswith(f"owner-ietf-{folder}"):
         return True
     if addr.startswith(f"{folder}-admin@"):
         return True
     if addr.startswith(f"{folder}-approval@"):
+        return True
+    if addr.lower().startswith(f"mailer-daemon@"):
         return True
     return False
 
@@ -265,24 +263,21 @@ def parse_addr_multiple_at(folder, uid, msg, hdr):
     hdr_name = None
     hdr_addr = None
 
-    # FIXME: hackathon/422
-    # From: "tian.luo@igfcn.org tian.luo@igfcn.org" <tian.luo@igfcn.org>
-
     if msg["x-sender"] is not None and not is_list_owner_addr(msg["x-sender"], folder):
-        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['x-sender']} (x-sender)")
+        # print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['x-sender']} (x-sender)")
         hdr_name, hdr_addr = parse_addr(msg["x-sender"])
     elif msg["x-orig-sender"] is not None and not is_list_owner_addr(msg["x-orig-sender"], folder):
-        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['x-orig-sender']} (x-orig-sender)")
+        # print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['x-orig-sender']} (x-orig-sender)")
         hdr_name, hdr_addr = parse_addr(msg["x-orig-sender"])
     elif msg["sender"] is not None and not is_list_owner_addr(msg["sender"], folder):
-        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['sender']} (sender)")
+        # print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['sender']} (sender)")
         hdr_name, hdr_addr = parse_addr(msg["sender"])
     elif msg["return-path"] is not None and not is_list_owner_addr(msg["return-path"], folder):
-        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['return-path']} (return-path)")
+        # print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {msg['return-path']} (return-path)")
         hdr_name, hdr_addr = parse_addr(msg["return-path"])
     else:
         hdr_from = re.sub(r"([^,]+), (.*)", r'"\1"', hdr["from"])
-        print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {hdr_from} (fallback)")
+        # print(f"{folder}/{uid} multiple @ signs in addr: rewrite {msg['from']} -> {hdr_from} (fallback)")
         hdr_name, hdr_addr = parse_addr(hdr_from)
 
         if hdr_addr == "noreply@ietf.org" and "@" in hdr_name:
@@ -597,6 +592,10 @@ def test_message_parsing():
     hdr = load_test_message("rfc-dist", 2106)
     assert hdr["from_name"] == ""
     assert hdr["from_addr"] == "rfc-editor@rfc-editor.org"
+
+    hdr = load_test_message("uri", 1380)
+    assert hdr["from_name"] == ""
+    assert hdr["from_addr"] == "raisch@internet.com"
 
     #print(hdr["from_name"])
     #print(hdr["from_addr"])
