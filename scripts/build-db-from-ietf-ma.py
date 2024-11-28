@@ -324,6 +324,12 @@ def parse_headers_core(folder, uid, msg, hdr):
                 else:
                     hdr["from_name"], hdr["from_addr"] = parse_addr_multiple_at(folder, uid, msg, hdr)
 
+        if hdr["from_addr"] == "":
+            hdr["from_addr"] = None
+
+        if hdr["from_name"] == "":
+            hdr["from_name"] = None
+
         hdr["subject"]     = msg["subject"]
         hdr["message_id"]  = msg["message-id"]
     except:
@@ -523,13 +529,13 @@ def test_message_parsing():
     assert hdr["cc"][0] == ("cats@ietf.org", "cats@ietf.org")
 
     hdr = load_test_message("pilc", 1683)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "internet-drafts@ietf.org"
     assert hdr["to"][0] == ("", "ietf-announce@ietf.org")
     assert hdr["cc"][0] == ("", "pilc@grc.nasa.gov")
 
     hdr = load_test_message("icnrg", 1591)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "icn-interest-bounces@listserv.netlab.nec.de"
     assert hdr["to"][0] == ("", "icn-interest@listserv.netlab.nec.de")
 
@@ -542,11 +548,11 @@ def test_message_parsing():
     assert hdr["from_addr"] == "mtraynor@hpindps.cup.hp.com"
 
     hdr = load_test_message("atm", 34)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "clapp@ameris.center.il.ameritech.com"
 
     hdr = load_test_message("smtpext", 1366)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "robert.l.sargent@stc06.ctd.ornl.gov"
 
     hdr = load_test_message("mmusic", 3429)
@@ -566,11 +572,11 @@ def test_message_parsing():
     assert hdr["from_addr"] == "arneson@yeti.ctron.com"
 
     hdr = load_test_message("xcon", 26)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "markus.isomaki@nokia.com"
 
     hdr = load_test_message("wgchairs", 16644)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "jbui@amsl.com"
 
     hdr = load_test_message("ucp", 32)
@@ -578,7 +584,7 @@ def test_message_parsing():
     assert hdr["from_addr"] == "brunner@practic.practic.com"
 
     hdr = load_test_message("trill", 2050)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "radia.perlman@sun.com"
 
     hdr = load_test_message("syslog", 1823)
@@ -590,11 +596,11 @@ def test_message_parsing():
     assert hdr["from_addr"] == "ehamilt@mtl.unisysgsg.com"
 
     hdr = load_test_message("rfc-dist", 2106)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "rfc-editor@rfc-editor.org"
 
     hdr = load_test_message("uri", 1380)
-    assert hdr["from_name"] == ""
+    assert hdr["from_name"] == None
     assert hdr["from_addr"] == "raisch@internet.com"
 
     #print(hdr["from_name"])
