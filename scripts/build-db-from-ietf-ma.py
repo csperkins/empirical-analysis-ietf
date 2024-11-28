@@ -169,6 +169,9 @@ def fix_name(old_name: Optional[str]) -> Optional[str]:
     if name.endswith(" via Datatracker"):
         name = name[:-16]
 
+    if name == "":
+        name = None
+
     #if name != old_name:
     #    print(f"    rewrite {old_name} -> {name}")
     return name
@@ -218,7 +221,12 @@ def fix_addr(old_addr: Optional[str]) -> Optional[str]:
 
     #if addr != old_addr:
     #    print(f"    rewrite {old_addr} -> {addr}")
-    return addr.strip()
+
+    if addr == "":
+        return None
+    else:
+        return addr.strip()
+
 
 
 def parse_addr(unparsed_addr: Optional[str]) -> Tuple[str, str]:
@@ -289,51 +297,51 @@ def parse_addr_multiple_at(folder, uid, msg, hdr):
 # Helpful function to parse an email message:
 
 def parse_headers_core(folder, uid, msg, hdr):
-    try:
-        hdr["from"] = msg["from"]
+    #try:
+    hdr["from"] = msg["from"]
 
-        if hdr["from"] is None:
-            # The "From:" header is missing
-            hdr["from_name"] = None
-            hdr["from_addr"] = None
-        elif hdr["from"].count("@") == 1:
-            # The "From:" header contains a single address
-            hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+    if hdr["from"] is None:
+        # The "From:" header is missing
+        hdr["from_name"] = None
+        hdr["from_addr"] = None
+    elif hdr["from"].count("@") == 1:
+        # The "From:" header contains a single address
+        hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+    else:
+        # The "From:" header potentially contains multiple addresses
+        from_addrs = getaddresses([hdr["from"]])
+        if len(from_addrs) == hdr["from"].count("@"):
+            # The header contains multiple well-formed From: addresses.
+            # Use the first one that appears to have a valid domain name.
+            for name, addr in from_addrs:
+                hdr["from_name"] = fix_name(name)
+                hdr["from_addr"] = fix_addr(addr)
+                if hdr["from_addr"].split("@")[1].count(".") >= 1:
+                    break
         else:
-            # The "From:" header potentially contains multiple addresses
-            from_addrs = getaddresses([hdr["from"]])
-            if len(from_addrs) == hdr["from"].count("@"):
-                # The header contains multiple well-formed From: addresses.
-                # Use the first one that appears to have a valid domain name.
-                for name, addr in from_addrs:
-                    hdr["from_name"] = fix_name(name)
-                    hdr["from_addr"] = fix_addr(addr)
-                    if hdr["from_addr"].split("@")[1].count(".") >= 1:
-                        break
+            hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+            if hdr["from_name"] is not None and hdr["from_name"] != "" and hdr["from_name"].lower() == hdr["from_addr"]:
+                # Email address duplicated into name field
+                pass
+            elif hdr["from_name"] is not None and " @ " in hdr["from_name"]:
+                # See snmpv2/4143: From: "Hamilton, Ed @ OTT" <EHAMILT@mtl.unisysgsg.com>
+                pass
+            elif hdr["from_name"] is not None and "@@" in hdr["from_name"]:
+                # See mmusic/3429
+                pass
             else:
-                hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
-                if hdr["from_name"] is not None and hdr["from_name"] != "" and hdr["from_name"].lower() == hdr["from_addr"]:
-                    # Email address duplicated into name field
-                    pass
-                elif " @ " in hdr["from_name"]:
-                    # See snmpv2/4143: From: "Hamilton, Ed @ OTT" <EHAMILT@mtl.unisysgsg.com>
-                    pass
-                elif "@@" in hdr["from_name"]:
-                    # See mmusic/3429
-                    pass
-                else:
-                    hdr["from_name"], hdr["from_addr"] = parse_addr_multiple_at(folder, uid, msg, hdr)
+                hdr["from_name"], hdr["from_addr"] = parse_addr_multiple_at(folder, uid, msg, hdr)
 
-        if hdr["from_addr"] == "":
-            hdr["from_addr"] = None
+    if hdr["from_addr"] == "":
+        hdr["from_addr"] = None
 
-        if hdr["from_name"] == "":
-            hdr["from_name"] = None
+    if hdr["from_name"] == "":
+        hdr["from_name"] = None
 
-        hdr["subject"]     = msg["subject"]
-        hdr["message_id"]  = msg["message-id"]
-    except:
-        print(f"    cannot parse message {folder}/{uid}: core headers")
+    hdr["subject"]     = msg["subject"]
+    hdr["message_id"]  = msg["message-id"]
+    #except:
+    #    print(f"    cannot parse message {folder}/{uid}: core headers")
 
 
 def parse_headers_reply(folder, uid, msg, hdr):
@@ -531,13 +539,13 @@ def test_message_parsing():
     hdr = load_test_message("pilc", 1683)
     assert hdr["from_name"] == None
     assert hdr["from_addr"] == "internet-drafts@ietf.org"
-    assert hdr["to"][0] == ("", "ietf-announce@ietf.org")
-    assert hdr["cc"][0] == ("", "pilc@grc.nasa.gov")
+    assert hdr["to"][0] == (None, "ietf-announce@ietf.org")
+    assert hdr["cc"][0] == (None, "pilc@grc.nasa.gov")
 
     hdr = load_test_message("icnrg", 1591)
     assert hdr["from_name"] == None
     assert hdr["from_addr"] == "icn-interest-bounces@listserv.netlab.nec.de"
-    assert hdr["to"][0] == ("", "icn-interest@listserv.netlab.nec.de")
+    assert hdr["to"][0] == (None, "icn-interest@listserv.netlab.nec.de")
 
     hdr = load_test_message("822ext", 280)
     assert hdr["from_name"] == "Bob Miles"
