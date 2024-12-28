@@ -24,6 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import base64
+import concurrent.futures
 import datetime
 import json
 import os
@@ -37,6 +38,7 @@ from email         import policy, utils
 from email.parser  import BytesHeaderParser
 from email.message import Message
 from email.utils   import parseaddr, parsedate_to_datetime, getaddresses, unquote
+from itertools     import repeat
 from typing        import Any, Dict, List, Optional, Tuple
 from pathlib       import Path
 
@@ -120,6 +122,7 @@ def create_tables(db_connection):
 # =============================================================================
 # Helper function to parse To: and Cc: headers
 
+# FIXME: not currently used
 def fix_to_cc1(folder, uid, old_tocc) -> Optional[str]:
     if old_tocc is None:
         return None
@@ -140,6 +143,7 @@ def fix_to_cc1(folder, uid, old_tocc) -> Optional[str]:
     return tocc
 
 
+# FIXME: not currently used
 def fix_to_cc2(folder, uid, old_name, old_addr):
     new_name = old_name
     new_addr = old_addr
@@ -160,6 +164,7 @@ def fix_to_cc2(folder, uid, old_name, old_addr):
 # =============================================================================
 # Helper functions to parse From: header and addresses
 
+# FIXME: not currently used
 def fix_name(old_name: Optional[str]) -> Optional[str]:
     if old_name is None:
         return None
@@ -177,6 +182,7 @@ def fix_name(old_name: Optional[str]) -> Optional[str]:
     return name
 
 
+# FIXME: not currently used
 def fix_addr(old_addr: Optional[str]) -> Optional[str]:
     if old_addr is None:
         return None
@@ -229,6 +235,7 @@ def fix_addr(old_addr: Optional[str]) -> Optional[str]:
 
 
 
+# FIXME: not currently used
 def parse_addr(unparsed_addr: Optional[str]) -> Tuple[str, str]:
     if unparsed_addr is None:
         return None, None
@@ -242,6 +249,7 @@ def parse_addr(unparsed_addr: Optional[str]) -> Tuple[str, str]:
         sys.exit(1)
 
 
+# FIXME: not currently used
 def is_list_owner_addr(addr, folder): 
     addr = addr.strip("<>")
     if addr == "noreply@ietf.org":
@@ -267,6 +275,7 @@ def is_list_owner_addr(addr, folder):
     return False
 
 
+# FIXME: not currently used
 def parse_addr_multiple_at(folder, uid, msg, hdr):
     hdr_name = None
     hdr_addr = None
@@ -293,352 +302,310 @@ def parse_addr_multiple_at(folder, uid, msg, hdr):
             hdr_name = ""
     return hdr_name, hdr_addr
 
+
 # =============================================================================
-# Helpful function to parse an email message:
 
-def parse_headers_core(folder, uid, msg, hdr):
-    #try:
-    hdr["from"] = msg["from"]
+def header_reader(sourcelines):
+    name, value = sourcelines[0].split(':', 1)
+    value = ''.join((value, *sourcelines[1:])).lstrip(' \t\r\n')
+    value = value.rstrip('\r\n')
 
-    if hdr["from"] is None:
+    if name.lower() == "to" or name.lower() == "cc":
+        value = value.replace("\r\n", "")
+        patterns_to_replace = [
+            # Many messages sent to ietf-announce have malformed "To:" and "Cc:" headers,
+            # some of which are so corrupt that they make the Python email package throw
+            # an exception ('Group' object has no attribute 'local_part').  Rewrite such
+            # headers to use the canonical ietf-announce@ietf.org list address.
+            (r'("IETF-Announce:; ; ; ; ; @tis.com"@tis.com[; ]+ , )(.*)', r'ietf-announce@ietf.org, \2'), 
+            (r'(.*)(IETF-Announce:[ ;,]+[a-zA-Z\.@:;-]+$)', r'\1ietf-announce@ietf.org'),
+            (r'(.*)(IETF-Announce:(; )+[; a-z\.@\r\n]+)',   r'\1ietf-announce@ietf.org'),
+            (r'(.*)(<"?IETF-Announce:"?)([a-z0-9\.@;"]+)?(>)(, @tislabs.com@tislabs.com)?(.*)',  r'\1<ietf-announce@ietf.org>\6'),
+            (r'IETF-Announce: ;, tis.com@CNRI.Reston.VA.US, tis.com@magellan.tis.com',           r'ietf-announce@ietf.org'),
+            (r'IETF-Announce: ;, "localhost.MIT.EDU": cclark@ietf.org;',                         r'ietf-announce@ietf.org'),
+            (r'IETF-Announce: @IETF.CNRI.Reston.VA.US:;, IETF.CNRI.Reston.VA.US@isi.edu',        r'ietf-announce@ietf.org'),
+            (r'IETF-Announce <IETF-Announce:@auemlsrv.firewall.lucent.com;>',                    r'ietf-announce@ietf.org'),
+            (r'IETF-Announce: ;,  "CNRI.Reston.VA.US" <@sun.com:CNRI.Reston.VA.US@eng.sun.com>', r'ietf-announce@ietf.org'),
+            (r'IETF-Announce: ;,  "neptune.tis.com" <@tis.com, @baynetworks.com:neptune.tis.com@baynetworks.com>, tis.com@tis.com', r'ietf-announce@ietf.org'),
+            (r'IETF-Announce: "IETF-Announce:;@IETF.CNRI.Reston.VA.US@PacBell.COM" <>;,  IETF.CNRI.Reston.VA.US@pacbell.com', r'ietf-announce@ietf.org'),
+            (r'IETF-Announce: %IETF.CNRI.Reston.VA.US@tgv.com;',  r'ietf-announce@ietf.org'),
+            (r'(IETF-Announce: ; ; ; , )(@pa.dec.com[ ;,]+)+',    r'ietf-announce@ietf.org'), 
+            (r'IETF-Announce:;;;@gis.net;',              r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:;;@gis.net',                r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:@ietf.org, ;;;@ietf.org;',  r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:@cisco.com, ";"@cisco.com', r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:, ";"@cisco.com',           r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:@cisco.com',                r'ietf-announce@ietf.org'),
+            (r'"IETF-Announce:"@netcentrex.net',         r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:@above.proper.com',         r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:all-ietf@ietf.org',         r'ietf-announce@ietf.org'),
+            (r'i IETF-Announce: ;',                      r'ietf-announce@ietf.org'),
+            (r'IETF-Announce: ;',                        r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:;',                         r'ietf-announce@ietf.org'),
+            (r'IETF-Announce:',                          r'ietf-announce@ietf.org'),
+            # Rewrite variants of "undisclosed-recipients; ;" into a consistent form:
+            (r'("?[Uu]ndisclosed.recipients"?: ;+)(, @[a-z\.]+)?(.*)',                        r'undisclosed-recipients: ;\3'),
+            (r'(.*)(unlisted-recipients:; \(no To-header on input\))(.*)',                    r'\1undisclosed-recipients: ;\3'),
+            (r'(.*)(random-recipients:;;;@cs.utk.edu; \(info-mime and ietf-822 lists\))(.*)', r'\1undisclosed-recipients: ;\3'),
+            (r'(.*)("[A-Za-z\.]+":;+@tislabs.com;;;)(.*)',                                    r'\1undisclosed-recipients: ;\3'),
+            (r'undisclosed-recipients:;;:;',                                                  r'undisclosed-recipients: ;'),
+            # Rewrite other problematic headers:
+            (r'(moore@cs.utk.edu)?(, )?(authors:;+@cs.utk.edu;+)(.*)', r'\1\4'),
+            (r'(RFC 3023 authors: ;)',                                 r'mmurata@trl.ibm.co.jp, simonstl@simonstl.com, dan@dankohn.com'),
+            (r'=\?ISO-8859-1\?B\?QWJhcmJhbmVsLA0KICAgIEJlbmphbWlu\?=', r'Benjamin Abarbanel'),
+            (r'=\?ISO-8859-15\?B\?UGV0ZXJzb24sDQogICAgSm9u\?=',        r'Jon Peterson'),
+        ]
+        for (pattern, replacement) in patterns_to_replace:
+            new_value = re.sub(pattern, replacement, value)
+            if new_value != value:
+                # print(f"header_reader: [{value}] -> [{new_value}]")
+                value = new_value
+                break
+
+    return (name, value)
+
+
+def parse_hdr_from(uid, msg):
+    hdr = msg["from"]
+    if hdr is None:
         # The "From:" header is missing
-        hdr["from_name"] = None
-        hdr["from_addr"] = None
-    elif hdr["from"].count("@") == 1:
-        # The "From:" header contains a single address
-        hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
+        return (None, None)
     else:
-        # The "From:" header potentially contains multiple addresses
-        from_addrs = getaddresses([hdr["from"]])
-        if len(from_addrs) == hdr["from"].count("@"):
-            # The header contains multiple well-formed From: addresses.
-            # Use the first one that appears to have a valid domain name.
-            for name, addr in from_addrs:
-                hdr["from_name"] = fix_name(name)
-                hdr["from_addr"] = fix_addr(addr)
-                if hdr["from_addr"].split("@")[1].count(".") >= 1:
-                    break
+        addr_list = getaddresses([hdr])
+        if len(addr_list) == 0:
+            # The "From:" header is present but empty
+            from_name = None
+            from_addr = None
+        elif len(addr_list) == 1:
+            # The "From:" header contains a single well-formed address.
+            from_name, from_addr = addr_list[0]
+        elif len(addr_list) > 1:
+            # The "From:" header contains multiple well-formed addresses; use the first one with a valid domain.
+            from_name = None
+            from_addr = None
+            for group in hdr.groups:
+                if   len(group.addresses) == 0:
+                    pass
+                elif len(group.addresses) == 1:
+                    if "." in group.addresses[0].domain: # We consider the domain to be valid if it contains a "."
+                        from_name = group.addresses[0].display_name
+                        from_addr = group.addresses[0].addr_spec
+                        break
+                else:
+                    raise RuntimeError(f"Cannot parse \"From:\" header: uid={uid} - multiple addresses in group")
+            # print(f"parse_hdr_from: ({uid}) multiple addresses [{hdr}] -> [{from_name}],[{from_addr}]")
         else:
-            hdr["from_name"], hdr["from_addr"] = parse_addr(hdr["from"])
-            if hdr["from_name"] is not None and hdr["from_name"] != "" and hdr["from_name"].lower() == hdr["from_addr"]:
-                # Email address duplicated into name field
-                pass
-            elif hdr["from_name"] is not None and " @ " in hdr["from_name"]:
-                # See snmpv2/4143: From: "Hamilton, Ed @ OTT" <EHAMILT@mtl.unisysgsg.com>
-                pass
-            elif hdr["from_name"] is not None and "@@" in hdr["from_name"]:
-                # See mmusic/3429
-                pass
-            else:
-                hdr["from_name"], hdr["from_addr"] = parse_addr_multiple_at(folder, uid, msg, hdr)
+            raise RuntimeError(f"Cannot parse \"From:\" header: uid={uid} cannot happen")
+            sys.exit(1)
 
-    if hdr["from_addr"] == "":
-        hdr["from_addr"] = None
+        if from_addr == "":
+           from_addr = None
 
-    if hdr["from_name"] == "":
-        hdr["from_name"] = None
+        if from_name == "":
+            from_name = None
 
-    hdr["subject"]     = msg["subject"]
-    hdr["message_id"]  = msg["message-id"]
-    #except:
-    #    print(f"    cannot parse message {folder}/{uid}: core headers")
+        return (from_name, from_addr)
 
 
-def parse_headers_reply(folder, uid, msg, hdr):
+def parse_hdr_to_cc(uid, msg, to_cc):
     try:
-        in_reply_to = msg["in-reply-to"]
-        references  = msg["references"]
-        if in_reply_to != "":
-            hdr["in_reply_to"] = in_reply_to
-        elif references != "":
-            hdr["in_reply_to"] = references.strip().split(" ")[-1]
-    except:
-        print(f"    cannot parse message {folder}/{uid}: in_reply_to/references")
+        hdr = msg[to_cc]
+        if hdr is None:
+            return []
+        else:
+            try:
+                headers = []
+                for name, addr in getaddresses([hdr]):
+                    headers.append((name, addr))
+                return headers
+            except:
+                print(f"failed: parse_hdr_to_cc (uid: {uid}) {hdr}")
+                return []
+    except Exception as e: 
+        print(f"failed: parse_hdr_to_cc (uid: {uid}) cannot extract {to_cc} header")
+        print(f"  {e}")
+        return []
 
 
-def parse_headers_date(folder, uid, msg, hdr):
+def parse_hdr_subject(uid, msg):
+    hdr = msg["subject"]
+    if hdr is None:
+        return None
+    else:
+        return hdr.strip()
+
+
+def parse_hdr_date(uid, msg):
+    if msg["date"] is None:
+        return None
+    hdr = msg["date"].strip()
+
     try:
-        date = parsedate_to_datetime(msg["date"])
-        hdr["date"] = date.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        # Standard date format:
+        temp = parsedate_to_datetime(hdr)
+        date = temp.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        return date
     except:
         try:
             # Standard format, with invalid timezone: Mon, 27 Dec 1993 13:46:36 +22306256
             # Parse assuming the timezone is UTC
-            split = msg["date"].split(" ")[:-1]
+            split = hdr.split(" ")[:-1]
             split.append("+0000")
             joined = " ".join(split)
-            hdr["date"] = parsedate_to_datetime(joined).astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+            date = parsedate_to_datetime(joined).astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+            # print(f"parse_hdr_date: okay (1): {date} | {hdr}")
+            return date
         except:
             try:
                 # Non-standard date format: 04-Jan-93 13:22:13 (assume UTC timezone)
-                date = datetime.datetime.strptime(msg["date"], "%d-%b-%y %H:%M:%S")
-                hdr["date"] = date.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                temp = datetime.datetime.strptime(hdr, "%d-%b-%y %H:%M:%S")
+                date = temp.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                # print(f"parse_hdr_date: okay (2): {date} | {hdr}")
+                return date
             except:
                 try:
                     # Non-standard date format: 30-Nov-93 17:23 (assume UTC timezone)
-                    date = datetime.datetime.strptime(msg["date"], "%d-%b-%y %H:%M")
-                    hdr["date"] = date.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                    temp = datetime.datetime.strptime(hdr, "%d-%b-%y %H:%M")
+                    date = temp.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                    # print(f"parse_hdr_date: okay (3): {date} | {hdr}")
+                    return date
                 except:
-                    print(f"    cannot parse message {folder}/{uid}: date {msg['date']}")
+                    try:
+                        # Non-standard date format: 2006-07-29 00:55:01 (assume UTC timezone)
+                        temp = datetime.datetime.strptime(hdr, "%Y-%m-%d %H:%M:%S")
+                        date = temp.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                        # print(f"parse_hdr_date: okay (4): {date} | {hdr}")
+                        return date
+                    except:
+                        try:
+                            # Non-standard date format: Mon, 17 Apr 2006  8: 9: 2 +0300
+                            tmp1 = hdr.replace(": ", ":0").replace("  ", " 0")
+                            tmp2 = parsedate_to_datetime(tmp1)
+                            date = tmp2.astimezone(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+                            # print(f"parse_hdr_date: okay (5): {date} | {hdr}")
+                            return date
+
+                        except:
+                            # print(f"failed: parse_hdr_date (uid: {uid}) {hdr}")
+                            return None
 
 
-
-def parse_headers_to_cc(folder, uid, msg, hdr, to_cc):
-    try:
-        if msg[to_cc] is not None:
-            try:
-                for name, addr in getaddresses([fix_to_cc1(folder, uid, msg[to_cc])]):
-                    name, addr = fix_to_cc2(folder, uid, name, addr)
-                    hdr[to_cc].append((fix_name(name), fix_addr(addr)))
-            except:
-                print(f"    cannot parse message {folder}/{uid}: {to_cc} (1)")
-    except:
-        print(f"    cannot parse message {folder}/{uid}: {to_cc} (2)")
+def parse_hdr_message_id(uid, msg):
+    hdr = msg["message-id"]
+    if hdr is None:
+        return None
+    else:
+        return hdr.strip()
 
 
-def header_reader(sourcelines):
-    name, value = sourcelines[0].split(':', 1)
-    old_value = ''.join((value, *sourcelines[1:])).lstrip(' \t\r\n').rstrip('\r\n')
-    new_value = old_value
-
-    # FIXME: how should we handle the following:
-    #   pem/800  From: Charles Kaufman dss <"kaufman@zk3.dec.com"@minsrv.enet.dec.com>
-
-    # Rewrite "To": addresses of the form "IETF-Announce:;;;@grc.nasa.gov;":
-    if name == "To" and new_value.startswith("IETF-Announce:;"):
-        new_value = "ietf-announce@ietf.org"
-
-    # Rewrite addresses of the form: icn-interest at listserv.netlab.nec.de
-    if name in ["From", "To", "Cc"] and "@" not in new_value and " at " in new_value:
-        new_value = new_value.replace(" at ", "@")
-
-    # Rewrite addresses of the form: 'Shihang\(Vincent\)' <shihang9=40huawei.com@dmarc.ietf.org>
-    # that are incorrectly quoted and break the Python header parser.
-    if name in ["From", "To", "Cc"]:
-        new_value = re.sub(r"'([A-Za-z ]+)\\\(([A-Za-z ]+)\\\)'", r'"\1(\2)"', new_value)
-        # Rewritw ""Shihang (Vincent)"" -> "Shihang (Vincent)"
-        new_value = re.sub(r'""([A-Za-z ]+)\(([A-Za-z ]+)\)""', r'"\1(\2)"', new_value)
-
-    # if new_value != old_value:
-    #     print(f"{name}: {old_value} ==> {new_value}")
-
-    return (name, new_value)
+def parse_hdr_in_reply_to(uid, msg):
+    hdr = msg["in-reply-to"]
+    if hdr is not None and hdr != "":
+        return hdr.strip()
+    hdr = msg["references"]
+    if hdr is not None and hdr != "":
+        return hdr.strip().split(" ")[-1]
+    return None
 
 
-def parse_message(folder, uid, uidvalidity, raw_message):
+def parse_message(data):
     parsing_policy = policy.default.clone(header_source_parse = header_reader)
-    msg = BytesHeaderParser(policy=parsing_policy).parsebytes(raw_message)
 
-    hdr = {
-        "uid"         : uid,
-        "uidvalidity" : uidvalidity,
-        "from_name"   : None,
-        "from_addr"   : None,
-        "subject"     : None,
-        "date"        : None,
-        "message_id"  : None,
-        "in_reply_to" : None,
-        "date"        : None,
-        "to"          : [],
-        "cc"          : []
-    }
+    uid = data["uid"]
+    raw = base64.b64decode(data["msg"])
+    msg = BytesHeaderParser(policy=parsing_policy).parsebytes(raw)
 
-    parse_headers_core(folder, uid, msg, hdr)
-    parse_headers_date(folder, uid, msg, hdr)
-    parse_headers_reply(folder, uid, msg, hdr)
-    parse_headers_to_cc(folder, uid, msg, hdr, "to")
-    parse_headers_to_cc(folder, uid, msg, hdr, "cc")
+    from_name, from_addr = parse_hdr_from(uid, msg)
 
-    return hdr
+    msg = {
+            "uid"         : uid,
+            "from_name"   : from_name,
+            "from_addr"   : from_addr,
+            "to"          : parse_hdr_to_cc(uid, msg, "to"),
+            "cc"          : parse_hdr_to_cc(uid, msg, "cc"),
+            "subject"     : parse_hdr_subject(uid, msg),
+            "date"        : parse_hdr_date(uid, msg),
+            "message_id"  : parse_hdr_message_id(uid, msg),
+            "in_reply_to" : parse_hdr_in_reply_to(uid, msg),
+            "raw_data"    : raw
+          }
 
+    return msg
 
-# =============================================================================
-# Helper function to populate database
-
-def populate_data(db_connection, folder):
-    print(f"  {folder}")
-
-    db_cursor = db_connection.cursor()
-
-    folder_path = Path("downloads/ietf-ma/lists") / f"{folder}.json"
-    with open(folder_path, "r") as inf:
-        meta = json.load(inf)
-
-    msg_count = 0
-    first_date = "2038-01-19 03:14:07"
-    final_date = "1970-01-01 00:00:00"
-
-    for data in meta["msgs"]:
-        msg_count += 1
-
-        uid         = data["uid"]
-        uidvalidity = int(meta["uidvalidity"])
-
-        raw = base64.b64decode(data["msg"])
-        hdr = parse_message(folder, uid, uidvalidity, raw)
-
-        val = (None, folder, uidvalidity, uid,
-               hdr["from_name"],
-               hdr["from_addr"],
-               hdr["subject"],
-               hdr["date"],
-               hdr["message_id"],
-               hdr["in_reply_to"],
-               raw)
-        sql = f"INSERT INTO ietf_ma_messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING message_num"
-        num = db_cursor.execute(sql, val).fetchone()[0]
-
-        for name, addr in hdr["to"]:
-            sql = f"INSERT INTO ietf_ma_messages_to VALUES (?, ?, ?, ?)"
-            db_cursor.execute(sql, (None, num, name, addr))
-
-        for name, addr in hdr["cc"]:
-            sql = f"INSERT INTO ietf_ma_messages_cc VALUES (?, ?, ?, ?)"
-            db_cursor.execute(sql, (None, num, name, addr))
-
-        if hdr["date"] is not None and hdr["date"] > final_date:
-            final_date = hdr["date"]
-        if hdr["date"] is not None and hdr["date"] < first_date:
-            first_date = hdr["date"]
-
-    db_connection.commit()
-
-    # FIXME: can this be a virtual table calculated by the database?
-    val = (folder, msg_count, first_date, final_date)
-    sql = f"INSERT INTO ietf_ma_lists VALUES (?, ?, ?, ?)"
-    db_cursor.execute(sql, val)
-    db_connection.commit()
-
-
-# =============================================================================
-# Test Cases:
-
-def load_test_message(folder, uid):
-    # print(f"  Loading test message {folder}/{uid}")
-    uidvalidity = 0 # Not needed for these tests
-    with open(f"downloads/ietf-ma/lists/{folder}.json", "r") as inf:
-        folder_data = json.load(inf)
-        for msg_data in folder_data["msgs"]:
-            if msg_data["uid"] == int(uid):
-                raw = base64.b64decode(msg_data["msg"])
-                hdr = parse_message(folder, uid, uidvalidity, raw)
-    return hdr
-
-
-def test_message_parsing():
-    hdr = load_test_message("cats", 343)
-    assert hdr["from_name"] == "weilin_wang@bjtu.edu.cn"
-    assert hdr["from_addr"] == "weilin_wang@bjtu.edu.cn"
-    assert hdr["to"][0] == ("Adrian Farrel", "adrian@olddog.co.uk")
-    assert hdr["to"][1] == ("Shihang(Vincent)", "shihang9@huawei.com")
-    assert hdr["to"][2] == ("Yao Kehan", "yaokehan@chinamobile.com")
-    assert hdr["to"][3] == ("draft-wang-cats-awareness-system-for-casfc@ietf.org", "draft-wang-cats-awareness-system-for-casfc@ietf.org")
-    assert hdr["to"][4] == ("draft-zhang-cats-computing-aware-sfc-usecase@ietf.org", "draft-zhang-cats-computing-aware-sfc-usecase@ietf.org")
-    assert hdr["cc"][0] == ("cats@ietf.org", "cats@ietf.org")
-
-    hdr = load_test_message("pilc", 1683)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "internet-drafts@ietf.org"
-    assert hdr["to"][0] == (None, "ietf-announce@ietf.org")
-    assert hdr["cc"][0] == (None, "pilc@grc.nasa.gov")
-
-    hdr = load_test_message("icnrg", 1591)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "icn-interest-bounces@listserv.netlab.nec.de"
-    assert hdr["to"][0] == (None, "icn-interest@listserv.netlab.nec.de")
-
-    hdr = load_test_message("822ext", 280)
-    assert hdr["from_name"] == "Bob Miles"
-    assert hdr["from_addr"] == "rsm@spyder.ssw.com"
-
-    hdr = load_test_message("appleip", 144)
-    assert hdr["from_name"] == "Mike Traynor"
-    assert hdr["from_addr"] == "mtraynor@hpindps.cup.hp.com"
-
-    hdr = load_test_message("atm", 34)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "clapp@ameris.center.il.ameritech.com"
-
-    hdr = load_test_message("smtpext", 1366)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "robert.l.sargent@stc06.ctd.ornl.gov"
-
-    hdr = load_test_message("mmusic", 3429)
-    assert hdr["from_name"] == "L@@K dont throw away!"
-    assert hdr["from_addr"] == "jimbobuk@home.com"
-
-    hdr = load_test_message("imap", 1018)
-    assert hdr["from_name"] == "Olle Jarnefors"
-    assert hdr["from_addr"] == "ojarnef@admin.kth.se"
-
-    hdr = load_test_message("6lowpan", 20)
-    assert hdr["from_name"] == "Soohong Daniel Park@samsung.com"
-    assert hdr["from_addr"] == "soohong.park@samsung.com"
-
-    hdr = load_test_message("chassis", 51)
-    assert hdr["from_name"] == "David L. Arneson (arneson@ctron.com)"
-    assert hdr["from_addr"] == "arneson@yeti.ctron.com"
-
-    hdr = load_test_message("xcon", 26)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "markus.isomaki@nokia.com"
-
-    hdr = load_test_message("wgchairs", 16644)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "jbui@amsl.com"
-
-    hdr = load_test_message("ucp", 32)
-    assert hdr["from_name"] == "practic!brunner@uunet.uu.net"
-    assert hdr["from_addr"] == "brunner@practic.practic.com"
-
-    hdr = load_test_message("trill", 2050)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "radia.perlman@sun.com"
-
-    hdr = load_test_message("syslog", 1823)
-    assert hdr["from_name"] == "Pasi.Eronen@nokia.com"
-    assert hdr["from_addr"] == "pasi.eronen@nokia.com"
-
-    hdr = load_test_message("snmpv2", 4143)
-    assert hdr["from_name"] == "Hamilton, Ed @ OTT"
-    assert hdr["from_addr"] == "ehamilt@mtl.unisysgsg.com"
-
-    hdr = load_test_message("rfc-dist", 2106)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "rfc-editor@rfc-editor.org"
-
-    hdr = load_test_message("uri", 1380)
-    assert hdr["from_name"] == None
-    assert hdr["from_addr"] == "raisch@internet.com"
-
-    #print(hdr["from_name"])
-    #print(hdr["from_addr"])
 
 # =============================================================================
 # Main code follows:
 
-if len(sys.argv) != 3:
-    print(f"Usage: {sys.argv[0]} <list.json> <output.sqlite>")
-    sys.exit(1)
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print(f"Usage: {sys.argv[0]} <lists.json> <ietf-ma.sqlite>")
+        sys.exit(1)
 
-ma_file = Path(sys.argv[1])
-db_file = Path(sys.argv[2])
-db_temp = db_file.with_suffix(".tmp")
+    ma_file = Path(sys.argv[1])
+    db_file = Path(sys.argv[2])
 
-test_message_parsing()
+    with open(ma_file, "r") as inf:
+        ma_json = json.load(inf)
 
-with open(ma_file, "r") as inf:
-    ma_json = json.load(inf)
+    db_temp = db_file.with_suffix(".tmp")
+    db_temp.unlink(missing_ok=True)
 
-db_temp.unlink(missing_ok=True)
-db_connection = sqlite3.connect(db_temp)
+    db_connection = sqlite3.connect(db_temp)
+    db_connection.execute("pragma journal_mode = WAL;")
+    db_connection.execute("pragma synchronous = normal;")
 
-create_tables(db_connection)
+    create_tables(db_connection)
 
-db_connection.execute('VACUUM;') 
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for folder in ma_json["folders"]:
+            print(f"  {folder}")
 
-for folder in ma_json["folders"]:
-    populate_data(db_connection, folder)
+            msg_count = 0
+            first_date = "2038-01-19 03:14:07"
+            final_date = "1970-01-01 00:00:00"
 
-db_temp.rename(db_file)
+            folder_path = Path("downloads/ietf-ma/lists") / f"{folder}.json"
+            with open(folder_path, "r") as inf:
+                meta = json.load(inf)
+
+            for msg in executor.map(parse_message, meta["msgs"], chunksize=16):
+                msg_count += 1
+
+                db_cursor = db_connection.cursor()
+
+                val = (None, 
+                       meta["folder"],
+                       meta["uidvalidity"],
+                       msg["uid"],
+                       msg["from_name"],
+                       msg["from_addr"],
+                       msg["subject"],
+                       msg["date"],
+                       msg["message_id"],
+                       msg["in_reply_to"],
+                       msg["raw_data"])
+                sql = f"INSERT INTO ietf_ma_messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING message_num"
+                num = db_cursor.execute(sql, val).fetchone()[0]
+
+                for name, addr in msg["to"]:
+                    sql = f"INSERT INTO ietf_ma_messages_to VALUES (?, ?, ?, ?)"
+                    db_cursor.execute(sql, (None, num, name, addr))
+
+                for name, addr in msg["cc"]:
+                    sql = f"INSERT INTO ietf_ma_messages_cc VALUES (?, ?, ?, ?)"
+                    db_cursor.execute(sql, (None, num, name, addr))
+
+                if msg["date"] is not None and msg["date"] > final_date:
+                    final_date = msg["date"]
+                if msg["date"] is not None and msg["date"] < first_date:
+                    first_date = msg["date"]
+
+            val = (folder, msg_count, first_date, final_date)
+            sql = f"INSERT INTO ietf_ma_lists VALUES (?, ?, ?, ?)"
+            db_cursor.execute(sql, val)
+
+            db_connection.commit()
+
+    db_connection.execute('VACUUM;') 
+    db_temp.rename(db_file)
 
