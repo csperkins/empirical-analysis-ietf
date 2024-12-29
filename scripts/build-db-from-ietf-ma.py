@@ -551,8 +551,7 @@ if __name__ == "__main__":
     db_temp.unlink(missing_ok=True)
 
     db_connection = sqlite3.connect(db_temp)
-    db_connection.execute("pragma journal_mode = WAL;")
-    db_connection.execute("pragma synchronous = normal;")
+    db_connection.execute("pragma synchronous = off;")
 
     create_tables(db_connection)
 
@@ -606,6 +605,7 @@ if __name__ == "__main__":
 
             db_connection.commit()
 
-    db_connection.execute('VACUUM;') 
+    db_connection.close()
+
     db_temp.rename(db_file)
 
